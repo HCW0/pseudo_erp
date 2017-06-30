@@ -14,17 +14,19 @@
 </head>
 
 <body>
-    <h2>GOGOGOGO</h2>
-    <p>Type ur account</p>
-
-    <form action='login_proc.php' method='POST'>
-        <p>ID:
+    <div style="
+	width:200px; height:250px;">
+	
+    </div>
+	<p align="center"><img src="선운로고.png" width="200" height="100" title="선운로고"/></p>
+    <form  action='login_proc.php' method='POST'>
+        <p align="center" >&nbsp&nbspID:
         <input type = 'text' name = 'id'/></P>
 
-        <p>PW:
-        <input type = 'password' name = 'pw'/></P>
+        <p align="center">PW:
+        <input   type = 'password' name = 'pw'/></P>
 
-        <input type = 'submit' value = 'game' name = 'login'/>
+       <p align="center"> <input  type = 'submit' value = 'login' name = 'login'/></p>
     </form>
 
     <?php
@@ -34,6 +36,13 @@
         }
     ?>
 
+	<div style="
+	width:200px; height:280px;">
+	
+    </div>
+	</div id="footer">
+				<p class="bd" align="center">COPYRIGHT(C) 2017 SUNUNENG.ENG ALL RIGHTS RESERVED&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp주소 : 광주광역시 광산구 송정동 735 선운빌딩 3층 <br/> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp연락처 : 062-651-9272 / FAX : 062-651-9271</p>
+		</div>
 </body>
 
 </html>

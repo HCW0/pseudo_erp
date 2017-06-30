@@ -12,12 +12,12 @@ session_start();
         $use = mysqli_query($conn,"use suproject");
         if(!$use) echo "실패1!";
 
-        $mquery = 'select u.ID from user_management u where u.ID = \''.$_POST['id'].'\';';
+        $mquery = 'select u.ID from account_table u where u.ID = \''.$_POST['id'].'\';';
       // echo $mquery;
         $result_id = mysqli_query($conn,$mquery);
         if(mysqli_num_rows($result_id)==0) echo "실패2!";
         
-        $mquery = 'select u.PASS_WORD from user_management u where u.PASS_WORD = \''.$_POST['pw'].'\' AND u.ID = \''.$_POST['id'].'\';';
+        $mquery = 'select u.PASSWORD from account_table u where u.PASSWORD = \''.$_POST['pw'].'\' AND u.ID = \''.$_POST['id'].'\';';
       // echo $mquery;
         $result_pw = mysqli_query($conn,$mquery);
         if(mysqli_num_rows($result_pw)==0) $result_pw=false;
@@ -28,7 +28,7 @@ if(($_POST['id']!=null)&&($_POST['pw']!=null)){
     if(($result_id)&&($result_pw)){
         $_SESSION['is_login']=true;
         $_SESSION['id']=$_POST['id'];
-        header('Location: ./test.php');
+        header('Location: ./minsutest.php');
     }else{
          $_SESSION['msg']='invalid input';
         header('Location: ./login.php');
