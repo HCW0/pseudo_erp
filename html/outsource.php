@@ -1,0 +1,1 @@
+<td><a href="/basic/memExe.php?mem_no=<?=$rows[mem_no]?>&mode=del" onclick="if(!confirm('학생을 삭제하시겠습니까?')){return false;}"><img src="/img/btn_del.gif" alt="" width="16" height="16" border="0"></a></td>
