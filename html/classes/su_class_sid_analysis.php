@@ -17,10 +17,8 @@
                                             }
 
                             $row = mysqli_fetch_assoc($result_set);
-                            $_SESSION['my_position'] = $row['sid_combine_position'];
-                            $_SESSION['my_name'] = $row['sid_combine_name'];
-                            $_SESSION['my_department'] = $row['sid_combine_department'];
-      
+                            $_SESSION['my_position_code'] = $row['sid_combine_position'];
+                            $_SESSION['my_department_code'] = $row['sid_combine_department'];
                        
             }
 

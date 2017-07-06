@@ -15,7 +15,6 @@ session_start();
         if(!$conn) { $_SESSION['msg']='DB연결에 실패하였습니다.';
                      header('Location: ./su_script_login_interface.php');
         }
-        $_SESSION['conn'] = $conn;
         $use = mysqli_select_db($conn,"suproject");
         if(!$use) die('cannot open db'.mysqli_error($conn));
 
@@ -43,6 +42,7 @@ session_start();
         if(mysqli_num_rows($result_id)==0) echo "실패2!";
 
          $row = mysqli_fetch_assoc($result_id);
+          $_SESSION['my_sid_code']= $row['SID'];
           $flag_Value = $row['FLAG_ACCOUNT_LOCK'];
          if($flag_Value) {
               $msg_ob = new su_class_message_handler();
@@ -63,15 +63,15 @@ if(($_POST['id']!=null)&&($_POST['pw']!=null)){
         $_SESSION['id']=$_POST['id'];
         header("Location: ./test.php");
     }else{
-        if(($result_id)&&(!$result_pw)){
+        if(($result_id)&&($result_pw==false)){
             $worker = new su_class_login_support();
             $worker->incorrect_cnt($_POST['id'],$conn);
         }
-        else{
+       
          $_SESSION['msg']='존재하지 않는 계정입니다.';
     
         header('Location: ./su_script_login_interface.php');
-     }
+     
     }
 
 }else{

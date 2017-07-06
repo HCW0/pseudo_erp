@@ -18,32 +18,12 @@ session_start();
         if(!$use) die('cannot open db'.mysqli_error($conn));
 
 
-    $ob1 = new su_class_sid_analysis();
-    $ob1->su_function_sid_analysis($conn,123);
-    echo $_SESSION['my_name'];
-    echo $_SESSION['my_department'];
-    echo $_SESSION['my_position'];
-   header('Location: ./su_script_user_interface.php');
+    $ob = new su_class_sid_analysis();
+    $ob->su_function_sid_analysis($conn, $_SESSION['my_sid_code']);
+    echo $_SESSION['my_department_code'];
+    echo $_SESSION['my_position_code'];
+    echo $_SESSION['my_sid_code'];
+    header('Location: ./su_script_user_interface.php');
   
  
 ?>
-
-
-<head></head>
-
-<body>
-    <form action='./su_script_login_interface.php' method='post'>
-
-        <input type='submit' value='logout' name='out_process'>
-        <?php  
-        
-
-
-        unset($_SESSION['is_login']);  
-        $_SESSION['msg'] = 'log out!';
-        ?>
-    </form>
-    </body>
-
-
-</html>
