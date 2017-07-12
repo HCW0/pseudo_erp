@@ -1,0 +1,553 @@
+-- phpMyAdmin SQL Dump
+-- version 4.7.1
+-- https://www.phpmyadmin.net/
+--
+-- Host: localhost
+-- 생성 시간: 17-07-12 09:37
+-- 서버 버전: 5.7.17-log
+-- PHP 버전: 7.1.6
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- 데이터베이스: `suproject`
+--
+
+-- --------------------------------------------------------
+
+--
+-- 테이블 구조 `account_table`
+--
+
+CREATE TABLE `account_table` (
+  `ID` varchar(15) COLLATE utf8mb4_unicode_520_ci NOT NULL,
+  `SID` smallint(6) NOT NULL,
+  `PASSWORD` varchar(15) COLLATE utf8mb4_unicode_520_ci NOT NULL,
+  `PASSWORD_INCORRECT_COUNTER` tinyint(4) NOT NULL DEFAULT '0',
+  `FLAG_ACCOUNT_LOCK` tinyint(1) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+
+--
+-- 테이블의 덤프 데이터 `account_table`
+--
+
+INSERT INTO `account_table` (`ID`, `SID`, `PASSWORD`, `PASSWORD_INCORRECT_COUNTER`, `FLAG_ACCOUNT_LOCK`) VALUES
+('root', 1, '9708258a', 5, 0),
+('tech_hongk', 401, '12345', 0, 0),
+('tech_jungj', 501, '12345', 1, 0),
+('tech_jungm', 502, '12345', 0, 0),
+('tech_lees', 201, '12345', 0, 0),
+('tech_oc', 204, '12345', 0, 0),
+('tech_test', 888, '12345', 0, 0);
+
+-- --------------------------------------------------------
+
+--
+-- 테이블 구조 `master_department_info_table`
+--
+
+CREATE TABLE `master_department_info_table` (
+  `sid_combine_department` bit(4) NOT NULL,
+  `master_department_info_name` varchar(12) COLLATE utf8mb4_unicode_520_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+
+--
+-- 테이블의 덤프 데이터 `master_department_info_table`
+--
+
+INSERT INTO `master_department_info_table` (`sid_combine_department`, `master_department_info_name`) VALUES
+(b'0000', '경영기획부'),
+(b'0001', '경영기획본부공백1'),
+(b'0010', '경영기획본부공백2'),
+(b'0011', '경영기획본부공백3'),
+(b'0100', '공간정보사업부'),
+(b'0101', '전력사업부'),
+(b'0110', '기술연구소'),
+(b'0111', '경영지원부'),
+(b'1000', '총괄부'),
+(b'1111', '전체');
+
+-- --------------------------------------------------------
+
+--
+-- 테이블 구조 `master_position_info_table`
+--
+
+CREATE TABLE `master_position_info_table` (
+  `sid_combine_position` bit(4) NOT NULL,
+  `master_position_info_name` varchar(12) COLLATE utf8mb4_unicode_520_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+
+--
+-- 테이블의 덤프 데이터 `master_position_info_table`
+--
+
+INSERT INTO `master_position_info_table` (`sid_combine_position`, `master_position_info_name`) VALUES
+(b'0000', '외부인'),
+(b'0001', '사원'),
+(b'0010', '대리'),
+(b'0011', '과장'),
+(b'0100', '부장'),
+(b'0101', '이사'),
+(b'0111', '상무'),
+(b'1000', '사장'),
+(b'1001', '대표이사'),
+(b'1111', '전체');
+
+-- --------------------------------------------------------
+
+--
+-- 테이블 구조 `master_priority_info_table`
+--
+
+CREATE TABLE `master_priority_info_table` (
+  `master_task_priority_info_code` bit(2) NOT NULL,
+  `master_task_priority_info_name` varchar(12) COLLATE utf8mb4_unicode_520_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+
+--
+-- 테이블의 덤프 데이터 `master_priority_info_table`
+--
+
+INSERT INTO `master_priority_info_table` (`master_task_priority_info_code`, `master_task_priority_info_name`) VALUES
+(b'00', '보통'),
+(b'01', '긴급'),
+(b'11', '전체');
+
+-- --------------------------------------------------------
+
+--
+-- 테이블 구조 `master_state_info_table`
+--
+
+CREATE TABLE `master_state_info_table` (
+  `master_task_state_info_code` tinyint(2) UNSIGNED NOT NULL,
+  `master_task_state_info_name` varchar(12) COLLATE utf8mb4_unicode_520_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+
+--
+-- 테이블의 덤프 데이터 `master_state_info_table`
+--
+
+INSERT INTO `master_state_info_table` (`master_task_state_info_code`, `master_task_state_info_name`) VALUES
+(10, '대기'),
+(20, '접수'),
+(30, '진행'),
+(40, '중지'),
+(50, '보류'),
+(60, '취소'),
+(70, '완료'),
+(99, '전체');
+
+-- --------------------------------------------------------
+
+--
+-- 테이블 구조 `master_task_level_info_table`
+--
+
+CREATE TABLE `master_task_level_info_table` (
+  `master_task_level_code` bit(4) NOT NULL,
+  `master_task_level_name` varchar(10) COLLATE utf8mb4_unicode_520_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+
+--
+-- 테이블의 덤프 데이터 `master_task_level_info_table`
+--
+
+INSERT INTO `master_task_level_info_table` (`master_task_level_code`, `master_task_level_name`) VALUES
+(b'0001', '대외 주관 업무'),
+(b'0010', '대외 도급 업무'),
+(b'0011', '대내 주요 업무'),
+(b'0100', '대내 일반 업무'),
+(b'0101', '협업업무'),
+(b'0110', '영업외 업무'),
+(b'1001', '연구/개발'),
+(b'1111', '전체');
+
+-- --------------------------------------------------------
+
+--
+-- 테이블 구조 `master_task_level_sub_info_table`
+--
+
+CREATE TABLE `master_task_level_sub_info_table` (
+  `master_task_level_sub_code` smallint(3) NOT NULL,
+  `master_task_level_sub_name` varchar(25) COLLATE utf8mb4_unicode_520_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+
+--
+-- 테이블의 덤프 데이터 `master_task_level_sub_info_table`
+--
+
+INSERT INTO `master_task_level_sub_info_table` (`master_task_level_sub_code`, `master_task_level_sub_name`) VALUES
+(20, '20XX년 무등산 측량 사업(테스트)'),
+(30, '송정리 공원 측량 계획 사업(테스트)'),
+(40, '사무실 2017년 하계 전산장비 교체사업'),
+(50, '2017년 봄 회사 운동회'),
+(999, '전체');
+
+-- --------------------------------------------------------
+
+--
+-- 테이블 구조 `master_user_info_table`
+--
+
+CREATE TABLE `master_user_info_table` (
+  `SID` mediumint(9) NOT NULL,
+  `master_user_info_name` varchar(5) COLLATE utf8mb4_unicode_520_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+
+--
+-- 테이블의 덤프 데이터 `master_user_info_table`
+--
+
+INSERT INTO `master_user_info_table` (`SID`, `master_user_info_name`) VALUES
+(1, '테스트'),
+(101, '전홍진'),
+(102, '김길한'),
+(201, '이상운'),
+(202, '김용운'),
+(203, '고재욱'),
+(204, '오창주'),
+(205, '전세준'),
+(301, '이태건'),
+(401, '홍경표'),
+(402, '조진철'),
+(403, '최강민'),
+(404, '진강석'),
+(405, '김진길'),
+(501, '정준모'),
+(502, '정미소'),
+(503, '박수경'),
+(504, '김지은'),
+(505, '오은정'),
+(506, '류기원'),
+(507, '서  옥'),
+(508, '나유나'),
+(509, '이창덕'),
+(510, '이학균'),
+(601, '류채현'),
+(602, '최  강'),
+(603, '박수림'),
+(604, '조국현'),
+(888, '테스트사원'),
+(8388607, '전체');
+
+-- --------------------------------------------------------
+
+--
+-- 테이블 구조 `message_table`
+--
+
+CREATE TABLE `message_table` (
+  `MSG_CODE` smallint(6) NOT NULL,
+  `MSG_CONTENTS` varchar(256) COLLATE utf8mb4_unicode_520_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+
+--
+-- 테이블의 덤프 데이터 `message_table`
+--
+
+INSERT INTO `message_table` (`MSG_CODE`, `MSG_CONTENTS`) VALUES
+(154, '\"비밀 번호가 틀렸습니다. 남은 횟수 : \"'),
+(155, '\"블록된 계정입니다.\"'),
+(334, '\"서버가 닫혔습니다.\"'),
+(514, '\"입력하지 않은 곳이 있습니다.\"'),
+(515, '\"신규 업무가 등록되었습니다.\"'),
+(516, '\"신규 공지가 등록되었습니다.\"');
+
+-- --------------------------------------------------------
+
+--
+-- 테이블 구조 `notice_document_header_table`
+--
+
+CREATE TABLE `notice_document_header_table` (
+  `notice_id` smallint(6) NOT NULL,
+  `notice_name` varchar(25) COLLATE utf8mb4_unicode_520_ci NOT NULL,
+  `notice_priority` bit(2) NOT NULL,
+  `notice_birth_date` date NOT NULL,
+  `notice_base_date` date NOT NULL,
+  `notice_limit_date` date NOT NULL,
+  `notice_content` varchar(200) COLLATE utf8mb4_unicode_520_ci NOT NULL,
+  `notice_orderer` mediumint(9) NOT NULL,
+  `notice_order_section` bit(4) NOT NULL,
+  `notice_file_directory` varchar(100) COLLATE utf8mb4_unicode_520_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+
+--
+-- 테이블의 덤프 데이터 `notice_document_header_table`
+--
+
+INSERT INTO `notice_document_header_table` (`notice_id`, `notice_name`, `notice_priority`, `notice_birth_date`, `notice_base_date`, `notice_limit_date`, `notice_content`, `notice_orderer`, `notice_order_section`, `notice_file_directory`) VALUES
+(1, '테스트 공지사항 1등급', b'01', '2017-07-03', '2017-07-13', '2017-07-20', '이러이러 저러저러 하답니다', 1, b'0001', '/storage/공문.txt'),
+(2, '테스트 공지사항 2등급', b'00', '2017-07-03', '2017-07-03', '2017-07-18', '2등급은 중요도가 보통인 것입니다.', 402, b'0011', '/storage/근거.zip'),
+(3, '긴급 동원 명령 221호', b'01', '2017-07-06', '2017-07-20', '2017-07-04', '사유 : \r\n\r\n장소 :\r\n\r\n발령권자 :', 1, b'0111', ''),
+(4, 'test', b'00', '2017-07-10', '2017-07-03', '2017-07-18', 'test bloom', 1, b'0110', 'none'),
+(5, '테스트 보통 공지사항', b'00', '2017-07-10', '2017-07-03', '2017-07-04', '테스트 공지사항 기간만료 버전\r\n', 1, b'0110', 'none'),
+(6, '공지사항 게시판 등록의 알림', b'01', '2017-07-11', '2017-07-10', '2017-07-13', '10일부터 13일까지 공지사항 게시판 구현 시험을 위해서 임시 공문을 공지합니다.\r\n', 1, b'0110', 'none');
+
+-- --------------------------------------------------------
+
+--
+-- 테이블 구조 `server_state_table`
+--
+
+CREATE TABLE `server_state_table` (
+  `FID` smallint(6) NOT NULL,
+  `FLAG_NAME` varchar(15) COLLATE utf8mb4_unicode_520_ci NOT NULL,
+  `FLAG_VALUE` tinyint(1) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+
+--
+-- 테이블의 덤프 데이터 `server_state_table`
+--
+
+INSERT INTO `server_state_table` (`FID`, `FLAG_NAME`, `FLAG_VALUE`) VALUES
+(0, 'shut_down', 0);
+
+-- --------------------------------------------------------
+
+--
+-- 테이블 구조 `sid_combine_table`
+--
+
+CREATE TABLE `sid_combine_table` (
+  `SID` mediumint(9) NOT NULL,
+  `sid_combine_department` bit(4) NOT NULL,
+  `sid_combine_position` bit(4) NOT NULL,
+  `is_valid` tinyint(1) NOT NULL DEFAULT '1'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+
+--
+-- 테이블의 덤프 데이터 `sid_combine_table`
+--
+
+INSERT INTO `sid_combine_table` (`SID`, `sid_combine_department`, `sid_combine_position`, `is_valid`) VALUES
+(1, b'0110', b'0000', 1),
+(201, b'0110', b'0111', 1),
+(204, b'0110', b'0101', 1),
+(401, b'0110', b'0011', 1),
+(501, b'0110', b'0010', 1),
+(502, b'0110', b'0010', 1),
+(888, b'0110', b'0001', 1);
+
+-- --------------------------------------------------------
+
+--
+-- 테이블 구조 `task_approbation_table`
+--
+
+CREATE TABLE `task_approbation_table` (
+  `TID` mediumint(9) NOT NULL,
+  `task_order_section` bit(4) NOT NULL,
+  `task_sequence_start` bit(4) NOT NULL,
+  `task_sequence_current` bit(4) NOT NULL,
+  `task_sequence_end` bit(4) NOT NULL,
+  `task_sq_0layer_message` varchar(200) COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
+  `task_sq_1layer_message` varchar(200) COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
+  `task_sq_2layer_message` varchar(200) COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
+  `task_sq_3layer_message` varchar(200) COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
+  `task_sq_4layer_message` varchar(200) COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
+  `task_sq_5layer_message` varchar(200) COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
+  `task_sq_6layer_message` varchar(200) COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
+  `task_sq_7layer_message` varchar(200) COLLATE utf8mb4_unicode_520_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+
+--
+-- 테이블의 덤프 데이터 `task_approbation_table`
+--
+
+INSERT INTO `task_approbation_table` (`TID`, `task_order_section`, `task_sequence_start`, `task_sequence_current`, `task_sequence_end`, `task_sq_0layer_message`, `task_sq_1layer_message`, `task_sq_2layer_message`, `task_sq_3layer_message`, `task_sq_4layer_message`, `task_sq_5layer_message`, `task_sq_6layer_message`, `task_sq_7layer_message`) VALUES
+(2, b'0110', b'0010', b'0011', b'0101', NULL, NULL, '다음과 같은 근거를 통해, 금일 업무 결재 부탁드립니다.', NULL, NULL, NULL, NULL, NULL),
+(3, b'0110', b'0011', b'0101', b'0111', NULL, NULL, NULL, '과장급 무등산 측량 사업 업무입니다.', NULL, NULL, NULL, NULL),
+(4, b'0110', b'0010', b'0011', b'0111', NULL, NULL, '대리급 무등산 측량 사업 업무입니다.\r\n', NULL, NULL, NULL, NULL, NULL),
+(5, b'0110', b'0010', b'0011', b'0111', NULL, NULL, '대리급 무등산 측량 사업 업무입니다.', NULL, NULL, NULL, NULL, NULL),
+(6, b'0110', b'0011', b'0101', b'0111', NULL, NULL, NULL, '업무 생성에 대한 설명을 적어주세요.', NULL, NULL, NULL, NULL),
+(7, b'0110', b'0010', b'0011', b'0111', NULL, NULL, '업무 생성에 대한 설명을 적어주세요.', NULL, NULL, NULL, NULL, NULL),
+(8, b'0110', b'0010', b'0011', b'0111', NULL, NULL, '업무 생성에 대한 설명을 적어주세요.', NULL, NULL, NULL, NULL, NULL),
+(9, b'0110', b'0001', b'0010', b'0111', NULL, '업무 생성에 대한 설명을 적어주세요.', NULL, NULL, NULL, NULL, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- 테이블 구조 `task_document_header_table`
+--
+
+CREATE TABLE `task_document_header_table` (
+  `TID` mediumint(9) NOT NULL,
+  `task_level_code` bit(4) NOT NULL COMMENT 'code',
+  `task_level_sub_code` smallint(3) NOT NULL,
+  `task_name` varchar(30) COLLATE utf8mb4_unicode_520_ci NOT NULL,
+  `task_order_section` bit(4) NOT NULL,
+  `task_order_position` bit(4) NOT NULL,
+  `task_orderer` mediumint(9) NOT NULL,
+  `task_priority` bit(1) NOT NULL COMMENT '1 bit = 긴급',
+  `task_base_date` date NOT NULL,
+  `task_limit_date` date NOT NULL,
+  `task_elapsed_base_date` date NOT NULL,
+  `task_elapsed_limit_date` date NOT NULL,
+  `task_state` tinyint(2) NOT NULL COMMENT 'code',
+  `task_birth_date` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+
+--
+-- 테이블의 덤프 데이터 `task_document_header_table`
+--
+
+INSERT INTO `task_document_header_table` (`TID`, `task_level_code`, `task_level_sub_code`, `task_name`, `task_order_section`, `task_order_position`, `task_orderer`, `task_priority`, `task_base_date`, `task_limit_date`, `task_elapsed_base_date`, `task_elapsed_limit_date`, `task_state`, `task_birth_date`) VALUES
+(6, b'0001', 20, '과장급 업무등록', b'0110', b'0011', 401, b'0', '2017-07-05', '2017-07-19', '2017-07-03', '2017-07-26', 10, '2017-07-11'),
+(7, b'0001', 20, '대리급 업무등록', b'0110', b'0010', 501, b'0', '2017-07-12', '2017-07-13', '2017-07-14', '2017-07-15', 10, '2017-07-11'),
+(8, b'0001', 20, '대리급 업무관리', b'0110', b'0010', 502, b'0', '2017-07-04', '2017-07-20', '2017-07-06', '2017-07-14', 10, '2017-07-11'),
+(9, b'0001', 20, '사원급 업무작성', b'0110', b'0001', 888, b'0', '2017-07-12', '2017-07-21', '2017-07-04', '2017-07-25', 10, '2017-07-12');
+
+-- --------------------------------------------------------
+
+--
+-- 테이블 구조 `task_document_header_table_config`
+--
+
+CREATE TABLE `task_document_header_table_config` (
+  `task_level_code` bit(4) NOT NULL COMMENT 'code',
+  `task_level_sub_code` smallint(3) NOT NULL,
+  `task_order_section` bit(4) NOT NULL,
+  `task_orderer` mediumint(9) NOT NULL,
+  `task_state` tinyint(2) NOT NULL COMMENT 'code',
+  `task_priority` bit(2) NOT NULL COMMENT '1 bit = 긴급',
+  `SID` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+
+--
+-- 테이블의 덤프 데이터 `task_document_header_table_config`
+--
+
+INSERT INTO `task_document_header_table_config` (`task_level_code`, `task_level_sub_code`, `task_order_section`, `task_orderer`, `task_state`, `task_priority`, `SID`) VALUES
+(b'1111', 999, b'1111', 8388607, 99, b'11', 1),
+(b'1111', 999, b'1111', 8388607, 99, b'11', 201),
+(b'1111', 999, b'1111', 8388607, 99, b'11', 204),
+(b'1111', 999, b'1111', 8388607, 99, b'11', 401),
+(b'1111', 999, b'1111', 8388607, 99, b'11', 501),
+(b'1111', 999, b'1111', 8388607, 99, b'11', 502),
+(b'1111', 999, b'1111', 8388607, 99, b'11', 888);
+
+--
+-- 덤프된 테이블의 인덱스
+--
+
+--
+-- 테이블의 인덱스 `account_table`
+--
+ALTER TABLE `account_table`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- 테이블의 인덱스 `master_department_info_table`
+--
+ALTER TABLE `master_department_info_table`
+  ADD PRIMARY KEY (`sid_combine_department`);
+
+--
+-- 테이블의 인덱스 `master_position_info_table`
+--
+ALTER TABLE `master_position_info_table`
+  ADD PRIMARY KEY (`sid_combine_position`);
+
+--
+-- 테이블의 인덱스 `master_priority_info_table`
+--
+ALTER TABLE `master_priority_info_table`
+  ADD PRIMARY KEY (`master_task_priority_info_code`);
+
+--
+-- 테이블의 인덱스 `master_state_info_table`
+--
+ALTER TABLE `master_state_info_table`
+  ADD PRIMARY KEY (`master_task_state_info_code`);
+
+--
+-- 테이블의 인덱스 `master_task_level_info_table`
+--
+ALTER TABLE `master_task_level_info_table`
+  ADD PRIMARY KEY (`master_task_level_code`);
+
+--
+-- 테이블의 인덱스 `master_task_level_sub_info_table`
+--
+ALTER TABLE `master_task_level_sub_info_table`
+  ADD PRIMARY KEY (`master_task_level_sub_code`);
+
+--
+-- 테이블의 인덱스 `master_user_info_table`
+--
+ALTER TABLE `master_user_info_table`
+  ADD PRIMARY KEY (`SID`);
+
+--
+-- 테이블의 인덱스 `message_table`
+--
+ALTER TABLE `message_table`
+  ADD PRIMARY KEY (`MSG_CODE`);
+
+--
+-- 테이블의 인덱스 `notice_document_header_table`
+--
+ALTER TABLE `notice_document_header_table`
+  ADD PRIMARY KEY (`notice_id`);
+
+--
+-- 테이블의 인덱스 `server_state_table`
+--
+ALTER TABLE `server_state_table`
+  ADD PRIMARY KEY (`FID`);
+
+--
+-- 테이블의 인덱스 `sid_combine_table`
+--
+ALTER TABLE `sid_combine_table`
+  ADD PRIMARY KEY (`SID`);
+
+--
+-- 테이블의 인덱스 `task_approbation_table`
+--
+ALTER TABLE `task_approbation_table`
+  ADD PRIMARY KEY (`TID`);
+
+--
+-- 테이블의 인덱스 `task_document_header_table`
+--
+ALTER TABLE `task_document_header_table`
+  ADD PRIMARY KEY (`TID`);
+
+--
+-- 테이블의 인덱스 `task_document_header_table_config`
+--
+ALTER TABLE `task_document_header_table_config`
+  ADD PRIMARY KEY (`SID`);
+
+--
+-- 덤프된 테이블의 AUTO_INCREMENT
+--
+
+--
+-- 테이블의 AUTO_INCREMENT `notice_document_header_table`
+--
+ALTER TABLE `notice_document_header_table`
+  MODIFY `notice_id` smallint(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+--
+-- 테이블의 AUTO_INCREMENT `task_document_header_table`
+--
+ALTER TABLE `task_document_header_table`
+  MODIFY `TID` mediumint(9) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

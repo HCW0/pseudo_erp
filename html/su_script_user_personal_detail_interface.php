@@ -5,7 +5,6 @@
 <?php
     session_start();
 
-
 // 유저 세션 검증
 	if(!isset($_SESSION['is_login'])){
 		header('Location: ./su_script_logout_support.php');
@@ -32,29 +31,21 @@
 // class 객체 생성
 
 		$ob1 = new su_class_task_table_config();
-
-
-		//임시코드
-
-		if(isset($_SESSION['current_task_level_code'])==false){
-			$_SESSION['current_base_date']="";
-			$_SESSION['current_limit_date']="";
-			$_SESSION['current_task_level_code'] = $ob1->su_function_init_config($conn,$_SESSION['my_sid_code'],"task_level_code");
-			$_SESSION['current_task_level_sub_code'] = $ob1->su_function_init_config($conn,$_SESSION['my_sid_code'],"task_level_sub_code");
-			$_SESSION['current_task_order_section'] = $ob1->su_function_init_config($conn,$_SESSION['my_sid_code'],"task_order_section");
-			$_SESSION['current_task_orderer'] = $ob1->su_function_init_config($conn,$_SESSION['my_sid_code'],"task_orderer");
-			$_SESSION['current_task_priority'] = $ob1->su_function_init_config($conn,$_SESSION['my_sid_code'],"task_priority");
-			$_SESSION['current_task_state'] = $ob1->su_function_init_config($conn,$_SESSION['my_sid_code'],"task_state");
-		}
-
 		$ob2 = new su_class_value_name_convert_with_code();
-			$_SESSION['my_name'] = $ob2->su_function_convert_name($conn,"master_user_info_table","SID",$_SESSION['my_sid_code'],"master_user_info_name");
-			$_SESSION['my_position'] = $ob2->su_function_convert_name($conn,"master_position_info_table","sid_combine_position",$_SESSION['my_position_code'],"master_position_info_name");
-			$_SESSION['my_department'] = $ob2->su_function_convert_name($conn,"master_department_info_table","sid_combine_department",$_SESSION['my_department_code'],"master_department_info_name");
-
-
 		$ob3 = new su_class_value_combine_combobox_value_to_mysql_query();
+
+	
+
+
+// 하위 업무의 탐색 깊이를 검증할 변수들 초기화
+	if(!isset($_SESSION['depth_position_offset'])){
 		
+		$_SESSION['depth_position_offset'] = 1;
+
+	};
+
+	$offset_position = $_SESSION['my_position_code'] - $_SESSION['depth_position_offset'];
+
 
 
 // 하드 코딩된 함수 이하
@@ -84,6 +75,23 @@ function toWeekNum($get_year, $get_month, $get_day){
 	  					var popUrl = "/su_script_task_detail_pop_up.php";	//팝업창에 출력될 페이지 URL
 						var popOption = "width=680, height=680, resizable=no, scrollbars=no, status=no;";    //팝업창 옵션(optoin)
 						window.open(popUrl+'?TID=' + course,popOption,'width=680,height=680');
+
+
+    
+						}
+
+						</script>
+
+						
+
+	<script> 
+						function hrefClick_of_sub_task($offset){
+     					 // You can't define php variables in java script as $course etc.
+
+
+	  					var popUrl = "/outsource8.php";	//팝업창에 출력될 페이지 URL
+						var popOption = "resizable=no, scrollbars=no, status=no;";    //팝업창 옵션(optoin)
+						window.open(popUrl+'?offset=' + $offset,'width=680,height=680');
 
 
     
@@ -169,14 +177,14 @@ function toWeekNum($get_year, $get_month, $get_day){
 				</div>
 				<div id="head" style="float:right;">
 						
-				<form action = 'outsource.php' method='POST' name="table_filter">		
+				<form action = 'outsource7.php' method='POST' name="table_filter">		
 						<span>시작일</span>
 						<?php
-						 echo '<input type="text" name = "task_select_box[]" id="datepicker1" value="'.$_SESSION['current_base_date'].'">'
+						 echo '<input type="text" name = "task_select_box[]" id="datepicker1" value="'.$_SESSION['current_personal_base_date'].'">'
 						?>
 						<span>/ 마감일</span>
 						<?php
-						 echo '<input type="text" name = "task_select_box[]" id="datepicker2" value="'.$_SESSION['current_limit_date'].'">'
+						 echo '<input type="text" name = "task_select_box[]" id="datepicker2" value="'.$_SESSION['current_personal_limit_date'].'">'
 						?>
 						
 						
@@ -201,78 +209,31 @@ function toWeekNum($get_year, $get_month, $get_day){
 						
 						<th>
 							업무레벨
-							<select name = "task_select_box[]">	
-       							 <?php
-										$query = "SELECT * FROM master_task_level_info_table";
-     					        		$result = mysqli_query($conn,$query);  
-           										 while( $row=mysqli_fetch_array($result) ){         
-														if($row['master_task_level_code']==$_SESSION['current_task_level_code']){
-															echo "<option value='".$row['master_task_level_code']."' selected>".$row['master_task_level_name']."</option>";
-														}
-														else{
-            											 echo "<option value='".$row['master_task_level_code']."'>".$row['master_task_level_name']."</option>";
-       										    		 }
-													}
-      							  ?>         
-   							</select>	
 						</th>
 						
 						
 						<th>
 							업무코드
-							<select name = "task_select_box[]">	
-       							 <?php
-										$query = "SELECT * FROM master_task_level_sub_info_table";
-     					        		$result = mysqli_query($conn,$query);  
-           										 while( $row=mysqli_fetch_array($result) ){    
-														if($row['master_task_level_sub_code']==$_SESSION['current_task_level_sub_code']){
-															echo "<option value='".$row['master_task_level_sub_code']."' selected>".$row['master_task_level_sub_name']."</option>";
-														}
-														else{
-            											 echo "<option value='".$row['master_task_level_sub_code']."'>".$row['master_task_level_sub_name']."</option>";
-       										    		 }
-													}
-      							  ?>         
-   							</select>	
 						</th>
 
 						<th>
 							업무명
 						</th>
+						
 
-						<th>
-							발주처
-							<select  name = "task_select_box[]">	
-       							 <?php
-										$query = "SELECT * FROM master_department_info_table";
-     					        		$result = mysqli_query($conn,$query);  
-           										 while( $row=mysqli_fetch_array($result) ){    
-															if($row['sid_combine_department']==$_SESSION['current_task_order_section']){
-															 echo "<option value='".$row['sid_combine_department']."' selected>".$row['master_department_info_name']."</option>";
-														}
-														else{
-            											  echo "<option value='".$row['sid_combine_department']."'>".$row['master_department_info_name']."</option>";
-       										    		 }                                           
-            											
-       										     }
-      							  ?>          
-   							</select>	
-						</th>
 
 
 						<th>
 							발주자
 							<select  name = "task_select_box[]">	
        							 <?php
-										$query = "SELECT * FROM master_user_info_table";
-     					        		$result = mysqli_query($conn,$query);  
+										$query = "SELECT * FROM sid_combine_table u where u.sid_combine_position = ".$offset_position." AND ".$_SESSION['my_department_code']." = u.sid_combine_department AND u.is_valid=1";
+     					        		$result = mysqli_query($conn,$query);
+										 		echo "<option value='8388607' selected>전체</option>";
            										 while( $row=mysqli_fetch_array($result) ){    
-														                 if($row['SID']==$_SESSION['current_task_orderer']){
-															echo "<option value='".$row['SID']."' selected>".$row['master_user_info_name']."</option>";
-														}
-														else{
-            											  echo "<option value='".$row['SID']."'>".$row['master_user_info_name']."</option>";
-       										    		 }                                    
+														$name_Value = $ob2->su_function_convert_name($conn,"master_user_info_table","SID",$row['SID'],"master_user_info_name");
+														echo "<option value='".$row['SID']."'>".$name_Value."</option>";
+													                                    
             											 
        										     }
       							  ?>          
@@ -287,7 +248,7 @@ function toWeekNum($get_year, $get_month, $get_day){
 										$query = "SELECT * FROM master_priority_info_table";
      					        		$result = mysqli_query($conn,$query);  
            										 while( $row=mysqli_fetch_array($result) ){    
-														if($row['master_task_priority_info_code']==$_SESSION['current_task_priority']){
+														if($row['master_task_priority_info_code']==$_SESSION['current_personal_task_priority']){
 															echo "<option value='".$row['master_task_priority_info_code']."' selected>".$row['master_task_priority_info_name']."</option>";
 														}
 														else{
@@ -318,7 +279,7 @@ function toWeekNum($get_year, $get_month, $get_day){
 										$query = "SELECT * FROM master_state_info_table";
      					        		$result = mysqli_query($conn,$query);  
            										 while( $row=mysqli_fetch_array($result) ){    
-														if($row['master_task_state_info_code']==$_SESSION['current_task_state']){
+														if($row['master_task_state_info_code']==$_SESSION['current_personal_task_state']){
 															echo "<option value='".$row['master_task_state_info_code']."' selected>".$row['master_task_state_info_name']."</option>";
 														}
 														else{
@@ -343,7 +304,7 @@ function toWeekNum($get_year, $get_month, $get_day){
 
 
 			<?php
-/*
+
 				
 				// 각 필드 콤보박스의 입력 값 확인하는 로직
 				// 테이블 위치에 코드값으로 바로 표시됨.
@@ -352,37 +313,50 @@ function toWeekNum($get_year, $get_month, $get_day){
 				echo "debug status";
 				echo "<br />";
 				echo '업무 레벨 ';
-				echo $_SESSION['current_task_level_code'];
+				echo $_SESSION['current_personal_detail_task_level_code'];
 				echo "<br />";
 				echo '업무 코드 ';
-				echo $_SESSION['current_task_level_sub_code'];
+				echo $_SESSION['current_personal_detail_task_level_sub_code'];
 				echo "<br />";
 				echo '발주처 코드 ';
-				echo $_SESSION['current_task_order_section'];
+				echo $_SESSION['current_personal_task_order_section'];
 				echo "<br />";
 				echo '발주자 코드 ';
-				echo $_SESSION['current_task_orderer'];
+				echo $_SESSION['current_personal_task_orderer'];
+				echo "<br />";
+				echo '디테일 테이블 발주자 코드 ';
+				echo $_SESSION['current_personal_detail_task_orderer'];
+				echo "<br />";
+				echo '현 계정 직급 코드 ';
+				echo $_SESSION['my_position_code'];
+				echo "<br />";
+				echo '소업무 검색 직급 코드 ';
+				echo $offset_position;
 				echo "<br />";
 				echo '우선도 코드 ';
-				echo $_SESSION['current_task_priority'];
+				echo $_SESSION['current_personal_task_priority'];
 				echo "<br />";
 				echo '상태 코드 ';
-				echo $_SESSION['current_task_state'];
+				echo $_SESSION['current_personal_task_state'];
 				echo "<br />";
 				echo '필터 시작 일자 ';
-				echo $_SESSION['current_base_date'];
+				echo $_SESSION['current_personal_base_date'];
 				echo "<br />";
 				echo '필터 제한 일자 ';
-				echo $_SESSION['current_limit_date'];
+				echo $_SESSION['current_personal_limit_date'];
 				echo "<br />";
 				
-*/
-
-				$task_table_query = $ob3->su_function_combine_query_to_task_header_table($_SESSION['current_task_level_code'],$_SESSION['current_task_level_sub_code'],$_SESSION['current_task_order_section'],$_SESSION['current_task_orderer'],$_SESSION['current_task_priority'],$_SESSION['current_task_state'],$_SESSION['current_base_date'],$_SESSION['current_limit_date']);
+				$temp = 0;
+				while($_SESSION['depth_position_offset']<10 && $temp==0 || (!$result_set)){
+				$task_table_query = $ob3->su_function_combine_query_to_task_header_table_with_offset($_SESSION['current_personal_detail_task_level_code'],$_SESSION['current_personal_detail_task_level_sub_code'],$_SESSION['current_personal_task_order_section'],$_SESSION['current_personal_detail_task_orderer'],$_SESSION['current_personal_task_priority'],$_SESSION['current_personal_task_state'],$_SESSION['current_personal_base_date'],$_SESSION['current_personal_limit_date']);
 				$result_set = mysqli_query($conn,$task_table_query);
-
-				
-       			/*
+				$temp = mysqli_num_rows($result_set);
+				echo $temp;
+					if($temp==0){
+							$_SESSION['depth_position_offset']++;
+					}
+				}
+       			
 				echo '입력된 쿼리문 ';
 				echo $task_table_query;
 				echo "<br />";   
@@ -396,7 +370,7 @@ function toWeekNum($get_year, $get_month, $get_day){
 					echo "개";
 					echo "<br />";
 					echo "<br />";
-						*/
+						
 				
 
 
@@ -418,10 +392,8 @@ function toWeekNum($get_year, $get_month, $get_day){
 					<td><?php echo 
 						 $ob2->su_function_convert_name($conn,"master_task_level_sub_info_table","master_task_level_sub_code",$row['task_level_sub_code'],"master_task_level_sub_name");
 					?></td>
-					<td><?php echo $row['task_name']?></td>
-					<td><?php echo 
-						 $ob2->su_function_convert_name($conn,"master_department_info_table","sid_combine_department",$row['task_order_section'],"master_department_info_name");
-					?></td>
+					<td><?php echo"<a href='#' onclick='hrefClick_of_sub_task(".$_SESSION['depth_position_offset'].");'/>"; echo $row['task_name']?></a></td>
+				
 					<td><?php echo 
 						 $ob2->su_function_convert_name($conn,"master_user_info_table","SID",$row['task_orderer'],"master_user_info_name");
 					?></td>

@@ -23,7 +23,7 @@ session_start();
     echo $_SESSION['my_department_code'];
     echo $_SESSION['my_position_code'];
     echo $_SESSION['my_sid_code'];
-    header('Location: ./su_script_user_interface.php');
+    header('Location: ./test2.php');
   
  
 ?>

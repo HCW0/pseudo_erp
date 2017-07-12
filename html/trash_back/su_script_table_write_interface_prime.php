@@ -36,7 +36,6 @@
 
 
 
-
 <html>
 	<head>
 			<meta charset="utf-8" />
@@ -55,7 +54,7 @@
 					body {
 						font-family: 'Nanum Gothic', sans-serif;
 					}
-					.nse_content{width:660px;height:500px}
+					.nse_content{width:660px;height:200px}
 			</style>
 
 			<script type="text/javascript">
@@ -122,16 +121,12 @@
 			});
 
 		</script>
-
-
-
-
 	</head>
 
 <!-- 상황에따라서 스마트에디터 사용 일단 서술식 텍스트-->
 	<body style="width:100%">
 	
-		<div id="wapper" style="background-color: ivory; width:100%;">
+		<div id="wapper" style="background-color: ivory; width:930px;">
 			
 				<form action = 'outsource2.php' method='POST' name="table_filter">
 					<a href=#none onclick=this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';> 
@@ -139,18 +134,18 @@
 					</a><DIV style='display:block'> 
 					<table>
 					<tr>
-						<td>업 무 명</td>
+						<td>업무명</td>
 						<td  colspan="5"><input type=text name=task_select_box[] size=60 ></td>
 						
 					</tr>
 					<tr>
-						<td  colspan="1">발 주 처</td>
+						<td  colspan="1">발주처</td>
 						<td  colspan="2"><?php echo $_SESSION['my_department'];?></td>
-						<td  colspan="1">발 주 자</td>
+						<td  colspan="1">발주자</td>
 						<td  colspan="2"><?php echo $_SESSION['my_name'];?></td>
 					</tr>
 					<tr>
-						<td  colspan="1">업 무 레 벨</td>
+						<td  colspan="1">업무레벨</td>
 						<td  colspan="2"><select name = "task_select_box[]">	
        							 <?php
 										$query = "SELECT * FROM master_task_level_info_table";
@@ -162,7 +157,7 @@
 													}
       							  ?>         
    							</select>	</td>
-						<td  colspan="1">우 선 도</td>
+						<td  colspan="1">우선도</td>
 						<td  colspan="2">
 							<select  name = "task_select_box[]">	
        							 <?php
@@ -179,7 +174,7 @@
 						</td>
 					</tr>
 					<tr>
-						<td  colspan="1">업 무 코 드</td>
+						<td  colspan="1">업무코드</td>
 						<td  colspan="2">
 						<select name = "task_select_box[]">	
        							 <?php
@@ -194,7 +189,7 @@
       							  ?>         
    							</select>	
 					</td>
-						<td  colspan="1">상 태 명</td>
+						<td  colspan="1">상태명</td>
 						<td  colspan="2">
 							<select  name = "task_select_box[]">	
        							 <?php
@@ -212,10 +207,10 @@
 						</td>
 					</tr>
 					<tr>
-						<td>과 업 기 간</td>
+						<td>과업기간</td>
 						<td><input type="text" name = "task_select_box[]" id="datepicker1" ></td>
 						<td><input type="text" name = "task_select_box[]" id="datepicker2" ></td>
-						<td>수 행 기 간</td>
+						<td>수행기간</td>
 						<td><input type="text" name = "task_select_box[]" id="datepicker3" ></td>
 						<td><input type="text" name = "task_select_box[]" id="datepicker4" ></td>
 					</tr>
@@ -226,9 +221,8 @@
 					</table>
 
 					</div>
-
-
-				<div style="padding:10px 0 0 0;">
+				
+					<div style="padding:10px 0 0 0;">
 					</div>
 					
 		
@@ -248,24 +242,19 @@
 					</table>
 					</div>
 					
-		
 					<tr>
 						<td colspan=2><hr size=1></td>
 					</tr>
 					
-					
 					<a href=#none onclick=this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';> 
-						<div align="center">결제</div>
+						<div align="center">결재</div>
 					</a><DIV style='display:block'> 
 					<table>
 					<tr>
-						<td> 결 제 루 트</td>
+						<td>최종결제자</td>
 						<td>
 						<select name = "task_select_box[]">	
        							 <?php
-
-										$approbation_path = $_SESSION['my_name'];
-
 										$query = "SELECT * FROM sid_combine_table";
      					        		$result = mysqli_query($conn,$query);  
 										 		$offset = 1;
@@ -275,15 +264,11 @@
 														$query = "SELECT * FROM sid_combine_table u WHERE u.sid_combine_position=$offset_applied";
      					        						$result = mysqli_query($conn,$query);
 														$row=mysqli_fetch_array($result);
-														if(mysqli_num_rows($result)==0||$row['is_valid']==0){
-																// 결제루트에서 공백 자리가 검출된 경우, continue 함
-																continue;
-																}
+														if(mysqli_num_rows($result)!=0&&$row['is_valid']!=0){
 															$aname = $ob2->su_function_convert_name($conn,"master_user_info_table","SID",$row['SID'],"master_user_info_name");
-															$approbation_path = $approbation_path." → ".$aname;
-															echo "<option value='".$row['SID']."' selected>".$approbation_path."</option>";
+															echo "<option value='".$row['SID']."' selected>".$aname."</option>";
 															  
-												 		
+												 		}
 											}
       							  ?>         
    							</select>	
@@ -304,6 +289,11 @@
 					</a><DIV style='display:block'  align="center"> 
 					<textarea name="task_select_box[]" id="task_select_box[]" class="nse_content" rows ="1" cols="35">업무 생성에 대한 설명을 적어주세요.</textarea>
 					
+					<td>
+						<div align = 'center'><input type="submit" value="작성 완료" ></div>
+					</td>
+						
+
 
 				<!--	<script type="text/javascript" src="/smart/js/HuskyEZCreator.js" charset="utf-8"></script>
 				 <script type="text/javascript">
@@ -350,12 +340,6 @@
 
 					</div>
 
-					<tr>
-					<td>
-						<div align = 'center'><input type="submit" value="작성 완료" ></div>
-					</td>
-						
-					</tr>
 
 					</form>
 						
@@ -396,9 +380,12 @@
 
 					</form>        
 
+					
 					</div>
 
+					<tr>
 					
+					</tr>
 
 					<!--검토자 고려해서 만들기-->
 					

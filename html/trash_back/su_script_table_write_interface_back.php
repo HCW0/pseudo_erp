@@ -226,26 +226,8 @@
 					</table>
 
 					</div>
-
-
-				<div style="padding:10px 0 0 0;">
-					</div>
-					
-		
-					<tr>
-						<td colspan=2><hr size=1></td>
-					</tr>
-					
-					<a href=#none onclick=this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';> 
-						<div align="center">상세</div>
-					</a><DIV style='display:block'> 
-					<table>
-					<tr>
-					
-					</tr>
-
-
-					</table>
+				
+					<div style="padding:10px 0 0 0;">
 					</div>
 					
 		
@@ -255,7 +237,7 @@
 					
 					
 					<a href=#none onclick=this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';> 
-						<div align="center">결제</div>
+						<div align="center">상 세</div>
 					</a><DIV style='display:block'> 
 					<table>
 					<tr>
@@ -300,10 +282,11 @@
 					</tr>
 					
 					<a href=#none onclick=this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';> 
-						<p align="center">메모</p>
+						<p align="center">내 용</p>
 					</a><DIV style='display:block'  align="center"> 
-					<textarea name="task_select_box[]" id="task_select_box[]" class="nse_content" rows ="1" cols="35">업무 생성에 대한 설명을 적어주세요.</textarea>
-					
+					<textarea name="task_select_box[]" id="task_select_box[]" class="nse_content" rows ="17" cols="75">업무 생성에 대한 설명을 적어주세요.</textarea>
+
+
 
 				<!--	<script type="text/javascript" src="/smart/js/HuskyEZCreator.js" charset="utf-8"></script>
 				 <script type="text/javascript">

@@ -81,9 +81,9 @@ function toWeekNum($get_year, $get_month, $get_day){
      					 // You can't define php variables in java script as $course etc.
 
 
-	  					var popUrl = "/su_script_task_detail_pop_up.php";	//팝업창에 출력될 페이지 URL
-						var popOption = "width=680, height=680, resizable=no, scrollbars=no, status=no;";    //팝업창 옵션(optoin)
-						window.open(popUrl+'?TID=' + course,popOption,'width=680,height=680');
+	  					var popUrl = "/su_script_table_write_interface.php";	//팝업창에 출력될 페이지 URL
+						var popOption = "width=370, height=360, resizable=no, scrollbars=no, status=no;";    //팝업창 옵션(optoin)
+						window.open(popUrl+'?notice_id=' + course,popOption,'width=100%,height=100%');
 
 
     
@@ -330,9 +330,6 @@ function toWeekNum($get_year, $get_month, $get_day){
    							</select>
 						</th>
 						<th>
-							작성일자
-						</th>
-						<th>
 							<input type="submit" name="Release" value="Click to Release">
 						</form>		
 						</th>
@@ -343,8 +340,8 @@ function toWeekNum($get_year, $get_month, $get_day){
 
 
 			<?php
-/*
-				
+
+				/*
 				// 각 필드 콤보박스의 입력 값 확인하는 로직
 				// 테이블 위치에 코드값으로 바로 표시됨.
 				echo "<br />";
@@ -375,14 +372,14 @@ function toWeekNum($get_year, $get_month, $get_day){
 				echo '필터 제한 일자 ';
 				echo $_SESSION['current_limit_date'];
 				echo "<br />";
-				
-*/
+				*/
+
 
 				$task_table_query = $ob3->su_function_combine_query_to_task_header_table($_SESSION['current_task_level_code'],$_SESSION['current_task_level_sub_code'],$_SESSION['current_task_order_section'],$_SESSION['current_task_orderer'],$_SESSION['current_task_priority'],$_SESSION['current_task_state'],$_SESSION['current_base_date'],$_SESSION['current_limit_date']);
 				$result_set = mysqli_query($conn,$task_table_query);
 
-				
-       			/*
+				/*
+       			
 				echo '입력된 쿼리문 ';
 				echo $task_table_query;
 				echo "<br />";   
@@ -396,8 +393,8 @@ function toWeekNum($get_year, $get_month, $get_day){
 					echo "개";
 					echo "<br />";
 					echo "<br />";
-						*/
-				
+
+				*/
 
 
 			?>
@@ -449,16 +446,6 @@ function toWeekNum($get_year, $get_month, $get_day){
 					<td><?php echo  
 						 $ob2->su_function_convert_name($conn,"master_state_info_table","master_task_state_info_code",$row['task_state'],"master_task_state_info_name");
 					?></td>
-					<td>
-					<?php
-						$query_of_date = "SELECT * FROM task_document_header_table u WHERE u.TId = ".$row['TID'].";";
-     					    $result_of_date = mysqli_query($conn,$query_of_date);  
-           						$row_of_date=mysqli_fetch_array($result_of_date);   
-									echo $row_of_date['task_birth_date'];
-											
-					?>
-					</td>
-
 						<td>
 					<?php
     
@@ -481,7 +468,7 @@ function toWeekNum($get_year, $get_month, $get_day){
 
 
 			<div id="footer" style="padding:600px 0px 0px 1800px;">
-						<input type="button" name="버튼" value="업무등록" onclick="window.open('./su_script_table_write_interface.php','win','width=800,height=700,toolbar=0,scrollbars=0,resizable=0')";>
+						<input type="button" name="버튼" value="업무등록" onclick="window.open('./su_script_table_write_interface.php','win','width=800,height=400,toolbar=0,scrollbars=0,resizable=0')";>
 
 			</div>
 				<p style="background-color:coffee" class="bd" align="center">COPYRIGHT(C) 2017 SUNUNENG.ENG ALL RIGHTS RESERVED&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp주소 : 광주광역시 광산구 송정동 735 선운빌딩 3층 <br/> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp연락처 : 062-651-9272 / FAX : 062-651-9271</p>
@@ -524,7 +511,6 @@ function toWeekNum($get_year, $get_month, $get_day){
 
 		<ul class="cd-navigation cd-single-item-wrapper">
 			<li><a class="current" href="#0">* * * *</a></li>
-
 			<li>
 			
 			<a href="#0"> 
@@ -546,35 +532,12 @@ function toWeekNum($get_year, $get_month, $get_day){
 			
 			
 			</li>
-
-			
-			<li>
-			
-			<a href="#0"> 
-			<a href=#none onclick=this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';> 
-						<div>! 업무관리</div>
-					</a><DIV style='display:none'> 
-					<a href = "su_script_user_interface.php" align = "right">
-				<font color='white' >
-				전체 업무 검색
-				</font></a>
-			
-				<a href = "su_script_user_personal_interface.php" align = "right">
-					<font color='white'>
-					내 업무
-					</font></a>		
-			
-						</DIV>
-			</a>
-			
-			
-			</li>
-
+			<li><a href="su_script_user_interface.php"> # 업무관리</a></li>
 			<li><a href="su_script_approbation_interface.php"> # 결제함</a></li>
 			<li><a href="su_script_configure_interface.php"> # 설정</a></li>
 		</ul> <!-- cd-single-item-wrapper -->
 
-		
+		</nav>
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 		<script src="assets/js/main.js"></script> <!-- Resource jQuery -->
 		<script language="JavaScript" src="assets/js/date_picker.js"></script>
@@ -582,6 +545,7 @@ function toWeekNum($get_year, $get_month, $get_day){
  		<!-- 새로운 달력 자바 스크립트 소스-->
 		<script src="https://code.jquery.com/jquery-1.12.4.js"></script>                     
       	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+		
 		</div>
 	</body>     
 </html>
