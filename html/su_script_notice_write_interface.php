@@ -54,7 +54,7 @@
 					body {
 						font-family: 'Nanum Gothic', sans-serif;
 					}
-					.nse_content{width:660px;height:500px}
+					.nse_content{width:660px;height:300px}
 			</style>
 
 			<script type="text/javascript">
@@ -76,7 +76,7 @@
 
 					var oCurrentCell = oCurrentRow.insertCell(0);
 
-					oCurrentCell.innerHTML = "<tr><td colspan=2><INPUT TYPE='FILE' NAME='filename" + rowIndex + "' size=25></td></tr>";
+					oCurrentCell.innerHTML = "<tr><td colspan=2><INPUT TYPE='FILE' NAME='filename" + rowIndex + "' size=35></td></tr>";
 
 				}
 
@@ -126,11 +126,11 @@
 <!-- 상황에따라서 스마트에디터 사용 일단 서술식 텍스트-->
 	<body style="width:100%">
 	
-		<div id="wapper" style="background-color: ivory; width:100%;">
+		<div id="wapper" style="background-color: ivory; width:800px;">
 			
 				<form action = 'outsource3.php' method='POST' name="table_filter">
 					<a href=#none onclick=this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';> 
-						<div align="center">헤 더</div>
+						<div align="center">공지등록</div>
 					</a><DIV style='display:block'> 
 					<table>
 					<tr>
@@ -166,9 +166,9 @@
 
 					<tr>
 						<td>공 지 기 간</td>
-						<td><input type="text" name = "task_select_box[]" id="datepicker1" ></td>
+						<td><input type="text" name = "task_select_box[]" id="datepicker1" value = <?php echo date("Y-m-d");?> ></td>
 						<td> ~ </td>
-						<td><input type="text" name = "task_select_box[]" id="datepicker2" ></td>
+						<td><input type="text" name = "task_select_box[]" id="datepicker2" value = <?php echo date("Y-m-d");?> ></td>
 					</tr>
 						<tr>
 							<td><br /></td>
@@ -181,7 +181,7 @@
 					
 						내 용</td>
 					
-					<td colspan=3><textarea name="task_select_box[]" id="task_select_box[]" class="nse_content" rows ="17" cols="60"></textarea></td>
+					<td colspan=3><textarea name="task_select_box[]" id="task_select_box[]" class="nse_content" rows ="17" cols="60">간단한 공지 사항에 대한 설명을 적어주세요.</textarea></td>
 
 				
 				

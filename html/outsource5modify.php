@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 
 <?php
 	session_start();
@@ -30,7 +30,7 @@
 		$ob2 = new su_class_value_name_convert_with_code();
 
 
-
+            $TID = $_GET['TID'];
 ?>
 
 
@@ -58,6 +58,8 @@
 					}
 					.nse_content{width:800px;height:300px}
 					.nse_content2{width:660px;height:130px}
+                              .nse_content3{width:35%;height:25px}
+                              .nse_content4{width:40;height:25px}
 					
 				
 					.h_graph ul{margin:0 50px 0 50px;padding:1px 0 0 0;border:1px solid #ddd;border-top:0;border-right:0;font-size:11px;font-family:Tahoma, Geneva, sans-serif;list-style:none}
@@ -67,6 +69,7 @@
 					.h_graph .g_bar span{position:absolute;top:0;right:-50px;width:40px;color:#767676;line-height:20px; padding:0px 55px 0px 0px;}
 			
 
+                  
 					.graph { 
 							position: relative; /* IE is dumb */
 							width: 200px; 
@@ -157,67 +160,10 @@
 		</script>
 
 
-		<script> 
-					function hrefClick(course){
-						// You can't define php variables in java script as $course etc.
-
-
-					var popUrl = "/su_script_task_detail_pop_up.php";	//팝업창에 출력될 페이지 URL
-					var popOption = "width=680, height=680, resizable=no, scrollbars=no, status=no;";    //팝업창 옵션(optoin)
-					window.open(popUrl+'?TID=' + course,popOption,'width=680,height=680');
-
-
-
-					}
-
-		</script>
-
-
-		<script> 
-					function hrefClick_of_sub_task(level,sub_level,tid){
-						// You can't define php variables in java script as $course etc.
-
-					var popOption = "fullscreen=yes, resizable=no, scrollbars=no, status=no;";    //팝업창 옵션(optoin)
-					var popUrl = "/outsource5.php";	//팝업창에 출력될 페이지 URL
-					window.open(popUrl+'?level=' + level +'&sub_level=' + sub_level +'&tid=' + tid,popOption,'height=' + (screen.height-50) + ',width=' + (screen.width+50));
-				
-				
-
-
-					}
-
-		</script>
-
-
-		<script> 
-					function hrefClick_of_delete_task(local){
-						// You can't define php variables in java script as $course etc.
-
-					window.location.href='outsource5delete.php?TID=' + local;
-				
-
-
-					}
-
-		</script>
-		
-
-		<script> 
-					function hrefClick_of_modify_task(local){
-						// You can't define php variables in java script as $course etc.
-
-					window.location.href='outsource5modify.php?TID=' + local;
-				
-
-
-					}
-
-		</script>
-
 	</head>
 
 
-	<body style="width:1300px">
+	<body style="width:99%">
 	
 		<div id="wapper" style="background-color: ivory; width:100%;">
 			
@@ -247,9 +193,9 @@
 
 					<!-- 공정표에 채울 값들을 TID를 key로 해서 가져오는 부분 -->
 					<?php
-										$query = "SELECT * FROM task_document_header_table u where ".$_SESSION['current_focused_TID']." = u.TID;";
+							      $query = "SELECT * FROM task_document_header_table u where $TID = u.TID;";
      					        		$result = mysqli_query($conn,$query);  
-           								$row=mysqli_fetch_array($result);
+           							$row=mysqli_fetch_array($result);
 					
 					 ?>
 
@@ -268,10 +214,10 @@
 							</td>
 					</tr>
 							<tr>
-						<td>업 무 명</td>        
+						<td  colspan="1">업 무 명</td>        
 						<td  colspan="5">
 								 <?php
-										echo $row['task_name'];    
+										echo "<textarea name='task_select_box[]' class='nse_content3'>".$row['task_name']."</textarea>";
       							  ?>  	
 						</td>
 						
@@ -294,9 +240,21 @@
 						
 						<td  colspan="1">우 선 도</td>
 						<td  colspan="2">
-								<?php
-										echo $ob2->su_function_convert_name($conn,"master_priority_info_table","master_task_priority_info_code",$row['task_priority'],"master_task_priority_info_name");
-      							?>  
+							<select  name = "task_select_box[]">	
+       							 <?php
+										$query2 = "SELECT * FROM master_priority_info_table";
+     					        		$result2 = mysqli_query($conn,$query2);  
+           										 while( $row2=mysqli_fetch_array($result2) ){    
+													if($row2['master_task_priority_info_code']!=3){
+                                                                                    if($row2['master_task_priority_info_code']==$row['task_priority'])
+            											      echo "<option value='".$row2['master_task_priority_info_code']." selected'>".$row2['master_task_priority_info_name']."</option>";
+       										    		      else{            
+                                                                                    echo "<option value='".$row2['master_task_priority_info_code']."'>".$row2['master_task_priority_info_name']."</option>";                       
+                                                                                    }
+                                                                              }
+       										     }
+      							  ?>          
+   							</select>
 						</td>
 
 						<td  colspan="1">상 태 명</td>
@@ -334,11 +292,7 @@
 					</tr>
 			
 					</table>
-							<div align = 'right'>
-									<?php echo"<a href='#' onclick='hrefClick_of_modify_task(".$_SESSION['current_focused_TID'].");'/>"; echo '업무 수정</a>  '?>
-									/
-									<?php echo"<a href='#' onclick='hrefClick_of_delete_task(".$_SESSION['current_focused_TID'].");'/>"; echo '  업무 삭제</a>'?>
-							</div>
+
 					</div>
 
 
@@ -368,7 +322,7 @@
 
 								
 									<tr>
-										<td><strong />
+										<td  colspan="1"><strong />
 											진척도 그래프
 										</td>
 										<td colspan='6' class="graph">
@@ -378,7 +332,7 @@
 									</tr>
 
 									<tr>
-									<td><span><strong />NO</span></td>
+									<td><strong />NO</td>
 
 									<td>
 										<strong />하위업무명
@@ -403,13 +357,12 @@
 										<strong />결제의견
 										
 									</td>
-
+										
 
 									<td>
 										<strong />업무가중치
 										
-									</td>
-											
+									</td>	
 									
 									<td colspan='6'>
 										<strong />진척도 그래프
@@ -452,10 +405,15 @@
 									<td>
 										<?php echo "<a href='#' onclick='hrefClick(".$row2['TID'].");'/>결제현황</a><br>";?>
 									</td>
-									
+
+                                                      						
 									<td>
-										<?php echo $row2['task_weight_value'];?>
+
+                                                            <?php
+                                                                  echo "<textarea name='task_select_box[]' class='nse_content4'>".$row2['task_weight_value']."</textarea>";
+                                                            ?>  	
 									</td>
+
 
 									<td class="graph">
    											 <strong class="bar" style="width: 33%;">33%</strong>

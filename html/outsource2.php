@@ -27,38 +27,112 @@
 
 
 		
-    $task_title = $_POST['task_select_box'][0];
-    $task_level = $_POST['task_select_box'][1];
-    $task_priority = $_POST['task_select_box'][2];
-    $task_sub_level = $_POST['task_select_box'][3];
+    $task_title = $_POST['task_select_box'][2];
+    $task_level = $_POST['task_select_box'][0];
+    $task_priority = $_POST['task_select_box'][3];
+    $task_sub_level = $_POST['task_select_box'][1];
     $task_state = $_POST['task_select_box'][4];
+
     $task_base_date = $_POST['task_select_box'][5];
     $task_limit_date = $_POST['task_select_box'][6];
+
     $task_base_elapsed_date = $_POST['task_select_box'][7];
-    $task_limit_elapsed_date = $_POST['task_select_box'][8];     
+    $task_limit_elapsed_date = $_POST['task_select_box'][7];
+
+    $last_checker_SID = $_POST['task_select_box'][8]; 
+    $task_index_contents = $_POST['task_select_box'][9]; 
+
     $my_name_code =  $_SESSION['my_sid_code'];
     $my_department_code = $_SESSION['my_department_code'];
     $my_position_code = $_SESSION['my_position_code'];
-    $last_checker_SID = $_POST['task_select_box'][9]; 
-    $task_index_contents = $_POST['task_select_box'][10]; 
+
+
+     $upper_task_id = $_POST['sub_task_select_box'][0];
+     
+
+    //debug
+    echo "<br />";
+    echo "task_title";
+    echo "<br />";
+    echo $task_title;
+    
+    echo "<br />";
+    echo "task_level";
+    echo "<br />";
+    echo $task_level;
+
+    echo "<br />";
+    echo "task_priority";
+    echo "<br />";
+    echo $task_priority;
+
+    echo "<br />";
+    echo "task_sub_level";
+    echo "<br />";
+    echo $task_sub_level;
+
+    echo "<br />";
+    echo "task_state";
+    echo "<br />";
+    echo $task_state;
+   
+    echo "<br />";
+    echo "date / e-date";
+    echo "<br />";
+    echo $task_base_date;
+    echo "<br />";
+    echo $task_limit_date;
+    echo "<br />";
+    echo $task_base_elapsed_date;
+    echo "<br />";
+    echo $task_limit_elapsed_date;
+    
+    echo "<br />";
+    echo "last approb";
+    echo "<br />";
+    echo $last_checker_SID;
+    echo "<br />";
+    echo "contents";
+    echo $task_index_contents;
+    echo "<br />";
+    echo "upper";
+    echo $upper_task_id;
+    echo "<br />";
+
+
+    $my_name_code =  $_SESSION['my_sid_code'];
+    $my_department_code = $_SESSION['my_department_code'];
+    $my_position_code = $_SESSION['my_position_code'];
+
+
+
+
+
 
     $ob2 = new su_class_value_name_convert_with_code();
     $last_checker_position = $ob2->su_function_convert_name($conn,"sid_combine_table","SID",$last_checker_SID,"sid_combine_position");
 
     $msg_ob = new su_class_message_handler();
   
-    if($task_title==''||$task_base_date==''||$task_limit_date==''||$task_base_elapsed_date==''||$task_limit_elapsed_date==''){
+    if($task_title==''||$task_base_date==''||$task_limit_date==''||$task_base_elapsed_date==''||$task_sub_level==''){
               echo "uninvalid input error in task add module";
               echo "<br />";
               
               $msg_ob->su_function_call_message($conn,514,'su_script_table_write_interface');
 
     }
+    else if($task_base_date>$task_limit_date){
+              $msg_ob->su_function_call_message($conn,513,'su_script_table_write_interface');
+    }
+    else if(($task_base_elapsed_date>$task_limit_date) || ($task_base_elapsed_date<$task_base_date)){
+              $msg_ob->su_function_call_message($conn,513,'su_script_table_write_interface');
+    }
     else{      
 
             $date = date("Y-m-d");
     	    $task_table_query = "Insert into task_document_header_table(task_level_code,task_level_sub_code,task_name,task_order_section,task_order_position,task_orderer,task_priority,task_base_date,task_limit_date,task_elapsed_base_date,task_elapsed_limit_date,task_state,task_birth_date) Values($task_level,$task_sub_level,'$task_title',$my_department_code,$my_position_code,$my_name_code,$task_priority,'$task_base_date','$task_limit_date','$task_base_elapsed_date','$task_limit_elapsed_date',$task_state,'$date');";      
-            
+            echo $task_table_query;
+            echo "<br />";
    
            $result_set = mysqli_query($conn,$task_table_query);
            $task_table_query2 = "select MAX(TID) as Max from task_document_header_table;";
@@ -82,14 +156,24 @@
                     }
                 }
 
-           $task_detail_table_query = "Insert into task_approbation_table(TID,task_order_section,task_sequence_start,task_sequence_current,task_sequence_end) Values($up_page_TID,$my_department_code,$my_position_code,$my_position_code+$offset,$last_checker_position);";
+           $task_detail_table_query = "Insert into task_approbation_table(TID,task_order_section,task_sequence_start,task_sequence_current,task_sequence_end,appro_state,last_appro_date) Values($up_page_TID,$my_department_code,$my_position_code,$my_position_code+$offset,$last_checker_position,0,'".$_SESSION['now_date']."');";
            mysqli_query($conn,$task_detail_table_query);
            echo $task_detail_table_query;
            echo "<br />";
+
+           if($upper_task_id=='') $upper_task_id = $up_page_TID;
            $task_detail_table_query2 = "update task_approbation_table set task_sq_$my_position_code"."layer_message = '$task_index_contents' where TID = $up_page_TID;";
+           $task_detail_table_query3 = "update task_document_header_table set super_task_TID = ".$upper_task_id." where TID = $up_page_TID;";
+
            echo $task_detail_table_query2;
+           echo "<br />";
+           echo $task_detail_table_query3;
+           echo "<br />";
+
            mysqli_query($conn,$task_detail_table_query2);
+           mysqli_query($conn,$task_detail_table_query3);
            $msg_ob->su_function_call_message_callback($conn,515);
+           echo "<script> opener.location.reload(); </script>";
            echo "<script> self.close(); </script>"; 
 
     };

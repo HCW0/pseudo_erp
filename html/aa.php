@@ -64,8 +64,16 @@
 					body {
 						font-family: 'Nanum Gothic', sans-serif;
 					}
-					.nse_content{width:660px;height:500px}
+					.nse_content{width:800px;height:300px}
 					.nse_content2{width:660px;height:130px}
+					
+					 <!-- UI Object 가로 -->
+					.h_graph ul{margin:0 50px 0 50px;padding:1px 0 0 0;border:1px solid #ddd;border-top:0;border-right:0;font-size:11px;font-family:Tahoma, Geneva, sans-serif;list-style:none}
+					.h_graph li{position:relative;margin:10px 0;vertical-align:top;white-space:nowrap}
+					.h_graph .g_term{position:absolute;top:0;left:-50px;width:40px;font-weight:bold;color:#767676;line-height:20px;text-align:right}
+					.h_graph .g_bar{display:inline-block;position:relative;height:20px;border:1px solid #ccc;border-left:0;background:#e9e9e9}
+					.h_graph .g_bar span{position:absolute;top:0;right:-50px;width:40px;color:#767676;line-height:20px; padding:0px 55px 0px 0px;}
+				     <!--UI Object -->
 			</style>
 
 			<script type="text/javascript">
@@ -152,15 +160,31 @@
 	</head>
 
 
-	<body style="width:100%">
+	<body style="width:99%">
 	
 		<div id="wapper" style="background-color: ivory; width:100%;">
 			
+				
+			<p align="center"><img src="./src/su_rsc_sulogo_a.png" width="200" height="100" title="선운로고"/></p>
+				
+				<div id="head" style="float:left;">
+				<span align="left">
+				
+				<?php echo date("Y-m-d");
+					$date = date("Y-m-d");
+					echo " / ";
+					$parts = explode('-',$date);
+					echo "  ".date("W")." 주자";
+					echo "<br />";
+				  ?>
+				  
+				  </span>
+				</div>
 				<form action = 'outsource2.php' method='POST' name="table_filter">
 					<a href=#none onclick=this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';> 
-						<div align="center"><h2>업 무 등 록</h2></div>
+						<div align="center" style="margin:0px 0px 0px 0px"><h2>Detail</h2></div>
 					</a><DIV style='display:block'> 
-					<table>
+					<table width="100%">
 			
 					<tr>
 						<td  colspan="1">업 무 레 벨</td>
@@ -278,31 +302,156 @@
 					</tr>
 					
 					<a href=#none onclick=this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';> 
-						<div align="center">상세</div>
+						<div align="center">공 정 표</div>
 					</a><DIV style='display:block'> 
-					<table>
+						
+					<div align="right">	
+						<?php
+						 echo '<input type="text" name = "task_select_box[]" id="datepicker1" value="'.$_SESSION['current_base_date'].'">'
+						?>
+						/
+						<?php
+						 echo '<input type="text" name = "task_select_box[]" id="datepicker2" value="'.$_SESSION['current_limit_date'].'">'
+						?>
+					</div>
+							<div class="h_graph">
+								<table width="100%">
+								
 					<tr>
-						<td>상위 업무명</td>
-							<td>
-							<select  name = "sub_task_select_box[]">	
-       							 <?php
-										$query = "SELECT * FROM task_document_header_table u WHERE ".$_SESSION['sub_hold_level']."=u.task_level_sub_code";
-     					        		$result = mysqli_query($conn,$query);  
-										 echo "<option value='' selected>해당 업무</option>"; 
-           										 while( $row=mysqli_fetch_array($result) ){   
-															echo "<option value='".$row['TID']."'>".$row['task_name']."</option>";
-													
-													}
-      							  ?>         
-   							</select>	
-							</td>
-						</tr>
-						<tr>
-			
+						<td colspan="1">진척도 그래프</td>
+						<th colspan="12" style="text-align:left">
+										<span class="g_bar" style="width:100%"><span>100%</span></span>
 
-						</tr>
-					</table>
-				</div>
+									</th>
+							
+					</tr>
+
+									<tr>
+									<th rowspan='2'><span>NO</span></th>
+									
+									<th rowspan='2'>
+										등급
+									</th>
+									
+									<th rowspan='2'>
+										업무번호
+									</th>
+
+									<th rowspan='2'>
+										사업명
+									</th>
+									
+									
+									<th rowspan='2'>
+										발주
+										
+									</th>
+									<th rowspan='2'>
+										감독
+									</th>
+					
+									<th colspan='2'>
+										계약
+									</th>
+
+									<th rowspan='2'>
+										착수일
+										
+									</th>
+
+
+									<th rowspan='2'>
+										준공일
+										
+									</th>
+									
+
+									<th rowspan='2'>
+										계약금
+										
+									</th>
+
+
+									<th rowspan='2'>
+										기성
+									</th>
+
+
+									<th rowspan='2'>
+										잔액
+									</th>
+
+
+									<th rowspan='2'>
+										비고	
+									</th>
+									
+									<th rowspan='2'>
+										상태
+									</th>
+									<th rowspan='2'>
+										진척도
+									</th>
+									
+									
+									<td colspan='12'>
+									진척도 그래프
+									</td>
+									
+									
+										
+									</tr>
+							
+									<tr>
+										<th>시작</th>
+										<th>종료</th>
+										<th>1월</th>
+										<th>2월</th>
+										<th>3월</th>
+										<th>4월</th>
+										<th>5월</th>
+										<th>6월</th>
+										<th>7월</th>
+										<th>8월</th>
+										<th>9월</th>
+										<th>10월</th>
+										<th>11월</th>
+										<th>12월</th>		
+									</tr>
+									
+									<tr>
+									<td>.</td>
+									<td>.</td>
+									<td>.</td>
+									<td>.</td>
+									<td>.</td>
+									<td>.</td>
+									<td>.</td>
+									<td>.</td>
+									<td>.</td>
+									<td>.</td>
+									<td>.</td>
+									<td>.</td>
+									<td>.</td>
+									<td>.</td>
+									<td>.</td>
+									<td>.</td>
+									<!-- 진척도 그래프-->
+									
+									</td>
+									
+									</tr>
+							
+						
+
+									</tr>
+									
+					
+
+								</table>
+					
+							</div>
+					</div>
 					
 		
 					<tr>
@@ -310,7 +459,7 @@
 					</tr>
 					
 					
-					<a href=#none onclick=this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';> 
+	<!--			<a href=#none onclick=this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';> 
 						<div align="center">결제</div>
 					</a><DIV style='display:block'> 
 					<table>
@@ -353,10 +502,10 @@
 					
 					<tr>
 						<td colspan=2><hr size=1></td>
-					</tr>
+					</tr>   -->
 					
 					<a href=#none onclick=this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';> 
-						<p align="center">메모</p>
+						<p align="center">메 모</p>
 					</a><DIV style='display:none'  align="center"> 
 							<textarea name="task_select_box[]" class="nse_content" rows ="1" cols="35">업무 생성에 대한 설명을 적어주세요.</textarea>
 						</div>
@@ -367,7 +516,7 @@
 
 					<tr>
 						<td>
-							<div align = 'center'><input type="submit" value="작성 완료" ></div>
+							<div align = 'center'><input type="submit" value="완료" ></div>
 						</td>
 					</tr>
 

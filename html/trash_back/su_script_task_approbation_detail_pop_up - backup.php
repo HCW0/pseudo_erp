@@ -104,6 +104,10 @@
 					</td>
 					</tr>
 
+
+					<!--  -->
+
+
 					<tr>
 
 
@@ -111,9 +115,8 @@
 									$row2 = mysqli_fetch_array($result_set2);
 
 
-
-										// detail debug state
 										/*
+										// detail debug state
 											echo "현재 결제 단계  ";
 											echo $row2['task_sequence_current'];
 											echo "<br />";
@@ -123,8 +126,8 @@
 											echo "종료 결제 단계  ";
 											echo $row2['task_sequence_end'];
 											echo "<br />";
-											*/
-
+										*/
+											
 
 											if($row2['task_sq_1layer_message']!=""){
 												echo "<td>의견</td>";
@@ -133,7 +136,7 @@
 												
 											}
 
-
+											
 											echo "<tr>";
 											if($row2['task_sq_2layer_message']!=""){
 
@@ -207,6 +210,11 @@
 
 					</tr>
 					
+
+
+					<!--  -->
+
+
 					<tr>
 						<td colspan=2><hr size=1></td>
 					</tr>
@@ -220,7 +228,7 @@
 							<td>관련근거</td>
 							<td>
 								&nbsp
-           					 	<a href="미구현"> 개발중입니다. </a>
+           					 	<a href="미구현"> 미구현입니다. </a>
 							</td>
 
 							</tr>

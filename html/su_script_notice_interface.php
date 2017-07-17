@@ -145,41 +145,41 @@ function hrefClick(course){
 
 					<table>
 						<tr>
-						<th><span>NO</span></th>
+						<th width="50px"><span>NO</span></th>
 
-						<th>
+						<th width="50px">
 							공지번호
 						</th>
 
 						
-						<th>
+						<th width="50px">
 							공지등급
 						</th>
 						
 						
-						<th>
+						<th width="150px">
 							공지이름
 						</th>
 
-						<th>
+						<th width="200px">
 							공지기간
 						</th>
 
-						<th>
+						<th width="100px">
 							개시일
 						</th>
 
-						<th>
+						<th width="80px">
 							개시자
 						</th>
 
 
-						<th>
+						<th width="100px">
 							담당부서	
 						</th>
 						
 
-						<th>
+						<th width="70px">
 							상태
 						</th>
 
@@ -235,8 +235,8 @@ function hrefClick(course){
 		
 
 
-			<div id="footer" style="padding:600px 0px 0px 1800px;">
-						<input type="button" name="버튼" value="공지등록" onclick="window.open('./su_script_notice_write_interface.php','win','width=700,height=350,toolbar=0,scrollbars=0,resizable=0')";>
+			<div id="footer" style="padding:300px 0px 0px 1800px;">
+						<input type="button" name="버튼" value="공지등록" onclick="window.open('./su_script_notice_write_interface.php','win','width=800,height=550,toolbar=0,scrollbars=1,resizable=0')";>
 
 			</div>
 				<p style="background-color:coffee" class="bd" align="center">COPYRIGHT(C) 2017 SUNUNENG.ENG ALL RIGHTS RESERVED&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp주소 : 광주광역시 광산구 송정동 735 선운빌딩 3층 <br/> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp연락처 : 062-651-9272 / FAX : 062-651-9271</p>
@@ -248,6 +248,8 @@ function hrefClick(course){
 
 	<nav id="cd-lateral-nav" >
 		<ul class="cd-navigation" >
+		<div style="padding:30px 0px 0px 0px;">
+		</div>
 		<p align="center"><img src="./src/su_rsc_sulogo_back.png" width="200" height="100" title="선운로고"/></p>
 			<li><a class="current" href="#0">* * * *</a></li>
 

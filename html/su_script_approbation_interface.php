@@ -72,19 +72,38 @@ function toWeekNum($get_year, $get_month, $get_day){
 
 
 	<script> 
-						function hrefClick(course){
+						function hrefClick(course,course2){
      					 // You can't define php variables in java script as $course etc.
 
 
 	  					var popUrl = "/su_script_task_approbation_detail_pop_up.php";	//팝업창에 출력될 페이지 URL
 						var popOption = "resizable=no, scrollbars=no, status=no;";    //팝업창 옵션(optoin)
-						window.open(popUrl+'?TID=' + course,popOption,'width=680,height=680');
+						window.open(popUrl+'?AID=' + course + '&TID=' + course2,popOption,'width=680,height=680');
 
 
     
 						}
 
 						</script>
+
+
+	
+
+			<script> 
+						function selectEvent(selectObj,field_index){
+     					 // You can't define php variables in java script as $course etc.
+
+
+	  					var popUrl = "./common_func/su_function_real_time_combobox_appro.php";	//팝업창에 출력될 페이지 URL
+						var popOption = "width=680, height=680, resizable=no, scrollbars=no, status=no;";    //팝업창 옵션(optoin)
+						 window.location.href = popUrl+'?var=' + selectObj.value + '&index=' +field_index;
+
+
+    
+						}
+
+			</script>
+
 
 
 
@@ -167,11 +186,11 @@ function toWeekNum($get_year, $get_month, $get_day){
 				<form action = 'outsource4.php' method='POST' name="table_filter">		
 						<span>시작일</span>
 						<?php
-						 echo '<input type="text" name = "task_select_box[]" id="datepicker1" value="'.$_SESSION['current_ap_base_date'].'">'
+						 echo '<input type="text" name = "task_select_box[]" id="datepicker1"  onchange="javascript:selectEvent(this,5); value="'.$_SESSION['current_ap_base_date'].'">'
 						?>
 						<span>/ 마감일</span>
 						<?php
-						 echo '<input type="text" name = "task_select_box[]" id="datepicker2" value="'.$_SESSION['current_ap_limit_date'].'">'
+						 echo '<input type="text" name = "task_select_box[]" id="datepicker2"  onchange="javascript:selectEvent(this,6); value="'.$_SESSION['current_ap_limit_date'].'">'
 						?>
 						
 						
@@ -187,20 +206,22 @@ function toWeekNum($get_year, $get_month, $get_day){
 
 					<table>
 						<tr>
-						<th><span>NO</span></th>
+						<th width="50px"><span>NO</span></th>
 
-						<th>
+						<th width="80px">
 							업무번호
 						</th>
 
 						
-						<th>
-							업무레벨
-							<select name = "task_select_box[]">	
+						<th width="100px">
+							업무등급
+							<select name = "task_select_box[]"  onchange="javascript:selectEvent(this,0);">	
        							 <?php
 										$query = "SELECT * FROM master_task_level_info_table";
      					        		$result = mysqli_query($conn,$query);  
-           										 while( $row=mysqli_fetch_array($result) ){         
+										 echo "<option value='15'>전체</option>";
+           										 while( $row=mysqli_fetch_array($result)){
+														if($row['master_task_level_code']!=15){           
 														if($row['master_task_level_code']==$_SESSION['current_ap_task_level_code']){
 															echo "<option value='".$row['master_task_level_code']."' selected>".$row['master_task_level_name']."</option>";
 														}
@@ -208,65 +229,63 @@ function toWeekNum($get_year, $get_month, $get_day){
             											 echo "<option value='".$row['master_task_level_code']."'>".$row['master_task_level_name']."</option>";
        										    		 }
 													}
-      							  ?>         
+      							  				 }
+									?>        
    							</select>	
 						</th>
 						
 						
-						<th>
-							업무코드
-							<select name = "task_select_box[]">	
+						<th width="300px">
+							사업명
+							<select name = "task_select_box[]" onchange="javascript:selectEvent(this,1);">	
        							 <?php
+										$cnt = 0;
 										$query = "SELECT * FROM master_task_level_sub_info_table";
-     					        		$result = mysqli_query($conn,$query);  
-           										 while( $row=mysqli_fetch_array($result) ){    
-														if($row['master_task_level_sub_code']==$_SESSION['current_ap_task_level_sub_code']){
-															echo "<option value='".$row['master_task_level_sub_code']."' selected>".$row['master_task_level_sub_name']."</option>";
+     					        		$result = mysqli_query($conn,$query); 
+										 		 echo "<option value='999' selected>전체</option>"; 
+           										 while( $row=mysqli_fetch_array($result) ){
+														
+														if(($row['master_task_level_code']==$_SESSION['current_ap_task_level_code'])){
+													
+														if($row['master_task_level_sub_code']!=999){
+																if($_SESSION['current_ap_task_level_sub_code']==$row['master_task_level_sub_code']){
+																	$cnt=1;
+																	echo "<option value='".$row['master_task_level_sub_code']."' selected>".$row['master_task_level_sub_name']."</option>";
+																}else{
+																	echo "<option value='".$row['master_task_level_sub_code']."'>".$row['master_task_level_sub_name']."</option>";
+																}
+															}
 														}
-														else{
-            											 echo "<option value='".$row['master_task_level_sub_code']."'>".$row['master_task_level_sub_name']."</option>";
-       										    		 }
 													}
+													if($cnt==0) $_SESSION['current_ap_task_level_sub_code'] = 999;
+							
       							  ?>         
    							</select>	
 						</th>
 
-						<th>
+						<th width="250px">
 							업무명
 						</th>
 
-						<th>
+						<th width="100px">
 							발주처
-							<select  name = "task_select_box[]">	
-       							 <?php
-										$query = "SELECT * FROM master_department_info_table";
-     					        		$result = mysqli_query($conn,$query);  
-           										 while( $row=mysqli_fetch_array($result) ){    
-															if($row['sid_combine_department']==$_SESSION['current_ap_task_order_section']){
-															 echo "<option value='".$row['sid_combine_department']."' selected>".$row['master_department_info_name']."</option>";
-														}
-														else{
-            											  echo "<option value='".$row['sid_combine_department']."'>".$row['master_department_info_name']."</option>";
-       										    		 }                                           
-            											
-       										     }
-      							  ?>          
-   							</select>	
 						</th>
 
 
-						<th>
+						<th width="80px">
 							발주자
-							<select  name = "task_select_box[]">	
+							<select name = "task_select_box[]" onchange="javascript:selectEvent(this,2);">	
        							 <?php
-										$query = "SELECT * FROM master_user_info_table";
-     					        		$result = mysqli_query($conn,$query);  
+										$query = "SELECT * FROM sid_combine_table u where ".$_SESSION['my_department_code']." = u.sid_combine_department AND u.is_valid=1";
+     					        		$result = mysqli_query($conn,$query);
+										 		echo "<option value='8388607'>전체</option>";
            										 while( $row=mysqli_fetch_array($result) ){    
+														$name_Value = $ob2->su_function_convert_name($conn,"master_user_info_table","SID",$row['SID'],"master_user_info_name");
 														                 if($row['SID']==$_SESSION['current_ap_task_orderer']){
-															echo "<option value='".$row['SID']."' selected>".$row['master_user_info_name']."</option>";
+															echo "<option value='".$row['SID']."' selected>".$name_Value."</option>";
 														}
 														else{
-            											  echo "<option value='".$row['SID']."'>".$row['master_user_info_name']."</option>";
+            											  echo "<option value='".$row['SID']."'>".$name_Value."</option>";
        										    		 }                                    
             											 
        										     }
@@ -275,20 +294,22 @@ function toWeekNum($get_year, $get_month, $get_day){
 						</th>
 						
 
-						<th>
+						<th width="80px">
 							우선도
-							<select  name = "task_select_box[]">	
+							<select name = "task_select_box[]" onchange="javascript:selectEvent(this,3);">	
        							 <?php
 										$query = "SELECT * FROM master_priority_info_table";
-     					        		$result = mysqli_query($conn,$query);  
-           										 while( $row=mysqli_fetch_array($result) ){    
+										$result = mysqli_query($conn,$query);
+										 echo "<option value='3'>전체</option>";
+           										 while( $row=mysqli_fetch_array($result) ){   
+														if($row['master_task_priority_info_code']!=3){  
 														if($row['master_task_priority_info_code']==$_SESSION['current_ap_task_priority']){
 															echo "<option value='".$row['master_task_priority_info_code']."' selected>".$row['master_task_priority_info_name']."</option>";
 														}
 														else{
             											  echo "<option value='".$row['master_task_priority_info_code']."'>".$row['master_task_priority_info_name']."</option>";
        										    		 }                                             
-            											 
+													}
        										     }
       							  ?>          
    							</select>
@@ -296,35 +317,37 @@ function toWeekNum($get_year, $get_month, $get_day){
 
 
 
-						<th>
+						<th width="200px">
 							과업기간
 						</th>
 
 
-						<th>
+						<th width="200px">
 							수행기간
 						</th>
 
 
-						<th>
+						<th width="100px">
 							상태명
-							<select  name = "task_select_box[]">	
+							<select name = "task_select_box[]" onchange="javascript:selectEvent(this,4);">		
        							 <?php
 										$query = "SELECT * FROM master_state_info_table";
-     					        		$result = mysqli_query($conn,$query);  
-           										 while( $row=mysqli_fetch_array($result) ){    
+										$result = mysqli_query($conn,$query);
+										 echo "<option value='99'>전체</option>";
+           										 while( $row=mysqli_fetch_array($result) ){   
+														if($row['master_task_state_info_code']!=99){  
 														if($row['master_task_state_info_code']==$_SESSION['current_ap_task_state']){
 															echo "<option value='".$row['master_task_state_info_code']."' selected>".$row['master_task_state_info_name']."</option>";
 														}
 														else{
             											  echo "<option value='".$row['master_task_state_info_code']."'>".$row['master_task_state_info_name']."</option>";
        										    		 }                                             
-            											 
+														}
        										     }
       							  ?>          
    							</select>
 						</th>
-						<th>
+						<th width="100px">
 							작성일자
 						</th>
 						<th>
@@ -338,7 +361,7 @@ function toWeekNum($get_year, $get_month, $get_day){
 
 
 			<?php
-/*
+
 				
 				// 각 필드 콤보박스의 입력 값 확인하는 로직
 				// 테이블 위치에 코드값으로 바로 표시됨.
@@ -371,7 +394,7 @@ function toWeekNum($get_year, $get_month, $get_day){
 				echo $_SESSION['current_ap_limit_date'];
 				echo "<br />";
 				
-*/
+
 
 				$task_table_query = $ob3->su_function_combine_query_to_task_header_table($_SESSION['current_ap_task_level_code'],$_SESSION['current_ap_task_level_sub_code'],$_SESSION['current_ap_task_order_section'],$_SESSION['current_ap_task_orderer'],$_SESSION['current_ap_task_priority'],$_SESSION['current_ap_task_state'],$_SESSION['current_ap_base_date'],$_SESSION['current_ap_limit_date']);
 				$result_set = mysqli_query($conn,$task_table_query);
@@ -381,16 +404,9 @@ function toWeekNum($get_year, $get_month, $get_day){
 				$result_set2 = mysqli_query($conn,$task_table_query2);
 				$row2 = mysqli_fetch_array($result_set2);
 
-				$filtered_TID='';
-				if((($_SESSION['my_position_code']<8)&&($_SESSION['my_department_code']==$row2['task_order_section']))||($_SESSION['my_position_code']>=8)){
-					if($row2['task_sequence_current']==$_SESSION['my_sid_code']){
-						$filtered_TID = $row2['TID'];
-					}
-				}
-
 
 				
-       			/*
+       			
 				echo '입력된 쿼리문 ';
 				echo $task_table_query;
 				echo "<br />";   
@@ -404,7 +420,7 @@ function toWeekNum($get_year, $get_month, $get_day){
 					echo "개";
 					echo "<br />";
 					echo "<br />";
-						*/
+						
 				
 
 
@@ -426,9 +442,16 @@ function toWeekNum($get_year, $get_month, $get_day){
 				$filtered_TID='';
 				if((($_SESSION['my_position_code']<8)&&($_SESSION['my_department_code']==$row2['task_order_section']))||($_SESSION['my_position_code']>=8)){
 
+						//debug
+						echo 'in';
+						echo "<br />";
 					if($row2['task_sequence_current']==$_SESSION['my_position_code']){
 						
 						$filtered_TID = $row2['TID'];
+
+						//debug
+						echo $filtered_TID;
+						echo "<br />";
 					}
 				}
 				if($filtered_TID=='') continue;
@@ -487,7 +510,7 @@ function toWeekNum($get_year, $get_month, $get_day){
 						<td>
 					<?php
     
-     					 echo "<a href='#' onclick='hrefClick(".$row['TID'].");'/>결제하기</a><br>";
+     					 echo "<a href='#' onclick='hrefClick(".$row2['AID'].','.$row2['TID'].");'/>결제하기</a><br>";
     
 					?>
 
