@@ -115,6 +115,14 @@ function toWeekNum($get_year, $get_month, $get_day){
 	
 	
 <style>
+	
+		@import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
+	body {
+		font-family: 'Nanum Gothic', sans-serif;
+	}
+	.nse_content{width:660px;height:500px}
+	.nse_content2{width:660px;height:130px}
+
   table {
     width: 100%;
     border-top: 1px solid #444444;

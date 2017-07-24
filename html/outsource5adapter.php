@@ -24,7 +24,9 @@
                   $_SESSION['current_personal_task_orderer'] = 8388607;
                   $_SESSION['current_personal_task_level_code'] = $level;
 			            $_SESSION['current_personal_task_level_sub_code'] = $sub_level;
-           
+                  
+                  $_SESSION['hold_level'] = $level;
+                  $_SESSION['sub_hold_level'] = $sub_level;
                   
 
             header('location: ./su_script_user_personal_interface_adapter_to_detail.php');

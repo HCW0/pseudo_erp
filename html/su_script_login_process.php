@@ -17,7 +17,8 @@ session_start();
         }
         $use = mysqli_select_db($conn,"suproject");
         if(!$use) die('cannot open db'.mysqli_error($conn));
-
+// 객체 생성
+        $msg_ob = new su_class_message_handler();
 
 // 서버 점검 확인 파트
          $flag = 'shut_down';
@@ -26,7 +27,7 @@ session_start();
          $row = mysqli_fetch_assoc($result_set);
          $flag_Value = $row['FLAG_VALUE'];
          if($flag_Value) {
-              $msg_ob = new su_class_message_handler();
+              
               $msg_ob->su_function_call_message($conn,334,'su_script_login_interface');
          
           die();   
@@ -45,7 +46,6 @@ session_start();
           $_SESSION['my_sid_code']= $row['SID'];
           $flag_Value = $row['FLAG_ACCOUNT_LOCK'];
          if($flag_Value) {
-              $msg_ob = new su_class_message_handler();
               $msg_ob->su_function_call_message($conn,155,'su_script_login_interface');
           die();   
          }
@@ -65,13 +65,13 @@ if(($_POST['id']!=null)&&($_POST['pw']!=null)){
     }else{
         if(($result_id)&&($result_pw==false)){
             $worker = new su_class_login_support();
-            $worker->incorrect_cnt($_POST['id'],$conn);
-        }
+            $worker->incorrect_cnt($_POST['id'],$conn,$msg_ob);
+        }else{
        
          $_SESSION['msg']='존재하지 않는 계정입니다.';
     
         header('Location: ./su_script_login_interface.php');
-     
+        }
     }
 
 }else{

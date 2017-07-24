@@ -116,6 +116,11 @@
 	<body>
 
 		<div id="wapper" style="background-color: ivory; width:640px;">
+			<div id="wapper" style="background-color:#f5f4e9; width:100%; border:1px solid black">
+		<div id="first" style="background-color:skyblue; width:100%;height:30px; border:2px solid black">
+			</div>	
+			
+			
 			<table summary="글쓰기 전체 테이블">
 	
 				

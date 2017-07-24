@@ -54,7 +54,7 @@
 					body {
 						font-family: 'Nanum Gothic', sans-serif;
 					}
-					.nse_content{width:660px;height:300px}
+					.nse_content{width:520px;height:120px}
 			</style>
 
 			<script type="text/javascript">
@@ -124,10 +124,11 @@
 	</head>
 
 <!-- 상황에따라서 스마트에디터 사용 일단 서술식 텍스트-->
-	<body style="width:100%">
+	<body style="width:750px">
 	
-		<div id="wapper" style="background-color: ivory; width:800px;">
-			
+		<div id="wapper" style="background-color:#f5f4e9; width:100%; border:1px solid black">
+		<div id="first" style="background-color:skyblue; width:100%;height:30px; border:2px solid black">
+			</div>	
 				<form action = 'outsource3.php' method='POST' name="table_filter">
 					<a href=#none onclick=this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';> 
 						<div align="center">공지등록</div>
@@ -181,7 +182,7 @@
 					
 						내 용</td>
 					
-					<td colspan=3><textarea name="task_select_box[]" id="task_select_box[]" class="nse_content" rows ="17" cols="60">간단한 공지 사항에 대한 설명을 적어주세요.</textarea></td>
+					<td colspan=3><textarea name="task_select_box[]" id="task_select_box[]" class="nse_content" rows ="17" cols="50">간단한 공지 사항에 대한 설명을 적어주세요.</textarea></td>
 
 				
 				
@@ -190,7 +191,7 @@
 
 					<tr>
 					<td colspan="4">
-						<div align = 'right'><input type="submit" value="작성 완료" ></div>
+						<div align = 'right'><input type="submit" value="완료" ></div>
 					</td>
 						
 					</tr>

@@ -35,12 +35,8 @@
 
 		$ob1 = new su_class_task_table_config();
 		$ob2 = new su_class_value_name_convert_with_code();
-
-		//임시코드
-
-
 		$ob3 = new su_class_value_combine_combobox_value_to_mysql_query();
-		
+		$UI_form_ob = new su_class_UI_format_generator();		
 
 
 // 하드 코딩된 함수 이하
@@ -62,7 +58,7 @@ function hrefClick(course){
 
 	  	var popUrl = "/su_script_notice_pop_up.php";	//팝업창에 출력될 페이지 URL
 		var popOption = "width=370, height=360, resizable=no, scrollbars=no, status=no;";    //팝업창 옵션(optoin)
-		window.open(popUrl+'?notice_id=' + course,popOption,'width=520px,height=380px');
+		window.open(popUrl+'?notice_id=' + course,popOption,'width=491px,height=370px');
 
 
     
@@ -93,6 +89,11 @@ function hrefClick(course){
 	
 	
 <style>
+  a{ color:blue;}
+  a:hover { color:blue;}
+  a:active { color:red;}
+  a:visited { color:purple;}
+
   table {
     width: 100%;
     border-top: 1px solid #444444;
@@ -109,6 +110,58 @@ function hrefClick(course){
   }
   th:nth-child(2n+1), td:nth-child(2n+1) {
     background-color: #;
+  }
+  
+  
+  .fixed-table-container {
+        width: 1000px;
+        height: 550px;
+        border: 1px solid #000;
+        position: relative;
+        padding-top: 30px; /* header-bg height값 */
+    }
+    .header-bg {
+        background: skyblue;
+        height: 30px; /* header-bg height값 */
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        border-bottom: 1px solid #000;
+    }
+    .table-wrapper {
+        overflow-x: hidden;
+        overflow-y: auto;
+        height: 100%;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    td {
+		vertical-align:middle;
+        border-bottom: 1px solid #ccc;
+        padding: 5px;
+    }
+    td + td {
+        border-left: 1px solid #ccc;
+    }
+    th {
+        padding: 0px; /* reset */
+    }
+    .th-text {
+		text-align:center;
+        position: absolute;
+        top: 0;
+        width: inherit;
+        line-height: 30px; /* header-bg height값 */
+        border-left: 1px solid #000;
+    }
+    th:first-child .th-text {
+        border-left: none;
+    }
+	#wrapper{
+	  padding: 0px 0px 0px 200px;
   }
 </style>
 
@@ -129,74 +182,76 @@ function hrefClick(course){
 		<a id="cd-menu-trigger" href="#0"><span class="cd-menu-text">메뉴</span><span class="cd-menu-icon"></span></a>
 
 		
-	<div id="wrapper" style="width:1900px" "height:300px">
-			<p align="center"><img src="./src/su_rsc_sulogo_a.png" width="200" height="100" title="선운로고"/></p>
-				
+	<div id="wrapper" style="width:1200px" "height:300px">
+
+					<?php
+						$UI_form_ob->su_function_get_title('공지사항 게시판',$_SESSION['my_name'],$_SESSION['my_position'],$_SESSION['my_department'],'su_script_user_personal_interface');
+					?>
 		
 						
 				<form action = 'outsource.php' method='POST' name="table_filter">		
 
+
 		
 				
 			 
-				<div style="height: 100% ; 
-						width: 100% ;
-						 ;">
+				<div class="fixed-table-container">
+					<div class="header-bg"></div>	 
+					<div class="table-wrapper" style="width:100%; height:500px; overflow:auto">
+					<thead>
 
+						 
 					<table>
 						<tr>
-						<th width="50px"><span>NO</span></th>
+						<th ><div class="th-text">NO</div></th>
 
-						<th width="50px">
-							공지번호
-						</th>
 
 						
-						<th width="50px">
-							공지등급
-						</th>
-						
-						
-						<th width="150px">
-							공지이름
-						</th>
-
-						<th width="200px">
-							공지기간
-						</th>
-
 						<th width="100px">
-							개시일
+							<div class="th-text">공지등급</div>
+						</th>
+						
+						
+						<th >
+							<div class="th-text" style="padding:0px 0px 0px 4%">공지이름</div>
 						</th>
 
-						<th width="80px">
-							개시자
+						<th >
+							<div class="th-text" style="padding:0px 0px 0px 9%">공지기간</div>
+						</th>
+
+						<th >
+							<div class="th-text" style="padding:0px 0px 0px 4%">개시일</div>
+						</th>
+
+						<th >
+							<div class="th-text" style="padding:0px 0px 0px 1%">개시자</div>
 						</th>
 
 
-						<th width="100px">
-							담당부서	
+						<th>
+							<div class="th-text" style="padding:0px 0px 0px 3%">담당부서</div>
 						</th>
 						
 
-						<th width="70px">
-							상태
+						<th >
+							<div class="th-text" style="padding:0px 0px 0px 2%">상태</div>
 						</th>
 
-						
+						</thead>
 		<?php
 			$cnt = 1;
-			$task_table_query = "select * from notice_document_header_table;";
+			$task_table_query = "select * from notice_document_header_table order by notice_birth_date DESC,notice_priority DESC;";
 			$result_set = mysqli_query($conn,$task_table_query);
             while($row = mysqli_fetch_array($result_set)) {
             ?>
                 <tr>
 					<td><?php echo $cnt++?></td>
-                    <td><?php echo $row['notice_id']?></td>
+
 					<td><?php 
 						switch($row['notice_priority']){
 							case 0 : echo '보통'; break;
-							case 1 : echo '긴급'; break;
+							case 1 : echo "<font color='red' />긴급"; break;
 						}
 					?></td>
 
@@ -209,7 +264,6 @@ function hrefClick(course){
 ?>
 
 
-
 					</td>
 
 					<td><?php echo $row['notice_base_date']."~".$row['notice_limit_date']?></td>
@@ -220,9 +274,9 @@ function hrefClick(course){
 					<td><?php
 							echo $ob2->su_function_convert_name($conn,"master_department_info_table","sid_combine_department",$row['notice_order_section'],"master_department_info_name");
 						?></td>
-					<td><?php 
+					<td width=7%><?php 
 						$is_valid = (time() >= strtotime($row['notice_base_date'])) && (time() <= strtotime($row['notice_limit_date']));
-					echo $is_valid ? '활성중' : '비활성'; ?></td>
+					echo $is_valid ? "<img src='./src/off_sign.png'/ width=50% height=5%>" : "<img src='./src/on_sign.png'/ width=50% height=5%>"; ?></td>
                 </tr>
 
             <?php
@@ -232,24 +286,21 @@ function hrefClick(course){
 					</table>
 				</div>
 
-		
-
-
-			<div id="footer" style="padding:300px 0px 0px 1800px;">
-						<input type="button" name="버튼" value="공지등록" onclick="window.open('./su_script_notice_write_interface.php','win','width=800,height=550,toolbar=0,scrollbars=1,resizable=0')";>
+			<div  id="footer" style="padding:70px 0px 0px 930px;">
+				<input type="button" name="버튼" value="공지등록" onclick="window.open('./su_script_notice_write_interface.php','win','width=575,height=286,toolbar=0,scrollbars=0,resizable=0')";>
 
 			</div>
+			<div id="footer" style="padding:50px 0px 0px 800px;">
+						
+			</div>
 				<p style="background-color:coffee" class="bd" align="center">COPYRIGHT(C) 2017 SUNUNENG.ENG ALL RIGHTS RESERVED&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp주소 : 광주광역시 광산구 송정동 735 선운빌딩 3층 <br/> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp연락처 : 062-651-9272 / FAX : 062-651-9271</p>
-		
+		</div>
 </header>
 
-	<div style="height:1000px">
-
+<div style="height:1000px">
 
 	<nav id="cd-lateral-nav" >
 		<ul class="cd-navigation" >
-		<div style="padding:30px 0px 0px 0px;">
-		</div>
 		<p align="center"><img src="./src/su_rsc_sulogo_back.png" width="200" height="100" title="선운로고"/></p>
 			<li><a class="current" href="#0">* * * *</a></li>
 
@@ -260,12 +311,12 @@ function hrefClick(course){
 			
 				<a>부서
 					<font color='white'><?php
-					echo  $_SESSION['my_department'];
+					echo $_SESSION['my_department'];
 				?></font></a>		
 			
 				<a>직급
 					<font color='white'><?php
-					echo  $_SESSION['my_position'];
+					echo $_SESSION['my_position'];
 				?></font></a>
 
 				<a>사번
@@ -281,20 +332,25 @@ function hrefClick(course){
 
 		<ul class="cd-navigation cd-single-item-wrapper">
 			<li><a class="current" href="#0">* * * *</a></li>
+
+
+<li><a href="./su_script_notice_interface.php"> # 공지사항</a></li>
+			
 			<li>
 			
 			<a href="#0"> 
 			<a href=#none onclick=this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';> 
-						<div>! 공지사항</div>
+						<div>! 업무관리</div>
 					</a><DIV style='display:none'> 
-					<a href = "./su_script_notice_active_only_interface.php" align = "right">
-				<font color='white' >
-				공지사항
-				</font></a>
 			
-				<a href = "./su_script_notice_interface.php" align = "right">
+				<a href = "su_script_user_personal_interface.php" align = "right">
 					<font color='white'>
-					공지사항 게시판
+					내 업무
+					</font></a>	
+
+				<a href = "su_script_process_table_interface.php" align = "right">
+					<font color='white'>
+					공정표 조회
 					</font></a>		
 			
 						</DIV>
@@ -302,9 +358,10 @@ function hrefClick(course){
 			
 			
 			</li>
-			<li><a href="su_script_user_interface.php"> # 업무관리</a></li>
+
 			<li><a href="su_script_approbation_interface.php"> # 결제함</a></li>
 			<li><a href="su_script_configure_interface.php"> # 설정</a></li>
+			<li><a href="rhksflwk.php"> # 관리자 모드</a></li>
 		</ul> <!-- cd-single-item-wrapper -->
 
 		
@@ -315,14 +372,7 @@ function hrefClick(course){
  		<!-- 새로운 달력 자바 스크립트 소스-->
 		<script src="https://code.jquery.com/jquery-1.12.4.js"></script>                     
       	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-		
 		</div>
-	</body> 
-
-
-
-
-
-
+	</body>    
 
 </html>

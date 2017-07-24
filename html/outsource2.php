@@ -26,21 +26,20 @@
 
 
 
-		
-    $task_title = $_POST['task_select_box'][2];
-    $task_level = $_POST['task_select_box'][0];
-    $task_priority = $_POST['task_select_box'][3];
-    $task_sub_level = $_POST['task_select_box'][1];
-    $task_state = $_POST['task_select_box'][4];
+	$task_level = $_SESSION['hold_level'];
+    $task_sub_level = $_SESSION['sub_hold_level'];
+    $task_title = $_POST['task_select_box'][0];
+    $task_priority = $_POST['task_select_box'][1];
+    $task_state = $_POST['task_select_box'][2];
 
-    $task_base_date = $_POST['task_select_box'][5];
-    $task_limit_date = $_POST['task_select_box'][6];
+    $task_base_date = $_POST['task_select_box'][3];
+    $task_limit_date = $_POST['task_select_box'][4];
 
-    $task_base_elapsed_date = $_POST['task_select_box'][7];
-    $task_limit_elapsed_date = $_POST['task_select_box'][7];
+    $task_base_elapsed_date = $_POST['task_select_box'][5];
+    $task_limit_elapsed_date = $_POST['task_select_box'][5];
 
-    $last_checker_SID = $_POST['task_select_box'][8]; 
-    $task_index_contents = $_POST['task_select_box'][9]; 
+    $path_number = $_POST['task_select_box'][6]; 
+    $task_index_contents = $_POST['task_select_box'][7]; 
 
     $my_name_code =  $_SESSION['my_sid_code'];
     $my_department_code = $_SESSION['my_department_code'];
@@ -88,9 +87,9 @@
     echo $task_limit_elapsed_date;
     
     echo "<br />";
-    echo "last approb";
+    echo "path num";
     echo "<br />";
-    echo $last_checker_SID;
+    echo $path_number;
     echo "<br />";
     echo "contents";
     echo $task_index_contents;
@@ -110,11 +109,11 @@
 
 
     $ob2 = new su_class_value_name_convert_with_code();
-    $last_checker_position = $ob2->su_function_convert_name($conn,"sid_combine_table","SID",$last_checker_SID,"sid_combine_position");
+
 
     $msg_ob = new su_class_message_handler();
   
-    if($task_title==''||$task_base_date==''||$task_limit_date==''||$task_base_elapsed_date==''||$task_sub_level==''){
+    if($path_number==''||$task_title==''||$task_base_date==''||$task_limit_date==''||$task_base_elapsed_date==''||$task_sub_level==''){
               echo "uninvalid input error in task add module";
               echo "<br />";
               
@@ -144,19 +143,14 @@
 
             //결제 경로에서 공석인 자리를 건너 뛰는 로직
             //출장 등의 공석 역시 표현해야 하므로, 기본적으로 빈 공석은 모두 계정을 생성하여 is_valid flag를 set해놓아야한다.
-                $offset = 1;
-                while(true){
-                $task_table_query_jump = "select is_valid from sid_combine_table u where u.sid_combine_department = $my_department_code AND u.sid_combine_position = $my_position_code+$offset;";
-                $result_jump = mysqli_query($conn,$task_table_query_jump);
-                $row_jump=mysqli_fetch_array($result_jump);
-                    if(($my_position_code+$offset)<8&&$row_jump['is_valid']==0){
-                        $offset+=1;
-                    }else{
-                        break;
-                    }
-                }
+           $min_find_query = "select * from task_approbation_path_table where sid=".$_SESSION['my_sid_code']." AND key_index = $path_number;";
+           $result_min = mysqli_query($conn,$min_find_query);
+           $row_min = mysqli_fetch_array($result_min);
+           $min = $row_min['min_sid'];
+           $end_sid = $row_min['end_user_sid'];
 
-           $task_detail_table_query = "Insert into task_approbation_table(TID,task_order_section,task_sequence_start,task_sequence_current,task_sequence_end,appro_state,last_appro_date) Values($up_page_TID,$my_department_code,$my_position_code,$my_position_code+$offset,$last_checker_position,0,'".$_SESSION['now_date']."');";
+           $end = $ob2->su_function_convert_name($conn,"sid_combine_table","SID",$end_sid,"sid_combine_position");
+           $task_detail_table_query = "Insert into task_approbation_table(TID,task_order_section,key_index,appro_state,last_appro_date,current_sid,first_order,end_order) Values($up_page_TID,$my_department_code,$path_number,0,'".$_SESSION['now_date']."',$min,".$_SESSION['my_position_code'].",$end);";
            mysqli_query($conn,$task_detail_table_query);
            echo $task_detail_table_query;
            echo "<br />";

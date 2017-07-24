@@ -34,12 +34,12 @@
                        echo "<br />";
            break;
         case 5 :
-           $_SESSION['current_personal_base_date']=$var;
+           $_SESSION['current_personal_gate_base_date']=$var;
            echo "case  5";
                        echo "<br />";
            break;
         case 6 :
-           $_SESSION['current_personal_limit_date']=$var;
+           $_SESSION['current_personal_gate_limit_date']=$var;
            echo "case  6";
                        echo "<br />";
            break;

@@ -55,7 +55,7 @@ function hrefClick(course){
 
 	  	var popUrl = "/su_script_notice_pop_up.php";	//팝업창에 출력될 페이지 URL
 		var popOption = "width=450, height=450, resizable=yes, scrollbars=no, status=no;";    //팝업창 옵션(optoin)
-		window.open(popUrl+'?notice_id=' + course,popOption,'width=650px,height=455px');
+		window.open(popUrl+'?notice_id=' + course,popOption,'width=575,height=286');
 
 
     
@@ -329,9 +329,8 @@ function hrefClick(course){
 
 									// UI
 
-											echo "<p id='top_".$count++."'>".$row_of_activated_notice_find_query_result_set['notice_name'];
+											echo "<p id='top_".$count++."'>"."<a href='#' onclick='hrefClick(".$row_of_activated_notice_find_query_result_set['notice_id'].");'>".$row_of_activated_notice_find_query_result_set['notice_name']."</a>";
 											echo "<br />";
-											echo "<a href='#' onclick='hrefClick(".$row_of_activated_notice_find_query_result_set['notice_id'].");'/>공지 자세히 보기</a><br>";
 											echo "</p>";
 
 									

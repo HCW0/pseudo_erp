@@ -88,11 +88,10 @@
 					.graph .bar span { position: absolute; left: 1em; }
 
 
-
 			</style>
 
 			<script type="text/javascript">
-				첨부파일 추가
+				//첨부파일 추가
 
 				var rowIndex = 1;
 
@@ -138,7 +137,7 @@
 
 			</script>
 
-			<script>               /*달력 함수*/
+			<script>           /*달력 함수*/
          $(function() {
 				$("#datepicker1, #datepicker2").datepicker({
 				dateFormat: 'yy-mm-dd'
@@ -163,7 +162,7 @@
 
 
 					var popUrl = "/su_script_task_detail_pop_up.php";	//팝업창에 출력될 페이지 URL
-					var popOption = "width=680, height=680, resizable=no, scrollbars=no, status=no;";    //팝업창 옵션(optoin)
+					var popOption = "width=680, height=680, resizafble=0, scrollbars=no, status=no;";    //팝업창 옵션(optoin)
 					window.open(popUrl+'?TID=' + course,popOption,'width=680,height=680');
 
 
@@ -177,7 +176,7 @@
 					function hrefClick_of_sub_task(level,sub_level,tid){
 						// You can't define php variables in java script as $course etc.
 
-					var popOption = "fullscreen=yes, resizable=no, scrollbars=no, status=no;";    //팝업창 옵션(optoin)
+					var popOption = "fullscreen=yes, resizable=0, scrollbars=no, status=no;";    //팝업창 옵션(optoin)
 					var popUrl = "/outsource5.php";	//팝업창에 출력될 페이지 URL
 					window.open(popUrl+'?level=' + level +'&sub_level=' + sub_level +'&tid=' + tid,popOption,'height=' + (screen.height-50) + ',width=' + (screen.width+50));
 				
@@ -217,12 +216,13 @@
 	</head>
 
 
-	<body style="width:1300px">
+	<body style="width:1400px ; height:100% ;">
 	
-		<div id="wapper" style="background-color: ivory; width:100%;">
-			
+		<div id="wapper" style="background-color:#f5f4e9; width:100%; border:1px solid black">
+		<div id="first" style="background-color:skyblue; width:100%;height:30px; border:2px solid black">
+			</div>	
 				
-			<p align="center"><img src="./src/su_rsc_sulogo_a.png" width="200" height="100" title="선운로고"/></p>
+			
 				
 				<div id="head">
 				<span align="left">
@@ -232,16 +232,16 @@
 					$date = date("Y-m-d");
 					echo " / ";
 					$parts = explode('-',$date);
-					echo "  ".date("W")." 주자";
+					echo "  ".date("W")." 주차";
 					echo "<br />";
 				  ?>
 				  
 				  </span>
 				</div>
 				<form action = 'outsource2.php' method='POST' name="table_filter">
-					<a href=#none onclick=this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';> 
-						<div align="center" style="margin:0px 0px 0px 0px"><h2>Detail</h2></div>
-					</a><DIV style='display:block'> 
+					 
+						<div align="center" style="margin:0px 0px 0px 0px"><h2></h2></div>
+				 
 					<table width="100%">
 			
 
@@ -262,7 +262,7 @@
 										<?php echo $ob2->su_function_convert_name($conn,"master_task_level_info_table","master_task_level_code",$row['task_level_code'],"master_task_level_name");?>
 							</td>
 
-								<td  colspan="1">업 무 코 드</td>
+						<td  colspan="1">업 무 코 드</td>
 							<td  colspan="2">
 										<?php echo $ob2->su_function_convert_name($conn,"master_task_level_sub_info_table","master_task_level_sub_code",$row['task_level_sub_code'],"master_task_level_sub_name");?>
 							</td>
@@ -335,48 +335,29 @@
 			
 					</table>
 							<div align = 'right'>
-									<?php echo"<a href='#' onclick='hrefClick_of_modify_task(".$_SESSION['current_focused_TID'].");'/>"; echo '업무 수정</a>  '?>
+									<?php echo"<a href='#' onclick='hrefClick_of_modify_task(".$_SESSION['current_focused_TID'].");'/>"; echo '수정</a>  '?>
 									/
-									<?php echo"<a href='#' onclick='hrefClick_of_delete_task(".$_SESSION['current_focused_TID'].");'/>"; echo '  업무 삭제</a>'?>
+									<?php echo"<a href='#' onclick='hrefClick_of_delete_task(".$_SESSION['current_focused_TID'].");'/>"; echo '  삭제</a>&nbsp&nbsp&nbsp&nbsp'?>
 							</div>
-					</div>
+				
 
 
 				<div style="padding:10px 0 0 0;">
 					</div>
 					
 		
-					<tr>
-						<td colspan=2><hr size=1></td>
-					</tr>
 					
-					<a href=#none onclick=this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';> 
-						<div align="center"><h2>공 정 표</h2></div>
-					</a><DIV style='display:block'> 
+					
+					 
+						<div align="center"><h2></h2></div>
+					
 						
-					<div align="right">	
-						<?php
-						 echo '<input type="text" name = "task_select_box[]" id="datepicker1">'
-						?>
-						/
-						<?php
-						 echo '<input type="text" name = "task_select_box[]" id="datepicker2">'
-						?>
-					</div>
+	
 							<div class="h_graph">
 								<table width="100%">
 
 								
-									<tr>
-										<td><strong />
-											진척도 그래프
-										</td>
-										<td colspan='6' class="graph">
-   											 <strong class="bar" style="width: 33%;">33%</strong>
-										</td>
-											
-									</tr>
-
+							
 									<tr>
 									<td><span><strong />NO</span></td>
 
@@ -405,17 +386,7 @@
 									</td>
 
 
-									<td>
-										<strong />업무가중치
-										
-									</td>
-											
-									
-									<td colspan='6'>
-										<strong />진척도 그래프
-									</td>
-					
-
+				
 									</tr>
 
 									
@@ -452,14 +423,7 @@
 									<td>
 										<?php echo "<a href='#' onclick='hrefClick(".$row2['TID'].");'/>결제현황</a><br>";?>
 									</td>
-									
-									<td>
-										<?php echo $row2['task_weight_value'];?>
-									</td>
 
-									<td class="graph">
-   											 <strong class="bar" style="width: 33%;">33%</strong>
-										</td>
 
 								</tr>
 							<?php
@@ -471,29 +435,12 @@
 								</table>
 					
 							</div>
-					</div>
+					
 					
 		
-					<tr>
-						<td colspan=2><hr size=1></td>
-					</tr>
-
-						
-					</tr>
 					
-					
-	
-					
-					<a href=#none onclick=this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';> 
-						<div align="center"><h2>메 모</h2></div>
-					</a><DIV style='display:none'  align="center"> 
-							<textarea name="task_select_box[]" class="nse_content" rows ="1" cols="35">다목적으로 예약된 필드입니다.</textarea>
-						</div>
 
 
-					<tr>
-						<td colspan=2><hr size=1></td>
-					</tr>
 					
 
 					<tr>
@@ -507,9 +454,9 @@
 					</form>
 						
 					
-					<a href=#none onclick=this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';> 
-					<div align="center"><h2>첨 부 파 일</h2></div>
-					</a><DIV style='display:none'> 
+					
+					<div align="center"><h2></h2></div>
+					
 					
 					<form name="write">
 					 <table id='insertTable' border=0 cellpadding=0 cellspacing=0>
@@ -539,7 +486,7 @@
 
 					</form>        
 
-					</div>
+				
 
 					
 

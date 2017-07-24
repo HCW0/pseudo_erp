@@ -117,6 +117,62 @@ function hrefClick(course){
   th:nth-child(2n+1), td:nth-child(2n+1) {
     background-color: #;
   }
+  
+  
+  .fixed-table-container {
+	  
+        width: 1000px;
+        height: 550px;
+        border: 1px solid #000;
+        position: relative;
+        padding-top: 30px; /* header-bg height값 */
+    }
+    .header-bg {
+		
+        background: skyblue;
+        height: 30px; /* header-bg height값 */
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        border-bottom: 1px solid #000;
+    }
+    .table-wrapper {
+	
+        overflow-x: hidden;
+        overflow-y: auto;
+        height: 100%;
+    }
+    table {
+		
+        width: 100%;
+        border-collapse: collapse;
+    }
+    td {
+        border-bottom: 1px solid #ccc;
+        padding: 5px;
+    }
+    td + td {
+        border-left: 1px solid #ccc;
+    }
+    th {
+        padding: 0px; /* reset */
+		
+    }
+    .th-text {
+    
+		position:absolute;
+        top: 0;
+        width: inherit;
+        line-height: 30px; /* header-bg height값 */
+        border-left: 1px solid #000;
+    }
+    th:first-child .th-text {
+        border-left: none;
+    }
+	#wrapper{
+	  padding: 0px 0px 0px 200px;
+  }
 </style>
 
 	<script>               /*달력 함수*/
@@ -136,61 +192,74 @@ function hrefClick(course){
 		<a id="cd-menu-trigger" href="#0"><span class="cd-menu-text">메뉴</span><span class="cd-menu-icon"></span></a>
 
 		
-	<div id="wrapper" style="width:1900px" "height:300px">
-			<p align="center"><img src="./src/su_rsc_sulogo_a.png" width="200" height="100" title="선운로고"/></p>
+	<div id="wrapper" style="width:100%" "height:300px">
+			<p align="center" style="font-size:35px ; font-weight:bold" >활 성 공 지 사 항</p>
 				
 		
 						
 				<form action = 'outsource.php' method='POST' name="table_filter">		
 
-		
+				<div id="head">
+				<span align="left">
 				
-			 
-				<div style="height: 100% ; 
-						width: 100% ;
-						 ;">
-
+				<?php echo date("Y-m-d");
+					$date = date("Y-m-d");
+					echo " / ";
+					$parts = explode('-',$date);
+					echo "  ".date("W")." 주자";
+					echo "<br />";
+				  ?>
+				  
+				  </span>
+				</div>
+				
+		
+				<div class="fixed-table-container">
+					<div class="header-bg"></div>	 
+					<div class="table-wrapper" style="width:100%; height:500px; overflow:auto">
+					<thead>
+					
 					<table>
 						<tr>
-						<th width="50px"><span>NO</span></th>
-
-						<th width="50px">
-							공지번호
-						</th>
-
-						
-						<th width="50px">
-							공지등급
-						</th>
-						
-						
-						<th width="200px">
-							공지이름
-						</th>
-
-						<th width="200px">
-							공지기간
-						</th>
-
-						<th width="100px">
-							개시일
-						</th>
+						<th ><div class="th-text">NO</div></th>
 
 						<th width="80px">
-							개시자
+							<div class="th-text">공지번호</div>
 						</th>
 
-
+						
 						<th width="100px">
-							담당부서	
+							<div class="th-text">공지등급</div>
+						</th>
+						
+						
+						<th >
+							<div class="th-text " style="padding:0px 0px 0px 4%" >공지이름</div>
+						</th>
+
+						<th >
+							<div class="th-text" style="padding:0px 0px 0px 9%">공지기간</div>
+						</th>
+
+						<th >
+							<div class="th-text" style="padding:0px 0px 0px 4%">개시일</div>
+						</th>
+
+						<th >
+							<div class="th-text" style="padding:0px 0px 0px 1%"	>개시자</div>
+						</th>
+
+
+						<th >
+							<div class="th-text" style="padding:0px 0px 0px 3%">담당부서	</div>
 						</th>
 						
 
-						<th width="50px">
-							상태
+						<th >
+							<div class="th-text" style="padding:0px 0px 0px 2%">상태</div>
 						</th>
 
-						
+						</thead>
 		<?php
 			$cnt = 1;
 			$date = date("Y-m-d");
@@ -229,7 +298,7 @@ function hrefClick(course){
 							echo $ob2->su_function_convert_name($conn,"master_department_info_table","sid_combine_department",$row['notice_order_section'],"master_department_info_name");
 						?></td>
 					<td><?php 
-						$is_valid = (time() >= strtotime($row['notice_base_date'])) && (time() <= strtotime($row['notice_limit_date']));
+						$is_valid = (time() >= strtotime($row['notice_base_date'])) && (time() <= 86400+strtotime($row['notice_limit_date']));
 					echo $is_valid ? '활성중' : '비활성'; ?></td>
                 </tr>
 
@@ -253,11 +322,8 @@ function hrefClick(course){
 
 	<div style="height:1000px">
 
-
 	<nav id="cd-lateral-nav" >
 		<ul class="cd-navigation" >
-		<div style="padding:30px 0px 0px 0px;">
-		</div>
 		<p align="center"><img src="./src/su_rsc_sulogo_back.png" width="200" height="100" title="선운로고"/></p>
 			<li><a class="current" href="#0">* * * *</a></li>
 
@@ -268,12 +334,12 @@ function hrefClick(course){
 			
 				<a>부서
 					<font color='white'><?php
-					echo  $_SESSION['my_department'];
+					echo $_SESSION['my_department'];
 				?></font></a>		
 			
 				<a>직급
 					<font color='white'><?php
-					echo  $_SESSION['my_position'];
+					echo $_SESSION['my_position'];
 				?></font></a>
 
 				<a>사번
@@ -289,20 +355,29 @@ function hrefClick(course){
 
 		<ul class="cd-navigation cd-single-item-wrapper">
 			<li><a class="current" href="#0">* * * *</a></li>
+
+
+<li><a href="./su_script_notice_interface.php"> # 공지사항</a></li>
+			
 			<li>
 			
 			<a href="#0"> 
 			<a href=#none onclick=this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';> 
-						<div>! 공지사항</div>
+						<div>! 업무관리</div>
 					</a><DIV style='display:none'> 
-					<a href = "./su_script_notice_active_only_interface.php" align = "right">
+					<a href = "su_script_user_interface.php" align = "right">
 				<font color='white' >
-				공지사항
+				전체 업무 검색
 				</font></a>
 			
-				<a href = "./su_script_notice_interface.php" align = "right">
+				<a href = "su_script_user_personal_interface.php" align = "right">
 					<font color='white'>
-					공지사항 게시판
+					내 업무
+					</font></a>	
+
+				<a href = "su_script_process_table_interface.php" align = "right">
+					<font color='white'>
+					공정표 조회
 					</font></a>		
 			
 						</DIV>
@@ -310,8 +385,8 @@ function hrefClick(course){
 			
 			
 			</li>
-			<li><a href="su_script_user_interface.php"> # 업무관리</a></li>
-			<li><a href="#0"> # 결제함</a></li>
+
+			<li><a href="su_script_approbation_interface.php"> # 결제함</a></li>
 			<li><a href="su_script_configure_interface.php"> # 설정</a></li>
 		</ul> <!-- cd-single-item-wrapper -->
 
@@ -323,28 +398,6 @@ function hrefClick(course){
  		<!-- 새로운 달력 자바 스크립트 소스-->
 		<script src="https://code.jquery.com/jquery-1.12.4.js"></script>                     
       	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-		
 		</div>
 	</body> 
-
-
-
-
-
-		
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 </html>

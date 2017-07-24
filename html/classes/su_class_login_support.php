@@ -1,7 +1,7 @@
 <?php
     class su_class_login_support{
 
-        function incorrect_cnt($id,$conn){
+        function incorrect_cnt($id,$conn,$ob){
             
             $mquery = 'select * from account_table u where u.ID = \''.$id.'\';';
             $result = mysqli_query($conn,$mquery);
@@ -21,9 +21,8 @@
                 $result = mysqli_query($conn,$mquery);
 
             }
-
-            $msg_ob2 = new su_class_message_handler();
-            $msg_ob2->su_function_call_message_with_one_parameter($conn,154,'su_script_login_interface',5-$row['PASSWORD_INCORRECT_COUNTER']);
+            $var = 5-$row['PASSWORD_INCORRECT_COUNTER'];
+            $ob->su_function_call_message_with_one_parameter($conn,154,'su_script_login_interface',$var);
             
         
 

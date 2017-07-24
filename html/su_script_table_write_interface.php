@@ -39,6 +39,11 @@
 			$_SESSION['sub_hold_level']=1;
 		}
 
+		if(isset($_GET['task_title'])){
+			$default_title = $_GET['task_title'];
+		}else{
+			$default_title = ' ';
+		}
 ?>
 
 
@@ -64,8 +69,20 @@
 					body {
 						font-family: 'Nanum Gothic', sans-serif;
 					}
-					.nse_content{width:660px;height:500px}
+					.nse_content{width:600px;height:100px}
 					.nse_content2{width:660px;height:130px}
+
+
+
+					.tr1 {height:50px;background:#ace;}
+					.td1 {}
+					.td2 {vertical-align:center}
+					.td3 {vertical-align:middle}
+					.td4 {vertical-align:asdfasdf}
+					.td5 {vertical-align:top}
+					.td6 {vertical-align:bottom}
+
+
 			</style>
 
 			<script type="text/javascript">
@@ -147,15 +164,22 @@
     
 						}
 
+						function get_path_index(task_title){
+
+
+   							 window.location.href = './su_script_table_write_interface_ura.php?task_title='+task_title;
+						}
+
 	</script>
 
 	</head>
 
 
-	<body style="width:100%">
+	<body style="width:800px">
 	
-		<div id="wapper" style="background-color: ivory; width:100%;">
-			
+		<div id="wapper" style="background-color:#f5f4e9; width:100%; border:1px solid black">
+			<div id="first" style="background-color:skyblue; width:100%;height:30px; border:2px solid black">
+			</div>
 				<form action = 'outsource2.php' method='POST' name="table_filter">
 					<a href=#none onclick=this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';> 
 						<div align="center"><h2>업 무 등 록</h2></div>
@@ -164,7 +188,8 @@
 			
 					<tr>
 						<td  colspan="1">업 무 레 벨</td>
-							<td  colspan="2"><select id = "task_writer_interface_combobox" name = "task_select_box[]" onchange="javascript:selectEvent(this,0);">	
+							<td  colspan="2">
+
 									<?php
 											$query = "SELECT * FROM master_task_level_info_table";
 											$result = mysqli_query($conn,$query);  
@@ -173,40 +198,34 @@
 															if($row['master_task_level_code']==$_SESSION['hold_level']){
 																echo "<option value='".$row['master_task_level_code']."' selected>".$row['master_task_level_name']."</option>";
 															}
-															else{
-																echo "<option value='".$row['master_task_level_code']."'>".$row['master_task_level_name']."</option>";
-															}
 														}
 									?>         
-								</select>	
+
 							</td>
 
 								<td  colspan="1">업 무 코 드</td>
 						<td  colspan="2">
-						<select name = "task_select_box[]" onchange="javascript:selectEvent(this,1);">	
+						
        							 <?php
 										$query = "SELECT * FROM master_task_level_sub_info_table";
      					        		$result = mysqli_query($conn,$query); 
-										 		 echo "<option value='' selected>--</option>"; 
            										 while( $row=mysqli_fetch_array($result) ){    
 														
 														if(($row['master_task_level_code']==$_SESSION['hold_level'])&&($row['master_task_level_sub_code']!=999)){
 															if($row['master_task_level_sub_code']==$_SESSION['sub_hold_level']){
             											 		echo "<option value='".$row['master_task_level_sub_code']."' selected>".$row['master_task_level_sub_name']."</option>";
-															}else{
-															echo "<option value='".$row['master_task_level_sub_code']."'>".$row['master_task_level_sub_name']."</option>";
 															}
 														   
 														}
 													
 													}
       							  ?>         
-   							</select>	
+   							
 					</td>
 					</tr>
 							<tr>
-						<td>업 무 명</td>
-						<td  colspan="5"><input type=text name=task_select_box[] size=60 ></td>
+						<td>진 행 업 무</td>
+						<td  colspan="5"><input id='task_title' type=text name=task_select_box[] size=60 value="<?php echo $default_title; ?>"></td>
 						
 					</tr>
 					<tr>
@@ -278,7 +297,7 @@
 					</tr>
 					
 					<a href=#none onclick=this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';> 
-						<div align="center">상세</div>
+						<div align="center">상세 업무 내용</div>
 					</a><DIV style='display:block'> 
 					<table>
 					<tr>
@@ -288,7 +307,7 @@
        							 <?php
 										$query = "SELECT * FROM task_document_header_table u WHERE ".$_SESSION['sub_hold_level']."=u.task_level_sub_code";
      					        		$result = mysqli_query($conn,$query);  
-										 echo "<option value='' selected>해당 업무</option>"; 
+										 echo "<option value='' selected>신규</option>"; 
            										 while( $row=mysqli_fetch_array($result) ){   
 															echo "<option value='".$row['TID']."'>".$row['task_name']."</option>";
 													
@@ -320,34 +339,42 @@
 						<select name = "task_select_box[]">	
        							 <?php
 
-										$approbation_path = $_SESSION['my_name'];
+										
 
-										$query = "SELECT * FROM sid_combine_table";
+										$query = "select * from task_approbation_path_table where SID = ".$_SESSION['my_sid_code'].";";
      					        		$result = mysqli_query($conn,$query);  
-										 		$offset = 1;
-												 while($offset+$_SESSION['my_position_code']<8){
-													 	$offset_applied = $offset+$_SESSION['my_position_code'];
-														$offset++;
-														$query = "SELECT * FROM sid_combine_table u WHERE u.sid_combine_position=$offset_applied";
-     					        						$result = mysqli_query($conn,$query);
-														$row=mysqli_fetch_array($result);
-														if(mysqli_num_rows($result)==0||$row['is_valid']==0){
-																// 결제루트에서 공백 자리가 검출된 경우, continue 함
-																continue;
-																}
-															$aname = $ob2->su_function_convert_name($conn,"master_user_info_table","SID",$row['SID'],"master_user_info_name");
-															$approbation_path = $approbation_path." → ".$aname;
-															echo "<option value='".$row['SID']."' selected>".$approbation_path."</option>";
+												 while($row=mysqli_fetch_array($result)){
+													 	$approbation_path = $_SESSION['my_name'];
+														for($cnt=1;$cnt<8;$cnt++){
+
+															if($row[$cnt."_layer_aida_sid"]){
+																	$name = $ob2->su_function_convert_name($conn,"master_user_info_table","SID",$row[$cnt."_layer_aida_sid"],"master_user_info_name");
+																	
+																	$approbation_path = $approbation_path.' → '.$name;
+															}
+														}
+														$name = $ob2->su_function_convert_name($conn,"master_user_info_table","SID",$row['end_user_sid'],"master_user_info_name");
+														$approbation_path = $approbation_path.' → '.$name;	
+
+												echo "<option value=".$row['key_index'].">".$approbation_path."</option>"; 
 															  
 												 		
 											}
       							  ?>         
    							</select>	
 							   </td>
+							   <td>
+							   		<div><input type="button" onclick="get_path_index(task_title.value);" value="신규 경로 생성" ></div>
+							   </td>
 
 					</tr>
+					<tr>
+							<td class='td5'>상 신 의 견</td>
+							<td>
+							<textarea name="task_select_box[]" class="nse_content" rows ="1" cols="35">상신에 대한 설명을 적어주세요.</textarea>
+							</td>
 
-
+					</tr>
 					</table>
 					</div>
 					
@@ -355,15 +382,6 @@
 						<td colspan=2><hr size=1></td>
 					</tr>
 					
-					<a href=#none onclick=this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';> 
-						<p align="center">메모</p>
-					</a><DIV style='display:none'  align="center"> 
-							<textarea name="task_select_box[]" class="nse_content" rows ="1" cols="35">업무 생성에 대한 설명을 적어주세요.</textarea>
-						</div>
-
-
-
-
 
 					<tr>
 						<td>

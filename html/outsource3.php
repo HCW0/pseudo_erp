@@ -53,6 +53,7 @@
            $result_set = mysqli_query($conn,$task_table_query);
 
            $msg_ob->su_function_call_message_callback($conn,516);
+                               echo "<script> opener.location.reload(); </script>";
            echo "<script> self.close(); </script>"; 
 
     };

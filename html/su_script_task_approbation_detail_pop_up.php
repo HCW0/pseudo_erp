@@ -38,7 +38,11 @@
 			$task_table_query2 = "select * from task_approbation_table u where u.AID = $AID ;";
 			$result_set2 = mysqli_query($conn,$task_table_query2);
 			$row2 = mysqli_fetch_array($result_set2);
-			
+
+
+			$task_table_query4 = "select * from task_approbation_path_table u where u.SID = ".$row['task_orderer']." AND u.key_index = ".$row2['key_index'].";";
+			$result_set4 = mysqli_query($conn,$task_table_query4);
+			$row4 = mysqli_fetch_array($result_set4);
 
 // 클래스 객체 선언
 
@@ -47,6 +51,10 @@
 		$this_state = $ob2->su_function_convert_name($conn,"task_document_header_table","TID",$TID,"task_state");
 		$this_state = $ob2->su_function_convert_name($conn,"master_state_info_table","master_task_state_info_code",$this_state,"master_task_state_info_name");
 
+
+		$end_user_position = $ob2->su_function_convert_name($conn,"sid_combine_table","SID",$row4['end_user_sid'],"sid_combine_position");
+
+		
 
 ?>
 
@@ -63,6 +71,16 @@
 					body {
 						font-family: 'Nanum Gothic', sans-serif;
 					}
+					.nse_content{width:600px;height:80px}
+					.nse_content2{width:660px;height:130px}
+
+					.tr1 {height:50px;background:#ace;}
+					.td1 {}
+					.td2 {vertical-align:center}
+					.td3 {vertical-align:middle}
+					.td4 {vertical-align:asdfasdf}
+					.td5 {vertical-align:top}
+					.td6 {vertical-align:bottom}
 					
 			</style>
 
@@ -71,28 +89,27 @@
 	</head>
 
 <!-- 상황에따라서 스마트에디터 사용 일단 서술식 텍스트-->
-	<body>
+	<body >
 
-		<div id="wapper" style="background-color: ivory; width:100%; height:100%;">
+		<div id="wapper" style="background-color:#f5f4e9; width:800px; border:1px solid black">
+		<div id="first" style="background-color:skyblue; width:100%;height:30px; border:2px solid black">
+			</div>
 			<table summary="글쓰기 전체 테이블">
 	
 				
 				<table summary="테이블 구성" >
-				<caption>업무 상세</caption>	
-				
-					
 					<tr>
-						<td colspan ='10'>제 목</td>
-						<td colspan='20'><?php echo $row['task_name']?></td>
+						<td colspan ='15'>제 목</td>
+						<td colspan='25'><?php echo $row['task_name']?></td>
 					</tr>
 					<tr>
-						<td colspan ='10'>상 태</td>
-						<td colspan ='8'>
+						<td colspan ='15'>상 태</td>
+						<td colspan ='10'>
 							<?php
 								 echo $this_state;
 							?>
 						</td>
-						<td colspan ='7'>결제생성일</td>
+						<td colspan ='1'>생성일</td>
 						<td colspan ='5'>
 						<?php
 								 echo $row2['last_appro_date'];
@@ -112,10 +129,10 @@
 
 
 					<tr>
-
-
+                 
+                 
 							<?php
-									
+								/*	
 
 
 										
@@ -129,9 +146,9 @@
 											echo "종료 결제 단계  ";
 											echo $row2['task_sequence_end'];
 											echo "<br />";
-										
+								*/		
 										$name_count=1;
-										for($count = $row2['task_sequence_start'] ; $count < $row2['task_sequence_end'] ; $count++ ){
+										for($count = $row2['first_order'] ; $count < 8 ; $count++ ){
 
 
 
@@ -145,45 +162,56 @@
 												$row3 = mysqli_fetch_array($result_set3);
 												
 
-												if($row3['SID']==null) continue;
+												if($row3['SID']==null) continue; //존재하지 않는 공석은 그냥 건너뛴다.
 												$approb_name = $ob2->su_function_convert_name($conn,"master_user_info_table","SID",$row3['SID'],"master_user_info_name");
 												
 
 												//variable generate
-												if($row2['task_sequence_start']==$count){
-													$approb_position = '최초발의자';
+
+
+												if($row2['first_order']==$count){
+													$approb_position = '최초발의자 :';
 												}else{
-													$approb_position = '제'.$name_count.'차 결제자';
+													$approb_position = '제'.$name_count.'차 결제자 : ';
 													$name_count++;
+												}
+
+
+
+
+												if($end_user_position==$count){
+													$approb_position = '최종승인자  :';
 												}
 												
 												//rendering
-												if($row2['task_sequence_current']!=$count){
+												if($row2['current_sid']!=$count){
 													echo "<tr>";
-													echo "<td colspan = '6'>";
+													echo "<td class='td5' colspan = '10'>";
 													echo $approb_position;
 													echo "</td>";
 
-														echo "<td colspan = '10'>";
+														echo "<td class='td5' colspan = '10'>";
 														echo $approb_name;
+														echo "&nbsp &nbsp &nbsp";
 														echo "</td>";
 
-														echo "<td colspan = '4'>";
+														echo "<td class='td5' colspan = '20'>";
 														echo $row2[$var];
 														echo "</td>";
 													echo "</tr>";
 
 												}else{
 													echo "<tr>";
-													echo "<td colspan = '6'>";
+													echo "<td  class='td5' colspan = '10'>";
 													echo $approb_position;
 													echo "</td>";
 
-														echo "<td colspan = '10'>";
+														echo "<td class='td5' colspan = '10'>";
 														echo $approb_name;
+														echo "&nbsp &nbsp &nbsp";
 														echo "</td>";
 
-														echo "<td colspan = '4'>";
+														echo "<td colspan = '20'>";
 															echo "<form action = 'outsource9.php' method='POST'>";
 																if($row2[$var]){
 																	echo "<textarea name='opinion_write[]' id='opinion' class='nse_content' rows ='17' cols='75'>".$row2[$var]."</textarea>";
@@ -197,25 +225,32 @@
 														echo "<tr>";
 														echo "<td colspan='15'>";
 														echo "</td>";
-																echo "<td colspan='20'>";
+																echo "<td colspan='25'>";
 																echo "<div align = 'left'>";
-																echo "<select name = 'opinion_write[]'>";	
-            													echo "<option value='0'>상신</option>";
+																echo "&nbsp &nbsp &nbsp";
+																echo "<select name = 'opinion_write[]'>";
+																if($row2['current_sid']==$end_user_position){	
+            														echo "<option value='-1'>승인</option>";
+																}else if($row2['current_sid']==$row2['first_order']){
+																	echo "<option value='2'>승인</option>";
+																}else{
+																	echo "<option value='0'>승인</option>";
+																}
 																echo "<option value='1'>반려</option>";
    																echo "</select>";	
-																echo "<input type='submit' value='작성 완료'>";
+																echo "<input type='submit' value='승인'>";
 																echo "</div>";
 																echo "</td>";
 														echo "</tr>";
 														echo "<input type='hidden' value=".$AID." name='opinion_write[]'>";
 													echo "</form>";
-
+                                          
 												}
 
 										}
 
 							?>
-
+              
 
 					</tr>
 					
