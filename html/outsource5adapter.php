@@ -21,7 +21,7 @@
 		             
 
                   //detail init
-                  $_SESSION['current_personal_task_orderer'] = 8388607;
+                  $_SESSION['current_personal_task_orderer'] = $_SESSION['my_sid_code'];
                   $_SESSION['current_personal_task_level_code'] = $level;
 			            $_SESSION['current_personal_task_level_sub_code'] = $sub_level;
                   

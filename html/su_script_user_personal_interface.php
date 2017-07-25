@@ -55,7 +55,7 @@
 			$_SESSION['current_personal_task_level_code'] = $ob1->su_function_init_config($conn,$_SESSION['my_sid_code'],"task_level_code");
 			$_SESSION['current_personal_task_level_sub_code'] = 999;
 			$_SESSION['current_personal_task_order_section'] = $ob1->su_function_init_config($conn,$_SESSION['my_sid_code'],"task_order_section");
-			$_SESSION['current_personal_task_orderer'] = 8388607;
+			$_SESSION['current_personal_task_orderer'] = $_SESSION['my_sid_code'];
 			$_SESSION['current_personal_task_priority'] = $ob1->su_function_init_config($conn,$_SESSION['my_sid_code'],"task_priority");
 			$_SESSION['current_personal_task_state'] = $ob1->su_function_init_config($conn,$_SESSION['my_sid_code'],"task_state");
 		}
@@ -534,6 +534,7 @@ function toWeekNum($get_year, $get_month, $get_day){
 
 
 
+
 <div style="height:1000px">
 
 	<nav id="cd-lateral-nav" >
@@ -598,7 +599,28 @@ function toWeekNum($get_year, $get_month, $get_day){
 
 			<li><a href="su_script_approbation_interface.php"> # 결제함</a></li>
 			<li><a href="su_script_configure_interface.php"> # 설정</a></li>
-			<li><a href="rhksflwk.php"> # 관리자 모드</a></li>
+						<li>
+			
+			<a href="#0"> 
+			<a href=#none onclick=this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';> 
+						<div># 관리자 기능</div>
+					</a><DIV style='display:none'> 
+			
+				<a href = "su_script_approbation_management_interface.php" align = "right">
+					<font color='white'>
+					결제 루트 설정
+					</font></a>	
+
+				<a href = "su_script_process_table_interface.php" align = "right">
+					<font color='white'>
+					이하 추가예정
+					</font></a>		
+			
+						</DIV>
+			</a>
+			
+			
+			</li>
 		</ul> <!-- cd-single-item-wrapper -->
 
 		
@@ -610,5 +632,6 @@ function toWeekNum($get_year, $get_month, $get_day){
 		<script src="https://code.jquery.com/jquery-1.12.4.js"></script>                     
       	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 		</div>
-	</body>       
+	</body>    
+   
 </html>

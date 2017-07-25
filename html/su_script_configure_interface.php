@@ -476,7 +476,7 @@ function toWeekNum($get_year, $get_month, $get_day){
 </header>
 
 
-	<div style="height:1000px">
+<div style="height:1000px">
 
 	<nav id="cd-lateral-nav" >
 		<ul class="cd-navigation" >
@@ -511,20 +511,25 @@ function toWeekNum($get_year, $get_month, $get_day){
 
 		<ul class="cd-navigation cd-single-item-wrapper">
 			<li><a class="current" href="#0">* * * *</a></li>
+
+
+<li><a href="./su_script_notice_interface.php"> # 공지사항</a></li>
+			
 			<li>
 			
 			<a href="#0"> 
 			<a href=#none onclick=this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';> 
-						<div>! 공지사항</div>
+						<div>! 업무관리</div>
 					</a><DIV style='display:none'> 
-					<a href = "./su_script_notice_active_only_interface.php" align = "right">
-				<font color='white' >
-				공지사항
-				</font></a>
 			
-				<a href = "./su_script_notice_interface.php" align = "right">
+				<a href = "su_script_user_personal_interface.php" align = "right">
 					<font color='white'>
-					공지사항 게시판
+					내 업무
+					</font></a>	
+
+				<a href = "su_script_process_table_interface.php" align = "right">
+					<font color='white'>
+					공정표 조회
 					</font></a>		
 			
 						</DIV>
@@ -532,12 +537,34 @@ function toWeekNum($get_year, $get_month, $get_day){
 			
 			
 			</li>
-			<li><a href="su_script_user_interface.php"> # 업무관리</a></li>
+
 			<li><a href="su_script_approbation_interface.php"> # 결제함</a></li>
 			<li><a href="su_script_configure_interface.php"> # 설정</a></li>
+						<li>
+			
+			<a href="#0"> 
+			<a href=#none onclick=this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';> 
+						<div># 관리자 기능</div>
+					</a><DIV style='display:none'> 
+			
+				<a href = "su_script_approbation_management_interface.php" align = "right">
+					<font color='white'>
+					결제 루트 설정
+					</font></a>	
+
+				<a href = "su_script_process_table_interface.php" align = "right">
+					<font color='white'>
+					이하 추가예정
+					</font></a>		
+			
+						</DIV>
+			</a>
+			
+			
+			</li>
 		</ul> <!-- cd-single-item-wrapper -->
 
-		</nav>
+		
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 		<script src="assets/js/main.js"></script> <!-- Resource jQuery -->
 		<script language="JavaScript" src="assets/js/date_picker.js"></script>
@@ -545,7 +572,7 @@ function toWeekNum($get_year, $get_month, $get_day){
  		<!-- 새로운 달력 자바 스크립트 소스-->
 		<script src="https://code.jquery.com/jquery-1.12.4.js"></script>                     
       	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-		
 		</div>
-	</body>     
+	</body>    
+  
 </html>

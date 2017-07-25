@@ -520,10 +520,16 @@ function toWeekNum($get_year, $get_month, $get_day){
 				$task_table_query2 = "select * from task_approbation_table u where u.TID = ".$row['TID'].";";
 				$result_set2 = mysqli_query($conn,$task_table_query2);
 				$row2 = mysqli_fetch_array($result_set2);
-				$path_num = $row2['key_index'];
-				$current = $row2['current_sid'];
 
-				if($current != $_SESSION['my_position_code']) continue;
+				// field name 조립해서 aida 필드시리즈의 sid 값을 가져온다.
+				
+				if($row2['current_sid']!=8){
+				$field_name = $row2['current_sid'].'_layer_aida_sid';
+				$current = $row2[$field_name];
+				}else{
+				$current = $row2['end_order'];
+				}
+				if($current != $_SESSION['my_sid_code']) continue;
 
             ?> 
                 <tr>

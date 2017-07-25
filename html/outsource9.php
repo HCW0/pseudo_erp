@@ -40,8 +40,7 @@
      		$result = mysqli_query($conn,$query);  
         $row=mysqli_fetch_array($result);
 
-
-
+        
 
 
 
@@ -65,16 +64,15 @@
 
        switch ($approb_type){
 
-          case 0 : //승인 1결제자 ~ 최종-1 결제자
-                        $offset = $row['current_sid'];
-                        $var = "task_sq_".$offset."layer_message";
-                        while($offset<$row['end_order']){
+          case 0 : //중간 검토자
+                        $offset = $row['current_sid']; //current sid는 어디까지나 숫자임, 필드값을 조합할 때 사용됨.
+                        $var = "task_sq_".$row['current_sid']."layer_message";
+                        while($offset<8){
                                         $offset++;
-
-                                $query2 = "SELECT * FROM sid_combine_table u WHERE u.sid_combine_position = ".$offset." AND u.sid_combine_department =".$_SESSION['my_department_code'].";";
-
-                                echo $query2;
-                           
+                                        $tmp = $offset.'_layer_aida_sid';
+                                        $current_next_sid = $row[$tmp];
+                                $query2 = "SELECT * FROM sid_combine_table u WHERE SID = $current_next_sid";
+                                echo $query2;                     
                            	$result2 = mysqli_query($conn,$query2);
                                 $row2=mysqli_fetch_array($result2);
                                 if(mysqli_num_rows($result2)!=0&&$row2['is_valid']==1){
@@ -86,6 +84,8 @@
                 mysqli_query($conn,$task_detail_table_query3);
                 $task_detail_table_query3 = "update task_approbation_table set ".$var." = '".$approb_content."' where AID = $AID;";
                 mysqli_query($conn,$task_detail_table_query3);
+                 $task_detail_table_query3 = "update task_document_header_table set task_state = 10 where TID = ".$row['TID'].";";
+                mysqli_query($conn,$task_detail_table_query3);
                 
 
                 $msg_ob->su_function_call_message_callback($conn,617);
@@ -93,15 +93,13 @@
                 break;
  
                 case 2 : //상신 최초결제자
-                        $offset = $row['current_sid'];
-                        $var = "task_sq_".$offset."layer_message";
-                        while($offset<$row['end_order']){
+                        $offset = $row['current_sid']; //current sid는 어디까지나 숫자임, 필드값을 조합할 때 사용됨.
+                        $var = "task_sq_".$row['current_sid']."layer_message";
+                        while($offset<8){
                                         $offset++;
-
-                                $query2 = "SELECT * FROM sid_combine_table u WHERE u.sid_combine_position = ".$offset." AND u.sid_combine_department =".$_SESSION['my_department_code'].";";
-
-                                echo $query2;
-                           
+                                        $tmp = $offset.'_layer_aida_sid';
+                                        $current_next_sid = $row[$tmp];
+                                $query2 = "SELECT * FROM sid_combine_table u WHERE SID = $current_next_sid";                     
                            	$result2 = mysqli_query($conn,$query2);
                                 $row2=mysqli_fetch_array($result2);
                                 if(mysqli_num_rows($result2)!=0&&$row2['is_valid']==1){
@@ -109,6 +107,7 @@
                                                 }
                          }
                 $task_detail_table_query3 = "update task_approbation_table set current_sid = ".$offset." where AID = $AID;";
+                echo $task_detail_table_query3;
                 mysqli_query($conn,$task_detail_table_query3);
                 $task_detail_table_query3 = "update task_approbation_table set ".$var." = '".$approb_content."' where AID = $AID;";
                 mysqli_query($conn,$task_detail_table_query3);
@@ -125,15 +124,13 @@
                 
                 
           case 1 : //반려
-                        $offset = $row['current_sid'];
-                        $var = "task_sq_".$offset."layer_message";
-                        while($offset>$row['first_order']){
+                        $offset = $row['current_sid']; //current sid는 어디까지나 숫자임, 필드값을 조합할 때 사용됨.
+                        $var = "task_sq_".$row['current_sid']."layer_message";
+                        while($offset>0){
                                         $offset--;
-
-                                $query2 = "SELECT * FROM sid_combine_table u WHERE u.sid_combine_position = ".$offset." AND u.sid_combine_department =".$_SESSION['my_department_code'].";";
-
-                           echo $query2;
-                           
+                                        $tmp = $offset.'_layer_aida_sid';
+                                        $current_next_sid = $row[$tmp];
+                                $query2 = "SELECT * FROM sid_combine_table u WHERE SID = $current_next_sid";                     
                            	$result2 = mysqli_query($conn,$query2);
                                 $row2=mysqli_fetch_array($result2);
                                 if(mysqli_num_rows($result2)!=0&&$row2['is_valid']==1){
@@ -141,6 +138,7 @@
                                                 }
                          }
                 $task_detail_table_query3 = "update task_approbation_table set current_sid = ".$offset." where AID = $AID;";
+                echo $task_detail_table_query3;
                 mysqli_query($conn,$task_detail_table_query3);
                 $task_detail_table_query3 = "update task_approbation_table set ".$var." = '".$approb_content."' where AID = $AID;";
                 mysqli_query($conn,$task_detail_table_query3);
@@ -155,16 +153,14 @@
                 
                 
           case -1 : //최종승인
-                        $offset = $row['current_sid'];
                         $TID = $row['TID'];
-                        $var = "task_sq_".$offset."layer_message";
-                        while($offset>$row['current_sid']){
-                                        $offset--;
-
-                                $query2 = "SELECT * FROM sid_combine_table u WHERE u.sid_combine_position = ".$offset." AND u.sid_combine_department =".$_SESSION['my_department_code'].";";
-
-                           echo $query2;
-                           
+                        $offset = $row['current_sid']; //current sid는 어디까지나 숫자임, 필드값을 조합할 때 사용됨.
+                        $var = "task_sq_".$row['current_sid']."layer_message";
+                        while($offset<8){
+                                        $offset++;
+                                        $tmp = $offset.'_layer_aida_sid';
+                                        $current_next_sid = $row[$tmp];
+                                $query2 = "SELECT * FROM sid_combine_table u WHERE SID = $current_next_sid";                     
                            	$result2 = mysqli_query($conn,$query2);
                                 $row2=mysqli_fetch_array($result2);
                                 if(mysqli_num_rows($result2)!=0&&$row2['is_valid']==1){
@@ -172,7 +168,7 @@
                                                 }
                          }
 
-
+                
 
                 $task_detail_table_query3 = "select * from task_document_header_table u where u.TID != u.super_task_TID AND u.super_task_TID = $TID"; 
                 $result = mysqli_query($conn,$task_detail_table_query3);
@@ -194,8 +190,8 @@
 
                 
        }
-                //echo "<script> opener.location.reload(); </script>";
-              // echo "<script> self.close(); </script>"; 
+                echo "<script> opener.location.reload(); </script>";
+                echo "<script> self.close(); </script>"; 
 
        
 

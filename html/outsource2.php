@@ -143,20 +143,34 @@
 
             //결제 경로에서 공석인 자리를 건너 뛰는 로직
             //출장 등의 공석 역시 표현해야 하므로, 기본적으로 빈 공석은 모두 계정을 생성하여 is_valid flag를 set해놓아야한다.
-           $min_find_query = "select * from task_approbation_path_table where sid=".$_SESSION['my_sid_code']." AND key_index = $path_number;";
-           $result_min = mysqli_query($conn,$min_find_query);
-           $row_min = mysqli_fetch_array($result_min);
-           $min = $row_min['min_sid'];
-           $end_sid = $row_min['end_user_sid'];
 
-           $end = $ob2->su_function_convert_name($conn,"sid_combine_table","SID",$end_sid,"sid_combine_position");
-           $task_detail_table_query = "Insert into task_approbation_table(TID,task_order_section,key_index,appro_state,last_appro_date,current_sid,first_order,end_order) Values($up_page_TID,$my_department_code,$path_number,0,'".$_SESSION['now_date']."',$min,".$_SESSION['my_position_code'].",$end);";
-           mysqli_query($conn,$task_detail_table_query);
-           echo $task_detail_table_query;
-           echo "<br />";
 
+            //선택한 결제 경로 엔터티의 정보를 생성될 결제 정보 테이블에 옮긴다.$_COOKIE
+            $min_find_query = "select * from task_approbation_path_table where sid=".$_SESSION['my_sid_code']." AND key_index = $path_number;";
+            $result_min = mysqli_query($conn,$min_find_query);
+            $row_min = mysqli_fetch_array($result_min);
+            $min = $row_min['min_sid'];
+            $end_sid = $row_min['end_user_sid'];
+
+            $end = $ob2->su_function_convert_name($conn,"sid_combine_table","SID",$end_sid,"sid_combine_position");
+            $task_detail_table_query = "Insert into task_approbation_table(TID,task_order_section,key_index,appro_state,last_appro_date,current_sid,first_order,end_order) Values($up_page_TID,$my_department_code,$path_number,0,'".$_SESSION['now_date']."',$min,".$_SESSION['my_sid_code'].",$end_sid);";
+            mysqli_query($conn,$task_detail_table_query);
+            echo $task_detail_table_query;
+            echo "<br />";
+
+                for($cnt=1;$cnt<8;$cnt++){
+                        $field_name = $cnt.'_layer_aida_sid';
+                        if($row_min[$field_name]){
+                                    $query_update_layer = "update task_approbation_table set $field_name = ".$row_min[$field_name]." where TID = $up_page_TID;";
+                                    $result_min = mysqli_query($conn,$query_update_layer);
+                        }
+                }
+
+
+
+         
            if($upper_task_id=='') $upper_task_id = $up_page_TID;
-           $task_detail_table_query2 = "update task_approbation_table set task_sq_$my_position_code"."layer_message = '$task_index_contents' where TID = $up_page_TID;";
+           $task_detail_table_query2 = "update task_approbation_table set task_sq_0layer_message = '$task_index_contents' where TID = $up_page_TID;";
            $task_detail_table_query3 = "update task_document_header_table set super_task_TID = ".$upper_task_id." where TID = $up_page_TID;";
 
            echo $task_detail_table_query2;
@@ -167,6 +181,7 @@
            mysqli_query($conn,$task_detail_table_query2);
            mysqli_query($conn,$task_detail_table_query3);
            $msg_ob->su_function_call_message_callback($conn,515);
+
            echo "<script> opener.location.reload(); </script>";
            echo "<script> self.close(); </script>"; 
 

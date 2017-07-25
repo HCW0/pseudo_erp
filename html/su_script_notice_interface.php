@@ -287,7 +287,7 @@ function hrefClick(course){
 				</div>
 
 			<div  id="footer" style="padding:70px 0px 0px 930px;">
-				<input type="button" name="버튼" value="공지등록" onclick="window.open('./su_script_notice_write_interface.php','win','width=575,height=286,toolbar=0,scrollbars=0,resizable=0')";>
+				<input type="button" name="버튼" value="공지등록" onclick="window.open('./su_script_notice_write_interface.php','win','width=630,height=286,toolbar=0,scrollbars=0,resizable=0')";>
 
 			</div>
 			<div id="footer" style="padding:50px 0px 0px 800px;">
@@ -296,6 +296,7 @@ function hrefClick(course){
 				<p style="background-color:coffee" class="bd" align="center">COPYRIGHT(C) 2017 SUNUNENG.ENG ALL RIGHTS RESERVED&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp주소 : 광주광역시 광산구 송정동 735 선운빌딩 3층 <br/> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp연락처 : 062-651-9272 / FAX : 062-651-9271</p>
 		</div>
 </header>
+
 
 <div style="height:1000px">
 
@@ -361,7 +362,28 @@ function hrefClick(course){
 
 			<li><a href="su_script_approbation_interface.php"> # 결제함</a></li>
 			<li><a href="su_script_configure_interface.php"> # 설정</a></li>
-			<li><a href="rhksflwk.php"> # 관리자 모드</a></li>
+						<li>
+			
+			<a href="#0"> 
+			<a href=#none onclick=this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';> 
+						<div># 관리자 기능</div>
+					</a><DIV style='display:none'> 
+			
+				<a href = "su_script_approbation_management_interface.php" align = "right">
+					<font color='white'>
+					결제 루트 설정
+					</font></a>	
+
+				<a href = "su_script_process_table_interface.php" align = "right">
+					<font color='white'>
+					이하 추가예정
+					</font></a>		
+			
+						</DIV>
+			</a>
+			
+			
+			</li>
 		</ul> <!-- cd-single-item-wrapper -->
 
 		
@@ -374,5 +396,6 @@ function hrefClick(course){
       	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 		</div>
 	</body>    
+ 
 
 </html>

@@ -40,10 +40,6 @@
 			$row2 = mysqli_fetch_array($result_set2);
 
 
-			$task_table_query4 = "select * from task_approbation_path_table u where u.SID = ".$row['task_orderer']." AND u.key_index = ".$row2['key_index'].";";
-			$result_set4 = mysqli_query($conn,$task_table_query4);
-			$row4 = mysqli_fetch_array($result_set4);
-
 // 클래스 객체 선언
 
 
@@ -51,8 +47,6 @@
 		$this_state = $ob2->su_function_convert_name($conn,"task_document_header_table","TID",$TID,"task_state");
 		$this_state = $ob2->su_function_convert_name($conn,"master_state_info_table","master_task_state_info_code",$this_state,"master_task_state_info_name");
 
-
-		$end_user_position = $ob2->su_function_convert_name($conn,"sid_combine_table","SID",$row4['end_user_sid'],"sid_combine_position");
 
 		
 
@@ -132,57 +126,37 @@
                  
                  
 							<?php
-								/*	
 
-
-										
-										// detail debug state
-											echo "현재 결제 단계  ";
-											echo $row2['task_sequence_current'];
-											echo "<br />";
-											echo "시작 결제 단계  ";
-											echo $row2['task_sequence_start'];
-											echo "<br />";
-											echo "종료 결제 단계  ";
-											echo $row2['task_sequence_end'];
-											echo "<br />";
-								*/		
 										$name_count=1;
-										for($count = $row2['first_order'] ; $count < 8 ; $count++ ){
+										for($count = 0 ; $count < 9 ; $count++ ){
 
 
+											//반복문의 파라미터에 따라 검색할 필드를 정하는 부분, 필드 값은 유저의 sid를 가리킨다.
+												if($count==0){
+															$target_sid = $row2['first_order'];
+															$approb_position = '최초발의자 :';
+												}else if($count==8){
+															$target_sid = $row2['end_order'];
+															$approb_position = '최종승인자 :';
+
+												}else{
+															$tmp = $count.'_layer_aida_sid';
+															$target_sid = $row2[$tmp];
+															$approb_position = '제'.$name_count.'차 결제자 : ';
+															$name_count++;															
+												}
 
 												$var = "task_sq_".$count."layer_message";
 												echo "<br />";
 												
-
-												//query generate
-												$task_table_query3 = "select * from sid_combine_table u where u.sid_combine_department = ".$row2['task_order_section']." AND u.sid_combine_position = ".$count.";";
-												$result_set3 = mysqli_query($conn,$task_table_query3);
-												$row3 = mysqli_fetch_array($result_set3);
-												
-
-												if($row3['SID']==null) continue; //존재하지 않는 공석은 그냥 건너뛴다.
-												$approb_name = $ob2->su_function_convert_name($conn,"master_user_info_table","SID",$row3['SID'],"master_user_info_name");
-												
-
-												//variable generate
+												if($target_sid==null) continue; //존재하지 않는 공석은 그냥 건너뛴다.
 
 
-												if($row2['first_order']==$count){
-													$approb_position = '최초발의자 :';
-												}else{
-													$approb_position = '제'.$name_count.'차 결제자 : ';
-													$name_count++;
-												}
+												//query generate							
+												$approb_name = $ob2->su_function_convert_name($conn,"master_user_info_table","SID",$target_sid,"master_user_info_name");
 
 
 
-
-												if($end_user_position==$count){
-													$approb_position = '최종승인자  :';
-												}
-												
 												//rendering
 												if($row2['current_sid']!=$count){
 													echo "<tr>";
@@ -222,6 +196,17 @@
 															
 														echo "</td>";
 													echo "</tr>";
+
+
+
+															if($row2['current_sid']!=8){
+															$tmp = $row2['current_sid'].'_layer_aida_sid';
+															$current_sid = $row2[$tmp];
+															}else{
+															$current_sid = $row2['end_order'];
+															}
+
+
 														echo "<tr>";
 														echo "<td colspan='15'>";
 														echo "</td>";
@@ -229,16 +214,20 @@
 																echo "<div align = 'left'>";
 																echo "&nbsp &nbsp &nbsp";
 																echo "<select name = 'opinion_write[]'>";
-																if($row2['current_sid']==$end_user_position){	
-            														echo "<option value='-1'>승인</option>";
-																}else if($row2['current_sid']==$row2['first_order']){
-																	echo "<option value='2'>승인</option>";
+
+
+
+
+																if($current_sid==$row2['end_order']){
+            														echo "<option value='-1'>승인</option>";  // 최종승인
+																}else if($current_sid==$row2['first_order']){
+																	echo "<option value='2'>승인</option>"; // 최초상신 .. 이지만 반려당하는 일이 없으면 볼일 없다.
 																}else{
-																	echo "<option value='0'>승인</option>";
+																	echo "<option value='0'>승인</option>"; // 중간 검토단계의 승인
 																}
-																echo "<option value='1'>반려</option>";
+																echo "<option value='1'>반려</option>";  // 반려
    																echo "</select>";	
-																echo "<input type='submit' value='승인'>";
+																echo "<input type='submit' value='완료'>";
 																echo "</div>";
 																echo "</td>";
 														echo "</tr>";
@@ -257,6 +246,27 @@
 
 
 					<!--  -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 					<tr>

@@ -166,8 +166,8 @@
 
 						function get_path_index(task_title){
 
-
-   							 window.location.href = './su_script_table_write_interface_ura.php?task_title='+task_title;
+							 window.resizeTo(1300,370);
+   							 window.location.href = './su_script_approbation_path_write_interface_not_manager.php';
 						}
 
 	</script>

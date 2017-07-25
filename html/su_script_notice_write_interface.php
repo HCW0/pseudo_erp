@@ -129,7 +129,7 @@
 		<div id="wapper" style="background-color:#f5f4e9; width:100%; border:1px solid black">
 		<div id="first" style="background-color:skyblue; width:100%;height:30px; border:2px solid black">
 			</div>	
-				<form action = 'outsource3.php' method='POST' name="table_filter">
+				<form action = 'outsource3.php' method='POST' enctype="multipart/form-data" name="table_filter">
 					<a href=#none onclick=this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';> 
 						<div align="center">공지등록</div>
 					</a><DIV style='display:block'> 
@@ -189,56 +189,34 @@
 						
 					</tr>
 
-					<tr>
-					<td colspan="4">
-						<div align = 'right'><input type="submit" value="완료" ></div>
-					</td>
-						
-					</tr>
+
 					</table>
-					</form>
+					
 					</div>
-		
-		
+						 
 					
-					<tr>
-						<td colspan=2><hr size=1></td>
-					</tr>
-					<tr>
 					
-					<a href=#none onclick=this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';> 
-					<p align="center">첨 부 파 일</p>
-					</a><DIV style='display:none'> 
-					
-					<form name="write">
 					 <table id='insertTable' border=0 cellpadding=0 cellspacing=0>
 
 						<tr>
 
 							<td valign=bottom>
 
-								<INPUT type='file' maxLength='100' name='filename1' size='25'>
+								<INPUT type='file' accept=".gif, .jpg, .png" maxLength='100'  name = "notice_sheet" id = "notice_sheet" size='25'>
 
 							</td>
 
-							<td >
-								
-								&nbsp&nbsp
-								<input type="button" value="추가" onClick="addFile(this.form)" border=0 style='cursor:hand'>
-								/			
-								<input type="button" value="삭제" onClick='deleteFile(this.form)' border=0 style='cursor:hand'>
-
-							</td>
 
 							</tr>
 	
-						</table>
 
+						</table>
+						<div align = 'right' style="padding: 0px 40px 0px 0px"><input type="submit" value="완료" ></div>
 						<input type="hidden" name="rowCount" value="1">
 
 					</form>        
 
-					</div>
+					
 
 					
 

@@ -126,9 +126,9 @@
 											*/
 
 
-											if($row2['task_sq_1layer_message']!=""){
-												echo "<td>의견</td>";
-												echo "<td>".$row2['task_sq_1layer_message']."</td>";	
+											if($row2['task_sq_0layer_message']!=""){
+												echo "<td>최초발의자</td>";
+												echo "<td>".$row2['task_sq_0layer_message']."</td>";	
 
 												
 											}
