@@ -66,8 +66,9 @@
 			<title>글쓰기</title>
 			<style>
 					@import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
-					body {
+					html, body {
 						font-family: 'Nanum Gothic', sans-serif;
+						height:98%;
 					}
 					.nse_content{width:600px;height:100px}
 					.nse_content2{width:660px;height:130px}
@@ -84,6 +85,14 @@
 
 
 			</style>
+
+
+
+<script language="javascript">
+				window.resizeTo(screen.availWidth/2,screen.availHeight*0.72); // 지정한 크기로 변한다.(가로,세로)
+				//window.resizeBy(500,500); // 지정한 크기만큼 더하거나 빼져서 변한다.
+ </script>
+
 
 			<script type="text/javascript">
 				//첨부파일 추가
@@ -175,15 +184,15 @@
 	</head>
 
 
-	<body style="width:800px">
+	<body>
 	
-		<div id="wapper" style="background-color:#f5f4e9; width:100%; border:1px solid black">
+		<div id="wapper" style="background-color:#f5f4e9; width:100%; height:100%; border:1px solid black">
 			<div id="first" style="background-color:skyblue; width:100%;height:30px; border:2px solid black">
 			</div>
 				<form action = 'outsource2.php' method='POST' name="table_filter">
-					<a href=#none onclick=this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';> 
-						<div align="center"><h2>업 무 등 록</h2></div>
-					</a><DIV style='display:block'> 
+					
+						<div align="center"><h2>실 적 등 록</h2></div>
+					<DIV style='display:block'> 
 					<table>
 			
 					<tr>
@@ -256,12 +265,12 @@
 						<td  colspan="2">
 							<select  name = "task_select_box[]">	
        							 <?php
-										$query = "SELECT * FROM master_state_info_table";
+										$query = "SELECT * FROM dmaster_state_info_table";
      					        		$result = mysqli_query($conn,$query);  
            										 while( $row=mysqli_fetch_array($result) ){    
 
-														if($row['master_task_state_info_code']!=99)
-            											  echo "<option value='".$row['master_task_state_info_code']."'>".$row['master_task_state_info_name']."</option>";
+														if($row['master_code']!=99 && $row['master_code']%10==0)
+            											  echo "<option value='".$row['master_code']."'>".$row['master_state_detail_name']."</option>";
        										    		                                             
             											 
        										     }
@@ -276,7 +285,7 @@
 						<td>과 업 기 간</td>
 						<td><input type="text" name = "task_select_box[]" id="datepicker1" value=<?php echo $_SESSION['now_date']; ?>></td>
 						<td><input type="text" name = "task_select_box[]" id="datepicker2" value=<?php echo $_SESSION['now_date']; ?>></td>
-						<td>작 업 기 간</td>
+						<td>수 행 일</td>
 						<td><input type="text" name = "task_select_box[]" id="datepicker3" value=<?php echo $_SESSION['now_date']; ?>></td>
 					</tr>
 						<tr>
@@ -296,9 +305,9 @@
 						<td colspan=2><hr size=1></td>
 					</tr>
 					
-					<a href=#none onclick=this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';> 
+					
 						<div align="center">상세 업무 내용</div>
-					</a><DIV style='display:block'> 
+					<DIV style='display:block'> 
 					<table>
 					<tr>
 						<td>상위 업무명</td>
@@ -315,9 +324,36 @@
       							  ?>         
    							</select>	
 							</td>
+							<td>업무상황</td>
+							<td>
+							<select  name = "task_select_box[]">	
+       							 <?php
+										$query = "SELECT * FROM dmaster_state_info_table";
+     					        		$result = mysqli_query($conn,$query);  
+           										 while( $row=mysqli_fetch_array($result) ){    
+
+														if($row['master_code']!=99)
+            											  echo "<option value='".$row['master_code']."'>".$row['master_state_detail_name']."</option>";
+       										    		                                             
+            											 
+       										     }
+      							  ?>          
+   							</select>
+							</td>
 						</tr>
 						<tr>
-			
+							<td>할당금</td>
+							<td>
+								<input id='task_title' type=text name=task_select_box[] size=10 />
+							</td>
+							<td>사용액</td>
+							<td>
+								<input id='task_title' type=text name=task_select_box[] size=10 />
+							</td>
+							<td>잔여액</td>
+							<td>
+								<input id='task_title' type=text name=task_select_box[] size=10 />
+							</td>
 
 						</tr>
 					</table>
@@ -329,9 +365,9 @@
 					</tr>
 					
 					
-					<a href=#none onclick=this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';> 
+					
 						<div align="center">결제</div>
-					</a><DIV style='display:block'> 
+					<DIV style='display:block'> 
 					<table>
 					<tr>
 						<td> 결 제 루 트</td>
@@ -396,9 +432,9 @@
 					</tr>
 					
 					
-					<a href=#none onclick=this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';> 
+					
 					<p align="center">첨 부 파 일</p>
-					</a><DIV style='display:none'> 
+					<DIV style='display:none'> 
 					
 					<form name="write">
 					 <table id='insertTable' border=0 cellpadding=0 cellspacing=0>

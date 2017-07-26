@@ -44,6 +44,7 @@
 			$_SESSION['current_personal_gate_task_level_sub_code'] = 999;
 			$_SESSION['current_personal_gate_base_date']="";
 			$_SESSION['current_personal_gate_limit_date']="";
+			$_SESSION['current_personal_gate_task_order_section'] = $_SESSION['my_department_code'];
 		}
 
 
@@ -173,7 +174,7 @@ function toWeekNum($get_year, $get_month, $get_day){
   	
 
 	 .fixed-table-container {
-        width: 1000px;
+        width: 1200px;
         height: 550px;
         border: 1px solid #000;
         position: relative;
@@ -255,13 +256,13 @@ function toWeekNum($get_year, $get_month, $get_day){
 		<a id="cd-menu-trigger" href="#0"><span class="cd-menu-text">메뉴</span><span class="cd-menu-icon"></span></a>
 		
 		
-	<div id="wrapper" style="width:1200px" "height:300px">
+	<div id="wrapper" style="width:1400px" "height:300px">
 		
 			<?php
 				$UI_form_ob->su_function_get_title('업무 선택 화면',$_SESSION['my_name'],$_SESSION['my_position'],$_SESSION['my_department'],'su_script_user_personal_interface');
 			?>
 				<input type="button" name="버튼" value="업무등록" onclick="window.open('./su_script_table_write_personal_interface.php','win','width=800,height=700,toolbar=0,scrollbars=0,resizable=0')";>
-				<div id="head" style="padding:0px 0px 0px 550px;">
+				<div id="head" style="padding:0px 0px 0px 750px;">
 						
 				<form action = 'outsource6.php' method='POST' name="table_filter">		
 				<span>시작일</span>
@@ -287,12 +288,11 @@ function toWeekNum($get_year, $get_month, $get_day){
 					
 					<table>
 						<tr>
-						<th width="3%" text-align="center"><div class="th-text">NO</div></th>
 
 
 
 						
-						<th   width="23%" text-align="center">
+						<th   width="22%" text-align="center">
 							<div class="th-text">업무등급
 							<select name = "task_select_box[]" onchange="javascript:selectEvent(this,0);">	
        							 <?php
@@ -310,14 +310,39 @@ function toWeekNum($get_year, $get_month, $get_day){
 													}
 												}
       							  ?>         
-   							</select>	</div>
+   							</select>	
+							</div>
+						</th>
+						<th   width="19%" text-align="center">
+							<div class="th-text">발주처
+							<select name = "task_select_box[]" onchange="javascript:selectEvent(this,2);">	
+       							 <?php
+										$query = "SELECT * FROM master_department_info_table";
+     					        		$result = mysqli_query($conn,$query);  
+										 echo "<option value='15'>전체</option>";
+           										 while( $row=mysqli_fetch_array($result) ){   
+														if($row['sid_combine_department']!=15){      
+														if($row['sid_combine_department']==$_SESSION['current_personal_gate_task_order_section']){
+															echo "<option value='".$row['sid_combine_department']."' selected>".$row['master_department_info_name']."</option>";
+														}
+														else{
+            											 echo "<option value='".$row['sid_combine_department']."'>".$row['master_department_info_name']."</option>";
+       										    		 }
+													}
+												}
+      							  ?>         
+   							</select>
+							</div>
 						</th>
 						
-						
-						<th   width="74%" text-align="center">
+						<th   width="34%" text-align="center">
 							<div class="th-text">사업명</div>
 						</th>
+						<th   width="25%" text-align="center">
+							<div class="th-text">사업기간</div>
+						</th>
 
+						
 					</form>		
 	
 						
@@ -362,7 +387,7 @@ function toWeekNum($get_year, $get_month, $get_day){
 				*/
 
 
-				$task_table_query = $ob3->su_function_combine_query_to_task_header_table_ms_page($_SESSION['current_personal_gate_task_level_code'],$_SESSION['current_personal_gate_task_level_sub_code'],	$_SESSION['current_personal_gate_base_date'],	$_SESSION['current_personal_gate_limit_date']);
+				$task_table_query = $ob3->su_function_combine_query_to_task_header_table_ms_page($_SESSION['current_personal_gate_task_level_code'],$_SESSION['current_personal_gate_task_level_sub_code'],	$_SESSION['current_personal_gate_base_date'],$_SESSION['current_personal_gate_limit_date'],$_SESSION['current_personal_gate_task_order_section']);
 				$result_set = mysqli_query($conn,$task_table_query);
 
 				
@@ -396,7 +421,7 @@ function toWeekNum($get_year, $get_month, $get_day){
             while($row = mysqli_fetch_array($result_set)) {
             ?>
                 <tr>
-					<td><?php echo $cnt++?></td>
+
 					<td><?php 
 						 $tmp_field_compare = $ob2->su_function_convert_name($conn,"master_task_level_info_table","master_task_level_code",$row['master_task_level_code'],"master_task_level_name");
 						 if($tmp_field!=$tmp_field_compare){
@@ -406,23 +431,26 @@ function toWeekNum($get_year, $get_month, $get_day){
 					
 					?>
 					</td>
-					
-						<td id='left'>
-					<?php 
-					 echo"<a href='#' onclick='hrefClick_of_sub_task(".$row['master_task_level_code'].','.$row['master_task_level_sub_code'].");'/>";
-					 echo $ob2->su_function_convert_name($conn,"master_task_level_sub_info_table","master_task_level_sub_code",$row['master_task_level_sub_code'],"master_task_level_sub_name");
-					
-					
-					?>
-					
-					
-					
-					
-					
-					
-					
-					
+					<td>
+						<?php
+							$name = $ob2->su_function_convert_name($conn,"master_department_info_table","sid_combine_department",$row['sub_level_order_section'],"master_department_info_name"); 
+							echo $name; 
+						?>
+					</td>				
+					<td id='left'>
+						<?php 
+						echo"<a href='#' onclick='hrefClick_of_sub_task(".$row['master_task_level_code'].','.$row['master_task_level_sub_code'].");'/>";
+						echo $ob2->su_function_convert_name($conn,"master_task_level_sub_info_table","master_task_level_sub_code",$row['master_task_level_sub_code'],"master_task_level_sub_name");
+						
+						
+						?>
 					</td>
+				
+					<td>
+						<?php echo $row['sub_level_from_date']."  ~  ".$row['sub_level_from_date']; ?>					
+					</td>
+					
+
                 </tr>
 
 

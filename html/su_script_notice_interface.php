@@ -57,8 +57,8 @@ function hrefClick(course){
 
 
 	  	var popUrl = "/su_script_notice_pop_up.php";	//팝업창에 출력될 페이지 URL
-		var popOption = "width=370, height=360, resizable=no, scrollbars=no, status=no;";    //팝업창 옵션(optoin)
-		window.open(popUrl+'?notice_id=' + course,popOption,'width=491px,height=370px');
+		var popOption = "resizable=no, scrollbars=no, status=no;";    //팝업창 옵션(optoin)
+		window.open(popUrl+'?notice_id=' + course,popOption,'width=491px,height=' +  screen.availHeight/3);
 
 
     
@@ -203,39 +203,39 @@ function hrefClick(course){
 						 
 					<table>
 						<tr>
-						<th ><div class="th-text">NO</div></th>
+						<th  width=3%><div class="th-text">NO</div></th>
 
 
 						
-						<th width="100px">
+						<th width="7%">
 							<div class="th-text">공지등급</div>
 						</th>
 						
 						
-						<th >
-							<div class="th-text" style="padding:0px 0px 0px 4%">공지이름</div>
+						<th  width=25% >
+							<div class="th-text" >공지이름</div>
 						</th>
 
-						<th >
-							<div class="th-text" style="padding:0px 0px 0px 9%">공지기간</div>
+						<th  width=30% >
+							<div class="th-text" >공지기간</div>
 						</th>
 
-						<th >
-							<div class="th-text" style="padding:0px 0px 0px 4%">개시일</div>
+						<th  width=11% >
+							<div class="th-text" >개시일</div>
 						</th>
 
-						<th >
-							<div class="th-text" style="padding:0px 0px 0px 1%">개시자</div>
+						<th  width=8% >
+							<div class="th-text" >개시자</div>
 						</th>
 
 
-						<th>
-							<div class="th-text" style="padding:0px 0px 0px 3%">담당부서</div>
+						<th width=8% >
+							<div class="th-text" >담당부서</div>
 						</th>
 						
 
-						<th >
-							<div class="th-text" style="padding:0px 0px 0px 2%">상태</div>
+						<th  width=8% >
+							<div class="th-text" >상태</div>
 						</th>
 
 						</thead>

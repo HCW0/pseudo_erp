@@ -183,6 +183,9 @@ function toWeekNum($get_year, $get_month, $get_day){
         position: relative;
         padding-top: 30px; /* header-bg height값 */
     }
+	#left{
+		text-align: left;
+	}
     .header-bg {
         background: skyblue;
         height: 30px; /* header-bg height값 */
@@ -343,7 +346,7 @@ function toWeekNum($get_year, $get_month, $get_day){
 						
 					
 
-						<th width="20%" text-align="center">
+						<th width="20%"  text-align="center">
 							<div class="th-text">업무명</div>
 						</th>
 
@@ -356,7 +359,7 @@ function toWeekNum($get_year, $get_month, $get_day){
 
 
 						<th width="15%" text-align="center">
-							<div class="th-text">담당자
+							<div class="th-text">작성자
 							<select name = "task_select_box[]" onchange="javascript:selectEvent(this,2);">	
        							 <?php
 										$query = "SELECT * FROM sid_combine_table u where ".$_SESSION['my_department_code']." = u.sid_combine_department AND u.is_valid=1";
@@ -508,7 +511,7 @@ function toWeekNum($get_year, $get_month, $get_day){
 					<td><?php echo $cnt++?></td>
 
 				
-					<td><?php
+					<td id='left'><?php
 					 echo"<a href='#' onclick='hrefClick_of_sub_task(".$row['task_level_code'].','.$row['task_level_sub_code'].','.$row['TID'].");'/>"; echo $row['task_name']?></td>
 					<td><?php echo 
 						 $ob2->su_function_convert_name($conn,"master_department_info_table","sid_combine_department",$row['task_order_section'],"master_department_info_name");

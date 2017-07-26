@@ -51,11 +51,25 @@
 			<title>글쓰기</title>
 			<style>
 					@import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
-					body {
+					html, body {
 						font-family: 'Nanum Gothic', sans-serif;
+						height:98%;
 					}
-					.nse_content{width:520px;height:120px}
+					.nse {
+						max-width: 100%;
+						width : 100%;
+						height : 100%;
+						}
 			</style>
+
+
+
+	
+
+<script language="javascript">
+				window.resizeTo(screen.availWidth*0.5,screen.availHeight*0.65); // 지정한 크기로 변한다.(가로,세로)
+				//window.resizeBy(500,500); // 지정한 크기만큼 더하거나 빼져서 변한다.
+ </script>
 
 			<script type="text/javascript">
 				//첨부파일 추가
@@ -124,9 +138,9 @@
 	</head>
 
 <!-- 상황에따라서 스마트에디터 사용 일단 서술식 텍스트-->
-	<body style="width:750px">
+	<body>
 	
-		<div id="wapper" style="background-color:#f5f4e9; width:100%; border:1px solid black">
+		<div id="wapper" style="background-color:#f5f4e9; width:100%;height:100%;  border:1px solid black">
 		<div id="first" style="background-color:skyblue; width:100%;height:30px; border:2px solid black">
 			</div>	
 				<form action = 'outsource3.php' method='POST' enctype="multipart/form-data" name="table_filter">
@@ -202,7 +216,7 @@
 
 							<td valign=bottom>
 
-								<INPUT type='file' accept=".gif, .jpg, .png" maxLength='100'  name = "notice_sheet" id = "notice_sheet" size='25'>
+								<INPUT type='file' accept=".gif, .jpg, .png" maxLength='100'   name="upload_file" size='25'>
 
 							</td>
 

@@ -19,7 +19,7 @@
                        echo "<br />";
            break;
         case 2 :
-           $_SESSION['current_personal_task_orderer']=$var;
+           $_SESSION['current_personal_gate_task_order_section']=$var;
            echo "case  2";
                        echo "<br />";
            break;

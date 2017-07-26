@@ -112,8 +112,8 @@
 
 
     $msg_ob = new su_class_message_handler();
-  
-    if($path_number==''||$task_title==''||$task_base_date==''||$task_limit_date==''||$task_base_elapsed_date==''||$task_sub_level==''){
+    
+    if($_POST['task_select_box'][0]==''||$_POST['task_select_box'][3]==''||$_POST['task_select_box'][4]==''||$_POST['task_select_box'][5]==''||$_POST['task_select_box'][6]==''){
               echo "uninvalid input error in task add module";
               echo "<br />";
               
@@ -129,7 +129,7 @@
     else{      
 
             $date = date("Y-m-d");
-    	    $task_table_query = "Insert into task_document_header_table(task_level_code,task_level_sub_code,task_name,task_order_section,task_order_position,task_orderer,task_priority,task_base_date,task_limit_date,task_elapsed_base_date,task_elapsed_limit_date,task_state,task_birth_date) Values($task_level,$task_sub_level,'$task_title',$my_department_code,$my_position_code,$my_name_code,$task_priority,'$task_base_date','$task_limit_date','$task_base_elapsed_date','$task_limit_elapsed_date',$task_state,'$date');";      
+    	    $task_table_query = "Insert into task_document_header_table(task_level_code,task_level_sub_code,task_name,task_order_section,task_order_position,task_orderer,task_priority,task_base_date,task_limit_date,task_elapsed_base_date,task_elapsed_limit_date,task_state,task_detail_state,task_birth_date) Values($task_level,$task_sub_level,'$task_title',$my_department_code,$my_position_code,$my_name_code,$task_priority,'$task_base_date','$task_limit_date','$task_base_elapsed_date','$task_limit_elapsed_date',10,$task_state,'$date');";      
             echo $task_table_query;
             echo "<br />";
    

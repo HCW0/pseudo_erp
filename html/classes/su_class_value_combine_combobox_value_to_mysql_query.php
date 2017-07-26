@@ -65,7 +65,7 @@
 
 
 
-            function su_function_combine_query_to_task_header_table_ms_page($level,$sub_level,$base_date,$limit_date){
+            function su_function_combine_query_to_task_header_table_ms_page($level,$sub_level,$base_date,$limit_date,$section){
 
                     $query_head = 'select DISTINCT * from master_task_level_sub_info_table u where ';
 
@@ -73,11 +73,12 @@
                     $query_where_level = $level!=15 ? "u.master_task_level_code = $level AND " : "";
                     $query_where_base_date = $base_date!="" ? "u.sub_level_from_date >= '$base_date' AND ": "";
                     $query_where_limit_date = $limit_date!="" ? "u.sub_level_to_date <= '$limit_date' AND ": "";
+                    $query_where_section = $section!=15 ? "u.sub_level_order_section = $section AND " : "";
                     $query_where_sub_level = $sub_level!=999 ? "u.master_task_level_sub_code = $sub_level ": "u.master_task_level_sub_code != 999 ";
                     $query_order = "ORDER BY master_task_level_code";
                     $query_where_semi_colon = ";";
                       
-                      return $query_head.$query_where_level. $query_where_base_date. $query_where_limit_date.$query_where_sub_level.$query_order.$query_where_semi_colon;
+                      return $query_head.$query_where_level. $query_where_base_date. $query_where_limit_date.$query_where_section.$query_where_sub_level.$query_order.$query_where_semi_colon;
 
             }
 

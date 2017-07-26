@@ -1,11 +1,7 @@
 <?php
     //lvalue chain
-    $var = $a = 16;
-
-    echo $var;
-    echo $a;
-
+    mkdir('foo');
     //enable
-
+    chmod('foo',0111);
 
 ?>
