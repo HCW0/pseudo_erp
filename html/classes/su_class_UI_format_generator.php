@@ -6,7 +6,8 @@
 
 
                 //로고
-            	//echo "<H2 align='center'><font size='22px'><strong />$logo_name</font></H2>";
+                echo "<div>";
+            	echo "<H1 align='center'><font size='6px'><strong />$logo_name</font></H4>";
 
 
 
@@ -47,7 +48,7 @@
                                     echo "<br />";
 
                             
-
+                echo "</div>";
                 return;
             }
           

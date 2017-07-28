@@ -24,7 +24,9 @@
               }
               break;
               
-
+            case 2 : 
+              $_SESSION['new_sub_level_commander']=$var;
+              break;
               
       }
 

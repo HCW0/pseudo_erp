@@ -62,8 +62,9 @@
 			<title>글쓰기</title>
 			<style>
 					@import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
-					body {
+					html, body {
 						font-family: 'Nanum Gothic', sans-serif;
+						height:98%;
 					}
 					.nse_content{width:600px;height:80px}
 					.nse_content2{width:660px;height:130px}
@@ -78,24 +79,25 @@
 					
 			</style>
 
-	
+<script language="javascript">
+				window.resizeTo(screen.availWidth/2.22,screen.availHeight*0.45); // 지정한 크기로 변한다.(가로,세로)
+				//window.resizeBy(500,500); // 지정한 크기만큼 더하거나 빼져서 변한다.
+ </script>	
 
 	</head>
 
 <!-- 상황에따라서 스마트에디터 사용 일단 서술식 텍스트-->
-	<body >
+	<body>
 
-		<div id="wapper" style="background-color:#f5f4e9; width:800px; border:1px solid black">
-		<div id="first" style="background-color:skyblue; width:100%;height:30px; border:2px solid black">
-			</div>
-			<table summary="글쓰기 전체 테이블">
-	
-				
-				<table summary="테이블 구성" >
+		<div id="wapper" style="background-color:#f5f4e9; width:100%; height:100%; border:1px solid black">
+		<div id="first" style="background-color:skyblue; width:100%;height:30px; border:2px solid black"></div>
+			<table border='1'>
 					<tr>
 						<td colspan ='15'>제 목</td>
-						<td colspan='25'><?php echo $row['task_name']?></td>
+						<td colspan ='25'><?php echo $row['task_name']?></td>
 					</tr>
+
+
 					<tr>
 						<td colspan ='15'>상 태</td>
 						<td colspan ='10'>
@@ -110,7 +112,9 @@
 							?>
 						</td>
 					</tr>
-					<tr>
+
+
+
 					
 					<tr>
 					<td  colspan = '40'>
@@ -147,7 +151,6 @@
 												}
 
 												$var = "task_sq_".$count."layer_message";
-												echo "<br />";
 												
 												if($target_sid==null) continue; //존재하지 않는 공석은 그냥 건너뛴다.
 
@@ -208,9 +211,8 @@
 
 
 														echo "<tr>";
-														echo "<td colspan='15'>";
-														echo "</td>";
-																echo "<td colspan='25'>";
+
+																echo "<td colspan='60'>";
 																echo "<div align = 'left'>";
 																echo "&nbsp &nbsp &nbsp";
 																echo "<select name = 'opinion_write[]'>";
@@ -242,65 +244,8 @@
               
 
 					</tr>
-					
 
-
-					<!--  -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-					<tr>
-						<td colspan=2><hr size=1></td>
-					</tr>
-					<tr>
-					<form action="http://localhost:1234/storage/upload.php" method="post" enctype="multipart/form-data">
-            
-      
-					 <table id='insertTable' border=0 cellpadding=0 cellspacing=0>
-
-						<tr>
-							<td>관련근거</td>
-							<td>
-								&nbsp
-           					 	<a href="미구현"> 개발중입니다. </a>
-							</td>
-
-							</tr>
-	
-						</table>
-
-
-
-					</form>        
-
-					
-					<tr>
-						<div align="center">
-						<input type="button" value="확인" onclick="self.close();"></div>
-						</td>
-					</tr> 
 				</table>	
-			</table>
 		</div>
 
 	</body>

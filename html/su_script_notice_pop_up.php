@@ -124,12 +124,15 @@
 										$query = "select * from master_upload_table u where u.upload_id = ".$row2['upload_id'].";";
 
 										$result = mysqli_query($conn,$query);
+										if(mysqli_num_rows($result)!=0){
 										$row = mysqli_fetch_array($result);
 										$real_name = $row['real_name'];
 										$server_name = $row['server_name'];
 
 										echo "<a href='./storage/notice/$server_name' download>".$real_name."</a>";
-
+											}else{
+																	echo "첨부된 파일 없음";
+																}
 								?>
 							
 							</td>

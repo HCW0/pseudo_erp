@@ -234,7 +234,7 @@ function toWeekNum($get_year, $get_month, $get_day){
         border-left: none;
     }
 	#wrapper{
-	  padding: 0px 0px 0px 200px;
+	  padding: 0px 0px 0px 66px;
   }
 </style>
 
@@ -252,7 +252,7 @@ function toWeekNum($get_year, $get_month, $get_day){
 
 	
 	<header>
-		<a id="cd-menu-trigger" href="#0"><span class="cd-menu-text">메뉴</span><span class="cd-menu-icon"></span></a>
+		<a id="cd-menu-trigger" href="#0"><span class="cd-menu-text">메뉴</span></a>
 
 		
 	<div id="wrapper" style="width:100%" "height:300px">
@@ -443,7 +443,7 @@ function toWeekNum($get_year, $get_month, $get_day){
 
 			<?php
 
-				
+				/*
 				// 각 필드 콤보박스의 입력 값 확인하는 로직
 				// 테이블 위치에 코드값으로 바로 표시됨.
 				echo "<br />";
@@ -474,7 +474,7 @@ function toWeekNum($get_year, $get_month, $get_day){
 				echo '필터 제한 일자 ';
 				echo $_SESSION['current_ap_limit_date'];
 				echo "<br />";
-				
+				*/
 
 
 				$task_table_query = $ob3->su_function_combine_query_to_task_header_table_lower_only($_SESSION['current_ap_task_level_code'],$_SESSION['current_ap_task_level_sub_code'],$_SESSION['current_ap_task_order_section'],$_SESSION['current_ap_task_orderer'],$_SESSION['current_ap_task_priority'],$_SESSION['current_ap_task_state'],$_SESSION['current_ap_base_date'],$_SESSION['current_ap_limit_date']);
@@ -485,7 +485,7 @@ function toWeekNum($get_year, $get_month, $get_day){
 
 
 				
-       			
+       			/*
 				echo '입력된 쿼리문 ';
 				echo $task_table_query;
 				echo "<br />";   
@@ -499,7 +499,7 @@ function toWeekNum($get_year, $get_month, $get_day){
 					echo "개";
 					echo "<br />";
 					echo "<br />";
-				
+				*/
 				
 
 
@@ -636,8 +636,12 @@ function toWeekNum($get_year, $get_month, $get_day){
 <div style="height:1000px">
 
 	<nav id="cd-lateral-nav" >
-		<ul class="cd-navigation" >
+												<br />
+															<br />
+																		<br />
 		<p align="center"><img src="./src/su_rsc_sulogo_back.png" width="200" height="100" title="선운로고"/></p>
+															<br />
+												<br />
 			<li><a class="current" href="#0">* * * *</a></li>
 
 				<a >이름

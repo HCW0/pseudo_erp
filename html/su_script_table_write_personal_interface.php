@@ -42,6 +42,10 @@
 			
 			$_SESSION['new_sub_level_awaked']=1;
 		}
+		if(!isset($_SESSION['new_sub_level_commander'])){
+			
+			$_SESSION['new_sub_level_commander']=$_SESSION['my_sid_code'];
+		}
 
 
 ?>
@@ -66,11 +70,12 @@
 			<title>글쓰기</title>
 			<style>
 					@import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
-					body {
+					html, body {
 						font-family: 'Nanum Gothic', sans-serif;
+						height:98%;
 					}
-					.nse_content{width:600px;height:100px}
-					.nse_content2{width:660px;height:130px}
+					.nse_content{width:600px;height:50px}
+					.nse_content2{width:600px;height:130px}
 
 
 
@@ -85,6 +90,11 @@
 
 			</style>
 
+						<script language="javascript">
+										window.resizeTo(screen.availWidth/2,screen.availHeight*0.86); // 지정한 크기로 변한다.(가로,세로)
+										//window.resizeBy(500,500); // 지정한 크기만큼 더하거나 빼져서 변한다.
+						</script>
+						
 			<script type="text/javascript">
 				//첨부파일 추가
 
@@ -169,19 +179,20 @@
 	</head>
 
 
-	<body style="width:100%">
+	<body>
 	
-		<div id="wapper" style="background-color: ivory; width:100%;">
-			
+		<div id="wapper" style="background-color:#f5f4e9; width:100%; height:100%; border:1px solid black">
+				<div id="first" style="background-color:skyblue; width:100%;height:30px; border:2px solid black">
+			</div>		
 				<form action = 'outsource2new_sub.php' method='POST' name="table_filter">
-					<a href=#none onclick=this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';> 
+					
 						<div align="center"><h2>등 록</h2></div>
-					</a><DIV style='display:block'> 
-					<table>
+					<DIV style='display:block'> 
+					<table border='1' width=100%;>
 			
 					<tr>
-						<td  colspan="1">업 무 등 급</td>
-							<td  colspan="2"><select id = "task_writer_interface_combobox" name = "task_select_box[]" onchange="javascript:selectEvent(this,0);">	
+						<td  colspan="1"width=25%;>업 무 등 급</td>
+							<td  colspan="1" width=25%><select id = "task_writer_interface_combobox" name = "task_select_box[]" onchange="javascript:selectEvent(this,0);">	
 									<?php
 											$query = "SELECT * FROM master_task_level_info_table";
 											$result = mysqli_query($conn,$query);  
@@ -198,16 +209,16 @@
 								</select>	
 							</td>
 
-								<td  colspan="1">사업명</td>
-						<td  colspan="2">
+					<td  colspan="1">사업명</td>
+						<td  colspan="1">
 						<select name = "task_select_box[]" onchange="javascript:selectEvent(this,1);">	
        							 <?php
 										$query = "SELECT * FROM master_task_level_sub_info_table";
      					        		$result = mysqli_query($conn,$query); 
-										 		 echo "<option value='' selected>--</option>";
-												  if($_SESSION['sub_hold_level']=='new'){
-            											 		 echo "<option value='new' selected>신규 사업 생성</option>"; 
-															}else{
+										 		 echo "<option value='new' selected>신규 사업</option>";
+												  //if($_SESSION['sub_hold_level']=='new'){
+            											 		// echo "<option value='new' selected>신규 사업 생성</option>"; 
+															/*}else{
 																echo "<option value='new'>신규 사업 생성</option>"; 
 															}
 												 
@@ -223,34 +234,55 @@
 														   
 														}
 													
-													}
+													}*/
       							  ?>         
-   							</select>	
+   						</select>	
+					</td>
+					<td>담당자</td>
+					<td>
+
+							<select name = "commander" onchange="javascript:selectEvent(this,2);">	
+       							 <?php
+										$query = "SELECT * FROM sid_combine_table u where ".$_SESSION['my_department_code']." = u.sid_combine_department AND u.is_valid=1";
+     					        		$result = mysqli_query($conn,$query);
+										 		echo "<option value='8388607'>--</option>";
+           										 while( $row=mysqli_fetch_array($result) ){    
+														$name_Value = $ob2->su_function_convert_name($conn,"master_user_info_table","SID",$row['SID'],"master_user_info_name");
+														                 if($row['SID']==$_SESSION['new_sub_level_commander']){
+															echo "<option value='".$row['SID']."' selected>".$name_Value."</option>";
+														}
+														else{
+            											  echo "<option value='".$row['SID']."'>".$name_Value."</option>";
+       										    		 }                                    
+            											 
+       										     }
+      							  ?>          
+   							</select>
+
+
 					</td>
 					</tr>
 						<?php
-							if($_SESSION['new_sub_level_awaked']==2){
+							if(true){
 										echo"<tr>";
 											echo"<td>신규사업명</td>";
-											echo"<td  colspan='5'><input type=text name='task_select_box[]' size=60 ></td>";	
+											echo"<td  colspan='1'><input type=text name='task_select_box[]' size=30% ></td>";	
 										echo"</tr>";
 								}
 						?>
 					<tr>
 						<td  colspan="1">발 주 처</td>
-						<td  colspan="2"><?php echo $_SESSION['my_department'];?></td>
+						<td  colspan="1"><?php echo $_SESSION['my_department'];?></td>
 						<td  colspan="1">발 주 자</td>
-						<td  colspan="2"><?php echo $_SESSION['my_name'];?></td>
+						<td  colspan="1"><?php echo $_SESSION['my_name'];?></td>
 					</tr>
 
 					<tr>
 						<td>사 업 기 간</td>
-						<td><input type="text" name = "task_select_box[]" id="datepicker1" value=<?php echo $_SESSION['now_date']; ?>></td>
-						<td><input type="text" name = "task_select_box[]" id="datepicker2" value=<?php echo $_SESSION['now_date']; ?>></td>
+						<td colspan=3><input type="text" name = "task_select_box[]" id="datepicker1" value=<?php echo $_SESSION['now_date']; ?>>~
+						<input type="text" name = "task_select_box[]" id="datepicker2" value=<?php echo $_SESSION['now_date']; ?>></td>
 					</tr>
-						<tr>
-							<td><br /></td>
-						</tr>
+
 				
 					</table>
 
@@ -260,15 +292,11 @@
 				<div style="padding:10px 0 0 0;">
 					</div>
 					
-		
-					<tr>
-						<td colspan=2><hr size=1></td>
-					</tr>
+
 					
 					
-					<a href=#none onclick=this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';> 
 						<div align="center">관 리 자 상 신</div>
-					</a><DIV style='display:block'> 
+					<DIV style='display:block'> 
 					<table>
 					
 					<tr>

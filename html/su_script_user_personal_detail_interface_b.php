@@ -44,6 +44,19 @@
 		}else{
 			$default_title = ' ';
 		}
+
+
+
+
+					//수정할 대상의 task id를 받아온다.
+		            $target_tid = $_GET['tid'];
+					
+
+					//기존의 입력 값들을 각 form에 불러와야하니 sql쿼리문으로 row array도 하나 만든다.
+					$target_query = "SELECT * FROM task_document_header_table u WHERE u.TID = $target_tid;";
+					$target_result = mysqli_query($conn,$target_query);  
+					$target_field=mysqli_fetch_array($target_result);
+
 ?>
 
 
@@ -85,69 +98,13 @@
 
 
     <script type="text/javascript">
-						function findTotal(){
-							var arr = document.getElementsByName('qty');
-							var arr2 = document.getElementsByName('qty2');
-							var tot=parseInt(arr[0].value) - parseInt(arr2[0].value);
-							if(arr[0].value>0&&arr2[0].value>0)
-							document.getElementById('total').value = tot;
-						}
-
-						function generate_reserve(){
-							var dt = new Date();
-							var dt2 = new Date();
-							var arr = document.getElementsByName('reserve_flag');
-							if(arr[0].value==1){
-
-
-							var dayOfMonth = dt.getDate();
-							dt.setDate(dayOfMonth + 7);
-							dt2.setDate(dayOfMonth + 14);
-
-
-
-								var month = dt.getMonth()+1;
-								var day = dt.getDate();
-								var year = dt.getFullYear();
-
-								day=prependZero(day, 2);
-								month=prependZero(month, 2);
-
-								document.getElementById('datepicker1').value =year  + '-' + month + '-' + day;
-								document.getElementById('datepicker3').value =year  + '-' + month + '-' + day;
-								
-								var month = dt2.getMonth()+1;
-								var day = dt2.getDate();
-								var year = dt2.getFullYear();
-
-								day=prependZero(day, 2);
-								month=prependZero(month, 2);
-
-								document.getElementById('datepicker2').value =year  + '-' + month + '-' + day;
-							}else{
-								var month = dt.getMonth()+1;
-								var day = dt.getDate();
-								var year = dt.getFullYear();
-
-								day=prependZero(day, 2);
-								month=prependZero(month, 2);
-
-								document.getElementById('datepicker1').value =year  + '-' + month + '-' + day;
-								document.getElementById('datepicker2').value =year  + '-' + month + '-' + day;
-								document.getElementById('datepicker3').value =year  + '-' + month + '-' + day;
-							}
-						}
-
-
-						function prependZero(num, len) {
-									while(num.toString().length < len) {
-										num = "0" + num;
-									}
-									return num;
-							}
-
-
-						
+function findTotal(){
+    var arr = document.getElementsByName('qty');
+    var arr2 = document.getElementsByName('qty2');
+    var tot=parseInt(arr[0].value) - parseInt(arr2[0].value);
+	if(arr[0].value>0&&arr2[0].value>0)
+    document.getElementById('total').value = tot;
+}
 
     </script>
 
@@ -155,6 +112,24 @@
 <script language="javascript">
 				window.resizeTo(screen.availWidth/2,screen.availHeight*0.86); // 지정한 크기로 변한다.(가로,세로)
 				//window.resizeBy(500,500); // 지정한 크기만큼 더하거나 빼져서 변한다.
+
+
+
+
+
+
+					function hrefClick_of_delete_task(local){
+						// You can't define php variables in java script as $course etc.
+
+					window.location.href='outsource5delete.php?TID=' + local;
+				
+
+
+					}
+
+
+
+
  </script>
 
 
@@ -229,7 +204,7 @@
      					 // You can't define php variables in java script as $course etc.
 
 
-							var popUrl = "./common_func/su_function_real_time_combobox.php";	//팝업창에 출력될 페이지 URL
+							var popUrl = "./common_func/su_function_real_time_combobox_b.php";	//팝업창에 출력될 페이지 URL
 							var popOption = "width=680, height=680, resizable=no, scrollbars=no, status=no;";    //팝업창 옵션(optoin)
 							window.location.href = popUrl+'?var=' + selectObj.value + '&index=' +field_index;
 
@@ -248,6 +223,7 @@
 
 
 
+
 	</head>
 
 
@@ -256,7 +232,7 @@
 		<div id="wapper" style="background-color:#f5f4e9; width:100%; height:100%; border:1px solid black">
 			<div id="first" style="background-color:skyblue; width:100%;height:30px; border:2px solid black">
 			</div>
-				<form action = 'outsource2.php' method='POST' enctype="multipart/form-data"  name="table_filter">
+				<form action = "<?php echo './outsource2b.php?tid='.$target_tid; ?>" method='POST' enctype="multipart/form-data"  name="table_filter">
 					
 						<div align="center"><h2>실 적 관 리</h2></div>
 					<DIV style='display:block'> 
@@ -300,20 +276,9 @@
 					</td>
 					</tr>
 							<tr>
-						<td  colspan="1">진 행 업 무</td>
-						<td  colspan="2"><input id='task_title' type=text name=task_select_box[] size=50% value="<?php echo $default_title; ?>"></td>
+						<td>진 행 업 무</td>
+						<td  colspan="5"><input id='task_title' type=text name=task_select_box[] size=60 value="<?php echo $target_field['task_name']; ?>"></td>
 						
-						<td  colspan="1">업 무 타 입</td>
-						<td  colspan="2">
-						
-									<select onchange="generate_reserve()"  name = "reserve_flag" id='ajax_state_header2'>	
-										<option value=0>현행업무</option>
-										<option value=1>계확업무</option>	
-   									</select>
-						
-						</td>
-
-
 					</tr>
 					<tr>
 						<td  colspan="1">발 주 처</td>
@@ -330,10 +295,14 @@
 										$query = "SELECT * FROM master_priority_info_table";
      					        		$result = mysqli_query($conn,$query);  
            										 while( $row=mysqli_fetch_array($result) ){    
-													if($row['master_task_priority_info_code']!=3)
-            											  echo "<option value='".$row['master_task_priority_info_code']."'>".$row['master_task_priority_info_name']."</option>";
-       										    		                                           
-            											 
+													if($row['master_task_priority_info_code']!=3){
+
+														if($target_field['task_priority']==$row['master_task_priority_info_code']){
+														echo "<option value='".$row['master_task_priority_info_code']."' selected>".$row['master_task_priority_info_name']."</option>";
+														}else{
+														echo "<option value='".$row['master_task_priority_info_code']."'>".$row['master_task_priority_info_name']."</option>";	
+														}                                           
+													}
        										     }
       							  ?>          
    							</select>
@@ -345,14 +314,20 @@
 						<td  colspan="2">
 							<select  name = "task_select_box[]" id="ajax_state_header">	
        							 <?php
+										$dstate_off = $target_field['task_detail_state'] - $target_field['task_detail_state']%10;
+										echo $dstate_off;
 										$query = "SELECT * FROM dmaster_state_info_table";
-     					        		$result = mysqli_query($conn,$query);  
-										 echo "<option value='50'>완료</option>";
+     					        		$result = mysqli_query($conn,$query);
+										$query2 = "SELECT master_state_detail_name FROM dmaster_state_info_table where master_code=".$dstate_off.";";
+     					        		$result2 = mysqli_query($conn,$query2); 
+										$row2=mysqli_fetch_array($result2);
            										 while( $row=mysqli_fetch_array($result) ){    
 
-														if($row['master_code']!=99 && $row['master_code']%10==0)
-            											  echo "<option value='".$row['master_code']."'>".$row['master_state_detail_name']."</option>";
-       										    		                                             
+														if($row['master_code']!=99 && $row['master_code']%10==0 && $dstate_off==$row['master_code']){
+            											  echo "<option value='".$row['master_code']."' selected>".$row['master_state_detail_name']."</option>";
+														}else if($row['master_code']!=99 && $row['master_code']%10==0 && $dstate_off){
+														echo "<option value='".$row['master_code']."'>".$row['master_state_detail_name']."</option>";
+														}
             											 
        										     }
       							  ?>          
@@ -364,10 +339,10 @@
 
 					<tr>
 						<td>과 업 기 간</td>
-						<td><input type="text" name = "task_select_box[]" id="datepicker1" value=<?php echo $_SESSION['now_date']; ?>></td>
-						<td><input type="text" name = "task_select_box[]" id="datepicker2" value=<?php echo $_SESSION['now_date']; ?>></td>
+						<td><input type="text" name = "task_select_box[]" id="datepicker1" value=<?php echo $target_field['task_base_date']; ?>></td>
+						<td><input type="text" name = "task_select_box[]" id="datepicker2" value=<?php echo $target_field['task_limit_date']; ?>></td>
 						<td>수 행 일</td>
-						<td><input type="text" name = "task_select_box[]" id="datepicker3" value=<?php echo $_SESSION['now_date']; ?>></td>
+						<td><input type="text" name = "task_select_box[]" id="datepicker3" value=<?php echo $target_field['task_elapsed_base_date']; ?>></td>
 					</tr>
 						<tr>
 							
@@ -378,17 +353,21 @@
 										$query = "SELECT * FROM task_document_header_table u WHERE ".$_SESSION['sub_hold_level']."=u.task_level_sub_code";
      					        		$result = mysqli_query($conn,$query);  
 										 echo "<option value='' selected>신규</option>"; 
-           										 while( $row=mysqli_fetch_array($result) ){   
+            										 while( $row=mysqli_fetch_array($result) ){
+
+														if($target_field['super_task_TID']==$row['TID']){ 
+															if($target_field['super_task_TID']!=$target_field['TID'])
+															echo "<option value='".$row['TID']."' selected>".$row['task_name']."</option>";
+														}else{
 															echo "<option value='".$row['TID']."'>".$row['task_name']."</option>";
-													
+														}
 													}
       							  ?>         
    							</select>	
 							
 							</td>
-						<!--
-							<td> + 업무 추가하기 </td>
-						-->
+
+
 						</tr>
 				
 					</table>
@@ -415,7 +394,16 @@
 							<td>업무상황</td>
 							<td>
 							<select  name = "dstate"id='dstate_zone'>
-												<option value=51>완료</option>	
+
+								<?php
+										$query2 = "SELECT master_state_detail_name FROM dmaster_state_info_table where master_code=".$target_field['task_detail_state'].";";
+     					        		$result2 = mysqli_query($conn,$query2); 
+										$row2=mysqli_fetch_array($result2);
+
+
+												echo "<option value=".$target_field['task_detail_state'].">".$row2['master_state_detail_name']."</option>";	
+
+								?>
 												<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 												<script>
 
@@ -441,11 +429,11 @@
 							</td>
 							<td>관련업체</td>
 							<td>
-								<input id='task_title' type=text name=relate_sp>
+								<input id='task_title' type=text name=relate_sp value='<?php echo $target_field['coworkspace']; ?>'>
 							</td>
 							<td>감독관</td>
 							<td>
-								<input id='task_title' type=text name=relate_org>
+								<input id='task_title' type=text name=relate_org value='<?php echo $target_field['coworker']; ?>'>
 							</td>
 						</tr>
 
@@ -453,15 +441,15 @@
 						<tr>
 							<td>할당금</td>
 							<td>
-								<input onblur="findTotal()" type="text" name="qty"/><br>
+								<input onblur="findTotal()" type="text" name="qty"  value='<?php echo $target_field['all_money_master_code_field']; ?>' /><br>
 							</td>
 							<td>사용액</td>
 							<td>
-								<input onblur="findTotal()" type="text" name="qty2"/><br>
+								<input onblur="findTotal()" type="text" name="qty2"  value='<?php echo $target_field['use_money_master_code_field']; ?>' /><br>
 							</td>
 							<td>잔여액</td>
 							<td>
-								<input type="text" name="total" id="total"/>
+								<input type="text" name="total" id="total"  value='<?php echo $target_field['remaind_money_master_code_field']; ?>' />
 							</td>
 
 						</tr>
@@ -470,89 +458,49 @@
 						<tr>
 							<td class='td5'>업 무 진 행</td>
 							<td colspan=5>
-							<textarea name="dcontent" class="nse_content2" rows ="1" cols="35"></textarea>
+							<textarea name="dcontent" class="nse_content2" rows ="1" cols="35"><?php echo $target_field['etcetera']; ?></textarea>
 							</td>						
 						</tr>
 
 
-					</table>
-				</div>
-					
-		
-					<tr>
-						<td colspan=2><hr size=1></td>
-					</tr>
-					
-					
-					
-						<div align="center">결제</div>
-					<DIV style='display:block'> 
-					<table width=100% border='1'>
-					<tr>
-						<td> 결 제 루 트</td>
-						<td>
-						<select name = "pathnum">	
-       							 <?php
-
-										
-
-										$query = "select * from task_approbation_path_table where SID = ".$_SESSION['my_sid_code'].";";
-     					        		$result = mysqli_query($conn,$query);  
-												 while($row=mysqli_fetch_array($result)){
-													 	$approbation_path = $_SESSION['my_name'];
-														for($cnt=1;$cnt<8;$cnt++){
-
-															if($row[$cnt."_layer_aida_sid"]){
-																	$name = $ob2->su_function_convert_name($conn,"master_user_info_table","SID",$row[$cnt."_layer_aida_sid"],"master_user_info_name");
-																	
-																	$approbation_path = $approbation_path.' → '.$name;
-															}
-														}
-														$name = $ob2->su_function_convert_name($conn,"master_user_info_table","SID",$row['end_user_sid'],"master_user_info_name");
-														$approbation_path = $approbation_path.' → '.$name;	
-
-												echo "<option value=".$row['key_index'].">".$approbation_path."</option>"; 
-															  
-												 		
-											}
-      							  ?>         
-   							</select>	
-							   </td>
-							   <td>
-							   		<div><input type="button" onclick="get_path_index(task_title.value);" value="신규 경로 생성" ></div>
-							   </td>
-
-					</tr>
-					<tr>
-							<td class='td5'>상 신 의 견</td>
-							<td>
-							<textarea name="task_0layer_content" class="nse_content" rows ="1" cols="35">상신에 대한 설명을 적어주세요.</textarea>
-							</td>
-
-					</tr>
-					</table>
 					</div>
 					
-					<tr>
-						<td colspan=2><hr size=1></td>
-					</tr>
-					
+
 					<table id='insertTable' border=0 cellpadding=0 cellspacing=0>
 
 						<tr>
 
 							<td valign=bottom>
 
-								<INPUT type='file' accept=".gif, .jpg, .png" maxLength='100'   name="upload_file" size='25'>
+
+								<?php
+									echo "</td>";
+									if($target_field['upload_id']){
+										echo "첨부된 파일 : ";
+										$query = "select * from master_upload_table u where u.upload_id = ".$target_field['upload_id'].";";
+										$result = mysqli_query($conn,$query);
+																$row = mysqli_fetch_array($result);
+																$real_name = $row['real_name'];
+																$server_name = $row['server_name'];
+
+																echo "<a href='./storage/task_sheet/".$_SESSION['my_department_code']."/$server_name' download>".$real_name."</a>";
+																echo "<td valign=bottom>";
+									}
+									
+								?>
+								첨부 파일 변경 : <INPUT type='file' accept=".gif, .jpg, .png" maxLength='100'   name="upload_file" size='25'>
 
 							</td>
-
 
 							</tr>
 	
 
 						</table>
-						<div align = 'right' style="padding: 0px 40px 0px 0px"><input type="submit" value="완료" ></div>
+						<div align = 'right' style="padding: 0px 40px 0px 0px">
+							<?php echo"<input type='button' value='삭제' onclick='hrefClick_of_delete_task(".$target_tid.");'/>"?>
+							<input type="submit" value="완료" >
+							
+						</div>
 						<input type="hidden" name="rowCount" value="1">
 
 					</form>        

@@ -37,7 +37,10 @@
 
 
 // 테이블 콤보박스의 필드값 초기화
-
+		
+		if(!isset($_SESSION['personal_radio_index'])){
+			$_SESSION['personal_radio_index']=0;
+		}
 
 		if(isset($_SESSION['current_personal_gate_task_level_code'])==false){
 			$_SESSION['current_personal_gate_task_level_code'] = $ob1->su_function_init_config($conn,$_SESSION['my_sid_code'],"task_level_code");
@@ -96,12 +99,12 @@ function toWeekNum($get_year, $get_month, $get_day){
 						
 
 	<script> 
-						function hrefClick_of_sub_task(level,sub_level){
+						function hrefClick_of_sub_task(level,sub_level,master){
      					 // You can't define php variables in java script as $course etc.
 
 						var popOption = "fullscreen=yes, resizable=no, scrollbars=no, status=no;";    //팝업창 옵션(optoin)
 	  					var popUrl = "/outsource5adapter.php";	//팝업창에 출력될 페이지 URL
-						window.location.href = popUrl+'?level=' + level +'&sub_level=' + sub_level;
+						window.location.href = popUrl+'?level=' + level +'&sub_level=' + sub_level +'&master=' + master;
 
 					
 
@@ -169,7 +172,7 @@ function toWeekNum($get_year, $get_month, $get_day){
     background-color: #;
   }
   #wrapper{
-	  padding: 0px 0px 0px 200px;
+	  padding: 0px 0px 0px 66px;
   }
   	
 
@@ -253,18 +256,55 @@ function toWeekNum($get_year, $get_month, $get_day){
 
 	
 	<header>
-		<a id="cd-menu-trigger" href="#0"><span class="cd-menu-text">메뉴</span><span class="cd-menu-icon"></span></a>
+		<a id="cd-menu-trigger" href="#0"><span class="cd-menu-text">메뉴</span></a>
 		
 		
-	<div id="wrapper" style="width:1400px" "height:300px">
-		
+	<div id="wrapper" style="width:100%"; "height:300px">
+
 			<?php
-				$UI_form_ob->su_function_get_title('업무 선택 화면',$_SESSION['my_name'],$_SESSION['my_position'],$_SESSION['my_department'],'su_script_user_personal_interface');
+				$UI_form_ob->su_function_get_title('업무 현황',$_SESSION['my_name'],$_SESSION['my_position'],$_SESSION['my_department'],'su_script_user_personal_interface');
 			?>
-				<input type="button" name="버튼" value="업무등록" onclick="window.open('./su_script_table_write_personal_interface.php','win','width=800,height=700,toolbar=0,scrollbars=0,resizable=0')";>
-				<div id="head" style="padding:0px 0px 0px 750px;">
+				<input type="button" name="버튼" value="사업 등록" onclick="window.open('./su_script_table_write_personal_interface.php','win','width=800,height=700,toolbar=0,scrollbars=0,resizable=0')";>
+				<div id="head" style="padding:0px 0px 0px 766px;">
 						
 				<form action = 'outsource6.php' method='POST' name="table_filter">		
+
+
+
+
+
+
+													<?php
+
+															switch ($_SESSION['personal_radio_index']){
+														
+																case 0 :
+																	echo "<input type='radio' onclick='selectEvent(this.value,7)' checked>주간 ";
+																	echo "<input type='radio' onclick='selectEvent(this.value,8)'>월간 ";
+																	echo "<input type='radio' onclick='selectEvent(this.value,9)'>연간 ";
+																	break;
+																case 1 :
+																	echo "<input type='radio' onclick='selectEvent(this.value,7)'>주간 ";
+																	echo "<input type='radio' onclick='selectEvent(this.value,8)'' checked>월간 ";
+																	echo "<input type='radio' onclick='selectEvent(this.value,9)'>연간 ";
+																	break;
+																case 2 :
+																	echo "<input type='radio' onclick='selectEvent(this.value,7)'>주간 ";
+																	echo "<input type='radio' onclick='selectEvent(this.value,8)'>월간 ";
+																	echo "<input type='radio' onclick='selectEvent(this.value,9)' checked>연간 ";
+																	break;
+															}
+													?>
+
+
+
+
+
+
+
+
+
+				<br />
 				<span>시작일</span>
 						<?php
 						 echo '<input type="text" name = "task_select_box[]" id="datepicker1" onchange="javascript:selectEvent(this,5);" value="'.$_SESSION['current_personal_gate_base_date'].'">'
@@ -275,7 +315,21 @@ function toWeekNum($get_year, $get_month, $get_day){
 						?>
 						
 				<br />
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
 				</div>
+				
 
 
 				
@@ -292,7 +346,7 @@ function toWeekNum($get_year, $get_month, $get_day){
 
 
 						
-						<th   width="22%" text-align="center">
+						<th   width="18%" text-align="center">
 							<div class="th-text">업무등급
 							<select name = "task_select_box[]" onchange="javascript:selectEvent(this,0);">	
        							 <?php
@@ -313,7 +367,7 @@ function toWeekNum($get_year, $get_month, $get_day){
    							</select>	
 							</div>
 						</th>
-						<th   width="19%" text-align="center">
+						<th   width="20%" text-align="center">
 							<div class="th-text">발주처
 							<select name = "task_select_box[]" onchange="javascript:selectEvent(this,2);">	
        							 <?php
@@ -335,13 +389,18 @@ function toWeekNum($get_year, $get_month, $get_day){
 							</div>
 						</th>
 						
-						<th   width="34%" text-align="center">
+						<th   width="25%" text-align="center">
 							<div class="th-text">사업명</div>
 						</th>
-						<th   width="25%" text-align="center">
+						<th width = "10%" text-align="center">
+							<div class="th-text">담당자</div>
+						</th>
+						<th   width="20%" text-align="center">
 							<div class="th-text">사업기간</div>
 						</th>
-
+						<th   width="7%" text-align="center">
+							<div class="th-text">상태</div>
+						</td>
 						
 					</form>		
 	
@@ -418,6 +477,10 @@ function toWeekNum($get_year, $get_month, $get_day){
 			$cnt = 1;
 			$tmp_field = '';
 			$tmp_field_compare = '';
+
+			$second_tmp_field_name='';
+			$seconde_tmp_field_compare='';
+
             while($row = mysqli_fetch_array($result_set)) {
             ?>
                 <tr>
@@ -427,29 +490,41 @@ function toWeekNum($get_year, $get_month, $get_day){
 						 if($tmp_field!=$tmp_field_compare){
 								echo $tmp_field_compare;
 								$tmp_field = $tmp_field_compare;
+								$second_tmp_field_name='';
 						 }
 					
 					?>
 					</td>
 					<td>
 						<?php
-							$name = $ob2->su_function_convert_name($conn,"master_department_info_table","sid_combine_department",$row['sub_level_order_section'],"master_department_info_name"); 
-							echo $name; 
+							$second_tmp_field_compare = $ob2->su_function_convert_name($conn,"master_department_info_table","sid_combine_department",$row['sub_level_order_section'],"master_department_info_name"); 
+							if($second_tmp_field_name!=$second_tmp_field_compare){
+							echo"<a href='#' onclick='hrefClick_of_sub_task(15,999,".$row['sub_level_master_sid'].");'/>";
+							echo $second_tmp_field_compare;
+							 $second_tmp_field_name = $second_tmp_field_compare;
+							}
 						?>
 					</td>				
 					<td id='left'>
 						<?php 
-						echo"<a href='#' onclick='hrefClick_of_sub_task(".$row['master_task_level_code'].','.$row['master_task_level_sub_code'].");'/>";
+						echo"<a href='#' onclick='hrefClick_of_sub_task(".$row['master_task_level_code'].','.$row['master_task_level_sub_code'].','.$row['sub_level_master_sid'].");'/>";
 						echo $ob2->su_function_convert_name($conn,"master_task_level_sub_info_table","master_task_level_sub_code",$row['master_task_level_sub_code'],"master_task_level_sub_name");
 						
 						
 						?>
 					</td>
-				
 					<td>
-						<?php echo $row['sub_level_from_date']."  ~  ".$row['sub_level_from_date']; ?>					
+						<?php 
+							
+							echo $ob2->su_function_convert_name($conn,"master_user_info_table","SID",$row['sub_level_master_sid'],"master_user_info_name");
+						?>
 					</td>
-					
+					<td>
+						<?php echo $row['sub_level_from_date']."  ~  ".$row['sub_level_to_date']; ?>					
+					</td>
+					<td>
+						--
+					</td>
 
                 </tr>
 
@@ -567,7 +642,12 @@ function toWeekNum($get_year, $get_month, $get_day){
 
 	<nav id="cd-lateral-nav" >
 		<ul class="cd-navigation" >
+												<br />
+															<br />
+																		<br />
 		<p align="center"><img src="./src/su_rsc_sulogo_back.png" width="200" height="100" title="선운로고"/></p>
+															<br />
+												<br />
 			<li><a class="current" href="#0">* * * *</a></li>
 
 				<a >이름

@@ -141,11 +141,12 @@ header.is-fixed {
   right: 0;
   top: 0;
   height: 100%;
-  width: 50px;
-  background-color: #64807d;
+  width: 23px;
+  background-color: #242e30;
 }
 #cd-menu-trigger .cd-menu-text {
   height: 100%;
+  text-align: center;
   text-transform: uppercase;
   color: #FFF;
   font-weight: 600;

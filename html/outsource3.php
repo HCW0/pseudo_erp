@@ -68,7 +68,7 @@
                                     $save_dir = './storage/notice/';
 
 
-
+/*
                             // 업로드 파일 확장자 검사 (필요시 확장자 추가)
 
                             if($mimeType=="html" || 
@@ -103,7 +103,7 @@
 
                                     alert('업로드를 할 수 없는 파일형식입니다.'); 
 
-                                    document.location.href = './su_script_write_interface.html';    
+                                    document.location.href = './su_script_notice_write_interface.php';    
 
                                     </script>"); 
 
@@ -111,7 +111,7 @@
 
                             } 
 
-
+*/
 
                             
 

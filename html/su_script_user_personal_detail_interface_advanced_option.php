@@ -386,6 +386,11 @@
 					</tr>
 
 					</table>
+							<div align = 'right'>
+									<?php echo"<a href='#' onclick='hrefClick_of_modify_task(".$_SESSION['current_focused_TID'].");'/>"; echo '수정</a>  '?>
+									/
+									<?php echo"<a href='#' onclick='hrefClick_of_delete_task(".$_SESSION['current_focused_TID'].");'/>"; echo '  삭제</a>&nbsp&nbsp&nbsp&nbsp'?>
+							</div>
 				
 
 

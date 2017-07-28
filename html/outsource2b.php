@@ -26,6 +26,27 @@
 
 
 
+
+
+
+
+
+					//수정할 대상의 task id를 받아온다.
+		            $target_tid = $_GET['tid'];
+					
+
+					//기존의 입력 값들을 각 form에 불러와야하니 sql쿼리문으로 row array도 하나 만든다.
+					$target_query = "SELECT * FROM task_document_header_table u WHERE u.TID = $target_tid;";
+					$target_result = mysqli_query($conn,$target_query);  
+					$target_field=mysqli_fetch_array($target_result);
+
+
+
+                    // 업무수정과 결제는 완전히 독ㄹ;ㅂ된 구조이다.
+                    // 따라서 기존의 모듈에서 결제는 배제
+
+
+
 	$task_level = $_SESSION['hold_level'];
     $task_sub_level = $_SESSION['sub_hold_level'];
     $task_title = $_POST['task_select_box'][0];
@@ -38,7 +59,7 @@
     $task_base_elapsed_date = $_POST['task_select_box'][5];
     $task_limit_elapsed_date = $_POST['task_select_box'][5];
 
-    $_rflag = $_POST['reserve_flag'];
+    
 
 
     // 디테일 필드 받는 파트
@@ -62,20 +83,14 @@
      $upper_task_id = $_POST['sub_task_select_box'][0];
 
 
+    //
+
      
     //debug
     echo "<br />";
     echo "task_title";
     echo "<br />";
-
-
-    //debug
-    echo "<br />";
-    echo " _POST['task_select_box'][0]";
-    echo "<br />";
-    echo  $_POST['task_select_box'][0];
-
-   
+    echo $task_title;
     
     echo "<br />";
     echo "task_level";
@@ -132,23 +147,18 @@
 
     $msg_ob = new su_class_message_handler();
     
-
-   // $bool = (!$task_title)||($_POST['task_select_box'][2]=='')||($_POST['task_select_box'][3]=='')||($_POST['task_select_box'][4]=='')||($_POST['task_select_box'][5]=='')||($_POST['pathnum']=='');
-
-
-
-    if(false){
+    if($_POST['task_select_box'][0]==''||$_POST['task_select_box'][2]==''||$_POST['task_select_box'][3]==''||$_POST['task_select_box'][4]==''||$_POST['task_select_box'][5]==''){
               echo "uninvalid input error in task add module";
               echo "<br />";
               
-              $msg_ob->su_function_call_message($conn,514,'su_script_table_write_interface');
+              $msg_ob->su_function_call_message($conn,514,'su_script_table_write_interface_b');
 
     }
     else if($task_base_date>$task_limit_date){
-              $msg_ob->su_function_call_message($conn,513,'su_script_table_write_interface');
+              $msg_ob->su_function_call_message($conn,513,'su_script_table_write_interface_b');
     }
     else if(($task_base_elapsed_date>$task_limit_date) || ($task_base_elapsed_date<$task_base_date)){
-              $msg_ob->su_function_call_message($conn,513,'su_script_table_write_interface');
+              $msg_ob->su_function_call_message($conn,513,'su_script_table_write_interface_b');
     }
     else{      
 
@@ -292,18 +302,9 @@
 
 
 
-                            
-                    $query = "select max(upload_id) as target from master_upload_table";
-                    echo $query;
-                    $result = mysqli_query($conn,$query);
-                    if(!$result){
-                        $target = 0;
-                    }else{
-                        $row = mysqli_fetch_array($result);
-                        $target = $row['target']+1;
-                    }
+                  
 
-                $query = "Insert into master_upload_table(upload_id,real_name,server_name) Values($target,'$real_name','$change_file_name');";
+                $query = "update master_upload_table set real_name = '$real_name', server_name = '$change_file_name' where upload_id = ".$target_field['upload_id'].";";
                 $result = mysqli_query($conn,$query);
                 echo $query;
 
@@ -320,73 +321,49 @@
 
         // 업로드 종료
 
-
-
-
             $date = date("Y-m-d");
-    	    $task_table_query = "Insert into task_document_header_table(task_level_code,task_level_sub_code,task_name,task_order_section,task_order_position,task_orderer,task_priority,task_base_date,task_limit_date,task_elapsed_base_date,task_elapsed_limit_date,task_state,task_birth_date,all_money_master_code_field,use_money_master_code_field,remaind_money_master_code_field,etcetera,coworker,coworkspace,reserve_flag) Values($task_level,$task_sub_level,'$task_title',$my_department_code,$my_position_code,$my_name_code,$task_priority,'$task_base_date','$task_limit_date','$task_base_elapsed_date','$task_limit_elapsed_date',10,'$date',$all_money,$use_money,$rema_money,'$task_detail_content','$cworker','$cworksp',$_rflag);";      
-            echo $task_table_query;
-            echo "<br />";
-   
-           $result_set = mysqli_query($conn,$task_table_query);
-           $task_table_query2 = "select MAX(TID) as Max from task_document_header_table;";
-           $result_set2 = mysqli_query($conn,$task_table_query2);
-            $row=mysqli_fetch_array($result_set2);
-            $up_page_TID = $row['Max'];
+
+        $result_set = mysqli_query($conn,$update_query);    
             
+            $update_query = "update task_document_header_table set task_name = '$task_title'  where TID = $target_tid";
+            
+           $result_set = mysqli_query($conn,$update_query); 
+            $update_query = "update task_document_header_table set task_priority = $task_priority  where TID = $target_tid";
 
-            if(isset($target)){
-                    $query_update_layer = "update task_document_header_table set upload_id = $target where TID = $up_page_TID;";
-                    $result_min = mysqli_query($conn,$query_update_layer);
+$result_set = mysqli_query($conn,$update_query);
+            $update_query = "update task_document_header_table set task_base_date = '$task_base_date' where TID = $target_tid";
 
-            }
+$result_set = mysqli_query($conn,$update_query);
+            $update_query = "update task_document_header_table set task_limit_date = '$task_limit_date' where TID = $target_tid";
+$result_set = mysqli_query($conn,$update_query);
 
-            if($task_detail_status){
-                    $query_update_layer = "update task_document_header_table set task_detail_state = $task_detail_status where TID = $up_page_TID;";
-                    $result_min = mysqli_query($conn,$query_update_layer);                
-            }
+            $update_query = "update task_document_header_table set task_elapsed_base_date = '$task_elapsed_base_date' where TID = $target_tid";
 
+$result_set = mysqli_query($conn,$update_query);
+            $update_query = "update task_document_header_table set task_elapsed_limit_date = '$task_elapsed_limit_date' where TID = $target_tid";
 
-            //결제 경로에서 공석인 자리를 건너 뛰는 로직
-            //출장 등의 공석 역시 표현해야 하므로, 기본적으로 빈 공석은 모두 계정을 생성하여 is_valid flag를 set해놓아야한다.
+$result_set = mysqli_query($conn,$update_query);
+            $update_query = "update task_document_header_table set task_birth_date = '$date' where TID = $target_tid";           
+            
+            $result_set = mysqli_query($conn,$update_query);
+            $update_query = "update task_document_header_table set all_money_master_code_field = $all_money where TID = $target_tid";   
 
+$result_set = mysqli_query($conn,$update_query);
+            $update_query = "update task_document_header_table set use_money_master_code_field = $use_money where TID = $target_tid";   
 
-            //선택한 결제 경로 엔터티의 정보를 생성될 결제 정보 테이블에 옮긴다.$_COOKIE
-            $min_find_query = "select * from task_approbation_path_table where sid=".$_SESSION['my_sid_code']." AND key_index = $path_number;";
-            $result_min = mysqli_query($conn,$min_find_query);
-            $row_min = mysqli_fetch_array($result_min);
-            $min = $row_min['min_sid'];
-            $end_sid = $row_min['end_user_sid'];
+$result_set = mysqli_query($conn,$update_query);
+            $update_query = "update task_document_header_table set remaind_money_master_code_field = $rema_money where TID = $target_tid";                                      
+         $result_set = mysqli_query($conn,$update_query);   
 
-            $end = $ob2->su_function_convert_name($conn,"sid_combine_table","SID",$end_sid,"sid_combine_position");
-            $task_detail_table_query = "Insert into task_approbation_table(TID,task_order_section,key_index,appro_state,last_appro_date,current_sid,first_order,end_order) Values($up_page_TID,$my_department_code,$path_number,0,'".$_SESSION['now_date']."',$min,".$_SESSION['my_sid_code'].",$end_sid);";
-            mysqli_query($conn,$task_detail_table_query);
-            echo $task_detail_table_query;
-            echo "<br />";
+            $update_query = "update task_document_header_table set etcetera = '$task_detail_content' where TID = $target_tid";    
+$result_set = mysqli_query($conn,$update_query);
+            $update_query = "update task_document_header_table set coworker = '$cworker' where TID = $target_tid";    
+$result_set = mysqli_query($conn,$update_query);
+            $update_query = "update task_document_header_table set coworkspace = '$cworksp' where TID = $target_tid";                                      
+            $result_set = mysqli_query($conn,$update_query);
 
-                for($cnt=1;$cnt<8;$cnt++){
-                        $field_name = $cnt.'_layer_aida_sid';
-                        if($row_min[$field_name]){
-                                    $query_update_layer = "update task_approbation_table set $field_name = ".$row_min[$field_name]." where TID = $up_page_TID;";
-                                    $result_min = mysqli_query($conn,$query_update_layer);
-                        }
-                }
-
-
-
-         
-           if($upper_task_id=='') $upper_task_id = $up_page_TID;
-           $task_detail_table_query2 = "update task_approbation_table set task_sq_0layer_message = '$task_index_contents' where TID = $up_page_TID;";
-           $task_detail_table_query3 = "update task_document_header_table set super_task_TID = ".$upper_task_id." where TID = $up_page_TID;";
-
-           echo $task_detail_table_query2;
-           echo "<br />";
-           echo $task_detail_table_query3;
-           echo "<br />";
-
-           mysqli_query($conn,$task_detail_table_query2);
-           mysqli_query($conn,$task_detail_table_query3);
-           $msg_ob->su_function_call_message_callback($conn,515);
+          
+           $msg_ob->su_function_call_message_callback($conn,517);
 
            echo "<script> opener.location.reload(); </script>";
            echo "<script> self.close(); </script>"; 

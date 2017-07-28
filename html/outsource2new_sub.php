@@ -44,10 +44,11 @@
 
 if($valid==1){
     $_SESSION['new_sub_level'] = $_POST['task_select_box'][0];
-	$_SESSION['new_sub_sub_level'] = $_POST['task_select_box'][1];
+	$_SESSION['new_sub_sub_level'] = 'new';
     if($_SESSION['new_sub_sub_level']=='new'){
         $_SESSION['new_sub_title'] = $_POST['task_select_box'][2];
-    }
+    } 
+    $_SESSION['sub_master'] = $_POST['commander'];
    
     $_SESSION['new_sub_base_date'] = $_POST['task_select_box'][3];
     $_SESSION['new_sub_limit_date'] = $_POST['task_select_box'][4];
@@ -56,7 +57,8 @@ if($valid==1){
     $my_department_code = $_SESSION['my_department_code'];
     $my_position_code = $_SESSION['my_position_code'];
 
- 
+
+
 //메시지 파트
 
     if($valid==1){
@@ -93,7 +95,7 @@ if($valid==1){
 
 
   
-    if(($_SESSION['new_sub_sub_level']=='new'&&$_SESSION['new_sub_title']=='')||$_SESSION['new_sub_base_date']==''||$_SESSION['new_sub_limit_date']==''||$_SESSION['new_sub_sub_level']==''){
+    if($_SESSION['sub_master']==8388607||($_SESSION['new_sub_sub_level']=='new'&&$_SESSION['new_sub_title']=='')||$_SESSION['new_sub_base_date']==''||$_SESSION['new_sub_limit_date']==''||$_SESSION['new_sub_sub_level']==''){
               echo "uninvalid input error in task add module";
               echo "<br />";
               
@@ -111,7 +113,8 @@ if($valid==1){
             $task_title = $_SESSION['new_sub_title'];
             $task_base_date = $_SESSION['new_sub_base_date'];
             $task_limit_date = $_SESSION['new_sub_limit_date'];
-    	    $task_table_query = "Insert into master_task_level_sub_info_table(master_task_level_code,master_task_level_sub_name,sub_level_order_section,sub_level_position,sub_level_orderer,sub_level_from_date,sub_level_to_date,sub_level_birth_date) Values($task_sub_level,'$task_title',$my_department_code,$my_position_code,$my_name_code,'$task_base_date','$task_limit_date','$date');";      
+            $task_commander = $_SESSION['sub_master'];
+    	    $task_table_query = "Insert into master_task_level_sub_info_table(master_task_level_code,master_task_level_sub_name,sub_level_order_section,sub_level_position,sub_level_orderer,sub_level_from_date,sub_level_to_date,sub_level_birth_date,sub_level_master_sid) Values($task_sub_level,'$task_title',$my_department_code,$my_position_code,$my_name_code,'$task_base_date','$task_limit_date','$date',$task_commander);";      
             echo $task_table_query;
             echo "<br />";
    if($valid==0){

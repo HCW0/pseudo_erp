@@ -1,0 +1,50 @@
+
+
+
+<html>
+<head>
+    <title><h3> deadman</h3></title>
+    </head>
+<body>
+
+<p`>
+    <select id = "dkdk">
+
+        <option value = '232' name = 'apple' selected>corn</option>
+        <option value = '233' name = 'gag' >dog</option>
+        <option value = '234' name = 'longly' >lay</option>
+        <option value = '235' name = 'take' >hello</option>
+    </select>
+</p>
+<p id="timezones"></p>
+<input type="button" id="execute" value="execute" />
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script>
+    $('#execute').click(function(){
+        $.ajax({
+            url:'./test_ajax_target.php',
+            dataType:'json',
+            success:function(data){
+                var str = '';
+                for(var name in data){
+                    str += "<?php echo 'hi';?>";
+                    str += '<li>'+data[name]+'</li>';
+                }
+                $('#timezones').html('<ul>'+str+'</ul>');
+            }
+        })
+    })
+</script>
+
+
+
+    <select>
+
+        <option value = '232' name = 'apple' selected>corn</option>
+        <option value = '233' name = 'gag' >dog</option>
+        <option value = '234' name = 'longly' >lay</option>
+        <option value = '235' name = 'take' >hello</option>
+        </select>
+</body>
+
+</html>

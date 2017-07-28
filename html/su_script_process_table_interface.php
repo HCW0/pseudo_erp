@@ -195,7 +195,7 @@ function toWeekNum($get_year, $get_month, $get_day){
     .graph .bar span { position: absolute; left: 1em; }
 
 	#fly{
-		padding : 0px 0px 0px 200px;
+		padding : 0px 0px 0px 66px;
 
 	}
 
@@ -286,10 +286,10 @@ function toWeekNum($get_year, $get_month, $get_day){
 	<div id="wrapper" style="width:1900px" "height:300px">
 
 		<div style="width:200px" "height:300px"  style="float:left;">
-			<a id="cd-menu-trigger" href="#0"><span class="cd-menu-text">메뉴</span><span class="cd-menu-icon"></span></a>
+		<a id="cd-menu-trigger" href="#0"><span class="cd-menu-text">메뉴</span></a>
 		</div>
 
-		<div id = 'fly' style="width:1200px" "height:300px"  style="float:right;" >
+		<div id = 'fly' style="width:1050px" "height:300px"  style="float:right;" >
 
 				<form action = 'outsource2.php' method='POST' name="table_filter">
 					<a href=#none onclick=this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';> 
@@ -581,7 +581,12 @@ function toWeekNum($get_year, $get_month, $get_day){
 
 	<nav id="cd-lateral-nav" >
 		<ul class="cd-navigation" >
+												<br />
+															<br />
+																		<br />
 		<p align="center"><img src="./src/su_rsc_sulogo_back.png" width="200" height="100" title="선운로고"/></p>
+															<br />
+												<br />
 			<li><a class="current" href="#0">* * * *</a></li>
 
 				<a >이름

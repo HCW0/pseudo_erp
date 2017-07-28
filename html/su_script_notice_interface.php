@@ -161,7 +161,7 @@ function hrefClick(course){
         border-left: none;
     }
 	#wrapper{
-	  padding: 0px 0px 0px 200px;
+	  padding: 0px 0px 0px 66px;
   }
 </style>
 
@@ -179,10 +179,10 @@ function hrefClick(course){
 
 	
 	<header>
-		<a id="cd-menu-trigger" href="#0"><span class="cd-menu-text">메뉴</span><span class="cd-menu-icon"></span></a>
+		<a id="cd-menu-trigger" href="#0"><span class="cd-menu-text">메뉴</span></a>
 
 		
-	<div id="wrapper" style="width:1200px" "height:300px">
+	<div id="wrapper" style="width:1050px" "height:300px">
 
 					<?php
 						$UI_form_ob->su_function_get_title('공지사항 게시판',$_SESSION['my_name'],$_SESSION['my_position'],$_SESSION['my_department'],'su_script_user_personal_interface');
@@ -302,7 +302,12 @@ function hrefClick(course){
 
 	<nav id="cd-lateral-nav" >
 		<ul class="cd-navigation" >
+												<br />
+															<br />
+																		<br />
 		<p align="center"><img src="./src/su_rsc_sulogo_back.png" width="200" height="100" title="선운로고"/></p>
+															<br />
+												<br />
 			<li><a class="current" href="#0">* * * *</a></li>
 
 				<a >이름

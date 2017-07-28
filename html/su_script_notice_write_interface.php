@@ -147,7 +147,7 @@
 					<a href=#none onclick=this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';> 
 						<div align="center">공지등록</div>
 					</a><DIV style='display:block'> 
-					<table>
+					<table border='1'>
 					<tr>
 						<td>공 지 명</td>
 						<td colspan=3><input type=text name=task_select_box[] size=60 ></td>
