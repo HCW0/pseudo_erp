@@ -34,21 +34,32 @@
 		$ob2 = new su_class_value_name_convert_with_code();
 		$ob3 = new su_class_value_combine_combobox_value_to_mysql_query();
 		$UI_form_ob = new su_class_UI_format_generator();
+		$ob4 = new su_class_calc_the_date();
 
 // 테이블 콤보박스의 필드값 초기화
 		if(isset($_SESSION['current_personal_dstate'])==false){
 			$_SESSION['current_personal_dstate']='99';
 		}
 
+
+		if(isset($_SESSION['current_personal_base_date'])==false){
+			$_SESSION['current_personal_base_date']=$ob4->su_function_convert_this_week_begin($_SESSION['now_date']);
+			$_SESSION['current_personal_limit_date']=$ob4->su_function_convert_this_week_ends($_SESSION['now_date']);
+		}
+
+
+
 		if(isset($_SESSION['reserve_index'])==false){
 			$_SESSION['reserve_index']=0;
+			$_SESSION['current_task_check_bottan']=true;
+			$_SESSION['reserve_task_check_bottan']=true;
 		}
 
 
 		if(isset($_SESSION['current_personal_task_level_code'])==false){
 			$_SESSION['current_personal_dstate']='99';
-			$_SESSION['current_personal_base_date']="";
-			$_SESSION['current_personal_limit_date']="";
+			$_SESSION['current_personal_base_date']=$ob4->su_function_convert_this_week_begin($_SESSION['now_date']);
+			$_SESSION['current_personal_limit_date']=$ob4->su_function_convert_this_week_ends($_SESSION['now_date']);
 			$_SESSION['current_personal_task_order_section'] = $ob1->su_function_init_config($conn,$_SESSION['my_sid_code'],"task_order_section");
 
 			if($_SESSION['task_master']!=$_SESSION['my_sid_code']){
@@ -289,7 +300,7 @@ function toWeekNum($get_year, $get_month, $get_day){
 
 	
 	<header>
-		<a id="cd-menu-trigger" href="#0"><span class="cd-menu-text">메뉴</span></a>
+		<a id="cd-menu-trigger" href="#0"><span class="cd-menu-text">메뉴&nbsp &nbsp &nbsp &nbsp</span></a>
 
 		
 	<div id="wrapper" style="width:100%" "height:300px">
@@ -303,7 +314,7 @@ function toWeekNum($get_year, $get_month, $get_day){
 				<div style='float:left;'>
 				업무등급 : <?php echo $ob2->su_function_convert_name($conn,"master_task_level_info_table","master_task_level_code",$_SESSION['current_personal_task_level_code'],"master_task_level_name");?><br />
 				사업명 : <?php echo $ob2->su_function_convert_name($conn,"master_task_level_sub_info_table","master_task_level_sub_code",$_SESSION['current_personal_task_level_sub_code'],"master_task_level_sub_name");?><br />
-				
+				담당부서 : <?php echo $ob2->su_function_convert_name($conn,"master_department_info_table","sid_combine_department",$_SESSION['task_master_section'],"master_department_info_name");?><br />
 				
 				
 				<?php 
@@ -317,8 +328,6 @@ function toWeekNum($get_year, $get_month, $get_day){
 				<div style="padding:0px 0px 0px 1066px;">
 						
 				<form action = 'outsource6.php' method='POST' name="table_filter">
-
-
 
 						<span align="right">
 	
@@ -345,18 +354,38 @@ function toWeekNum($get_year, $get_month, $get_day){
 										
 										echo "&nbsp &nbsp &nbsp &nbsp &nbsp";
 
-									switch ($_SESSION['reserve_index']){
+									if($_SESSION['current_task_check_bottan']&&$_SESSION['reserve_task_check_bottan']){
 										
-																case 0 :
-																	echo "<input type='radio' onclick='selectEvent(this.value,12)' checked>실적업무 ";
-																	echo "<input type='radio' onclick='selectEvent(this.value,13)'>계획업무 ";
-																	break;
-																case 1 :
-																	echo "<input type='radio' onclick='selectEvent(this.value,12)'>실적업무 ";
-																	echo "<input type='radio' onclick='selectEvent(this.value,13)'' checked>계획업무 ";
-																	break;
 
-										}
+																	echo "<input type='checkbox' onclick='selectEvent(this.value,12)' checked>실적업무 ";
+																	echo "<input type='checkbox' onclick='selectEvent(this.value,13)' checked>계획업무 ";
+
+									}else if($_SESSION['current_task_check_bottan']&&(!$_SESSION['reserve_task_check_bottan'])){
+
+																	echo "<input type='checkbox' onclick='selectEvent(this.value,12)' checked>실적업무 ";
+																	echo "<input type='checkbox' onclick='selectEvent(this.value,13)'>계획업무 ";
+
+									}else if((!$_SESSION['current_task_check_bottan'])&&$_SESSION['reserve_task_check_bottan']){
+
+																	echo "<input type='checkbox' onclick='selectEvent(this.value,12)'>실적업무 ";
+																	echo "<input type='checkbox' onclick='selectEvent(this.value,13)' checked>계획업무 ";
+									
+									}else{
+
+																	
+																		echo("<script> 
+																								
+																			alert('다른 부서에 실적등록을 할 수 없습니다.');  
+
+                                   		 									</script>");
+
+																	$_SESSION['current_task_check_bottan']=true;
+																	$_SESSION['reserve_task_check_bottan']=true;
+																	echo "<input type='checkbox' onclick='selectEvent(this.value,12)' checked>실적업무 ";
+																	echo "<input type='checkbox' onclick='selectEvent(this.value,13)' checked>계획업무 ";
+									}
+
+								
 									?>
 									
 
@@ -426,14 +455,15 @@ function toWeekNum($get_year, $get_month, $get_day){
 
 									if($_SESSION['task_master']!=$_SESSION['my_sid_code']){
 										//즉 권한 MAX가 아닌 경우
-										$query = "SELECT * FROM sid_combine_table u where ".$_SESSION['my_department_code']." = u.sid_combine_department AND u.is_valid=1 AND u.sid_combine_position <= ".$_SESSION['my_position_code'].";";
+										$query = "SELECT * FROM sid_combine_table u where ".$_SESSION['task_master_section']." = u.sid_combine_department AND u.is_valid=1 AND u.sid_combine_position <= ".$_SESSION['my_position_code'].";";
 									}else{
-										$query = "SELECT * FROM sid_combine_table u where ".$_SESSION['my_department_code']." = u.sid_combine_department AND u.is_valid=1";
+										$query = "SELECT * FROM sid_combine_table u where ".$_SESSION['task_master_section']." = u.sid_combine_department AND u.is_valid=1";
+										echo "<option value='8388607'>전체</option>";
 									}
 										 
 										 
 										 $result = mysqli_query($conn,$query);
-										 		echo "<option value='8388607'>전체</option>";
+										 		
            										 while( $row=mysqli_fetch_array($result) ){    
 														$name_Value = $ob2->su_function_convert_name($conn,"master_user_info_table","SID",$row['SID'],"master_user_info_name");
 														                 if($row['SID']==$_SESSION['current_personal_task_orderer']){
@@ -565,10 +595,15 @@ function toWeekNum($get_year, $get_month, $get_day){
 				echo '필터 제한 일자 ';
 				echo $_SESSION['current_personal_limit_date'];
 				echo "<br />";
+				echo '담당자';
+				echo $_SESSION['task_master'];
+				echo "<br />";
+				echo '담당부서';	
+				echo $_SESSION['current_personal_task_order_section'];
 				*/
 
 
-				$task_table_query = $ob3->su_function_combine_query_to_task_header_table_spaghetti_wo_kiwameru($_SESSION['current_personal_task_level_code'],$_SESSION['current_personal_task_level_sub_code'],$_SESSION['current_personal_task_order_section'],$_SESSION['current_personal_task_orderer'],$_SESSION['current_personal_task_priority'],$_SESSION['current_personal_task_state'],$_SESSION['current_personal_base_date'],$_SESSION['current_personal_limit_date'],$_SESSION['current_personal_dstate']);
+				$task_table_query = $ob3->su_function_combine_query_to_task_header_table_spaghetti_wo_kiwameru($_SESSION['current_personal_task_level_code'],$_SESSION['current_personal_task_level_sub_code'],$_SESSION['current_personal_task_order_section'],$_SESSION['current_personal_task_orderer'],$_SESSION['current_personal_task_priority'],$_SESSION['current_personal_task_state'],$_SESSION['current_personal_dstate']);
 				$result_set = mysqli_query($conn,$task_table_query);
 
 				
@@ -597,7 +632,18 @@ function toWeekNum($get_year, $get_month, $get_day){
 						
 		<?php
 			$cnt = 1;
+			if($result_set){
             while($row = mysqli_fetch_array($result_set)) {
+
+
+						if(!$ob4->su_function_date_conflict_senser($_SESSION['current_personal_base_date'],$_SESSION['current_personal_limit_date'],$row['task_base_date'],$row['task_limit_date'])){
+							continue;
+						}
+						if($_SESSION['task_master_section']!=$row['task_order_section']){
+							continue;
+						}
+
+
             ?>
                 <tr>
 					<td><?php echo $cnt++?></td>
@@ -658,15 +704,15 @@ function toWeekNum($get_year, $get_month, $get_day){
 
 
             <?php
-            }
-
+            	}
+			}
 
 
 			//statistical summary
 			echo "<div class='foot-bg'></div>";
 				echo "<tr><th>";
 				echo "<div class='th-text2'>";
-			   if(mysqli_num_rows($result_set)==0){ echo "일치하는 항목이 없습니다.";
+			   if(!$result_set){ echo "일치하는 항목이 없습니다.";
 				}else{
 					echo "합계 : ";
 					echo mysqli_num_rows($result_set);

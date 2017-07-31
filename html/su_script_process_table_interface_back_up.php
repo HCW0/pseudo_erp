@@ -109,7 +109,7 @@ function toWeekNum($get_year, $get_month, $get_day){
 
 					var popOption = "fullscreen=0, resizable=no, scrollbars=1, status=no;";    //팝업창 옵션(optoin)
 					var popUrl = "/outsource5.php";	//팝업창에 출력될 페이지 URL
-					window.open(popUrl+'?level=' + level +'&sub_level=' + sub_level +'&tid=' + tid,popOption,'height=' + (screen.height*0.60) + ',width=' + (screen.width*0.69));
+					window.open(popUrl+'?level=' + level +'&sub_level=' + sub_level +'&tid=' + tid,popOption,'height=' + (screen.height*0.37) + ',width=' + (screen.width*0.69));
 
 				
 
@@ -148,15 +148,14 @@ function toWeekNum($get_year, $get_month, $get_day){
     border-top: 1px solid #444444;
     border-collapse: collapse;
   }
-  td {
-    border-bottom: 1px solid #444444;
-    padding: 1px;
-    text-align: left;
-  }
-  th {
+  td,th {
     border-bottom: 1px solid #444444;
     padding: 1px;
     text-align: center;
+	vertical-align: middle;
+  }
+  #left {
+    text-align: left;
   }
 
   th:nth-child(2n), td:nth-child(2n) {
@@ -168,7 +167,7 @@ function toWeekNum($get_year, $get_month, $get_day){
 
     .graph { 
         position: relative; /* IE is dumb */
-        width: 200px; 
+        width: 100%; 
         border: 1px solid #B1D632; 
         padding: 2px; 
       font-size:11px;
@@ -196,9 +195,72 @@ function toWeekNum($get_year, $get_month, $get_day){
     .graph .bar span { position: absolute; left: 1em; }
 
 	#fly{
-		padding : 0px 0px 0px 200px;
+		padding : 0px 0px 0px 66px;
 
 	}
+
+	 .fixed-table-container {
+        width: 1000px;
+        height: 550px;
+        border: 1px solid #000;
+        position: relative;
+        padding-top: 30px; /* header-bg height값 */
+    }
+    .header-bg {
+        background: skyblue;
+        height: 30px; /* header-bg height값 */
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        border-bottom: 1px solid #000;
+    }
+	.foot-bg {
+        background: skyblue;
+        height: 20px; /* header-bg height값 */
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        border-bottom: 1px solid #000;
+    }
+
+    .table-wrapper {
+        overflow-x: hidden;
+        overflow-y: auto;
+        height: 100%;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    td {
+        border-bottom: 1px solid #ccc;
+        padding: 5px;
+    }
+    td + td {
+        border-left: 1px solid #ccc;
+    }
+    th {
+        padding: 0px; /* reset */
+    }
+    .th-text {
+        position: absolute;
+        top: 0;
+        width: inherit;
+        line-height: 30px; /* header-bg height값 */
+        border-left: 1px solid #000;
+    }
+	.th-text2 {
+        position: absolute;
+        bottom: 0;
+        width: inherit;
+        line-height: 20px; /* header-bg height값 */
+        border-left: 1px solid #000;
+    }
+    th:first-child .th-text {
+        border-left: none;
+    }
 
 
 </style>
@@ -224,10 +286,10 @@ function toWeekNum($get_year, $get_month, $get_day){
 	<div id="wrapper" style="width:1900px" "height:300px">
 
 		<div style="width:200px" "height:300px"  style="float:left;">
-			<a id="cd-menu-trigger" href="#0"><span class="cd-menu-text">메뉴</span><span class="cd-menu-icon"></span></a>
+		<a id="cd-menu-trigger" href="#0"><span class="cd-menu-text">메뉴</span></a>
 		</div>
 
-		<div id = 'fly' style="width:1200px" "height:300px"  style="float:right;" >
+		<div id = 'fly' style="width:1050px" "height:300px"  style="float:right;" >
 
 				<form action = 'outsource2.php' method='POST' name="table_filter">
 					<a href=#none onclick=this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';> 
@@ -238,10 +300,11 @@ function toWeekNum($get_year, $get_month, $get_day){
 			
 					<tr>
 						<td  colspan="1">업 무 등 급</td>
-							<td  colspan="5"><select id = "task_writer_interface_combobox" name = "task_select_box[]" onchange="javascript:selectEvent(this,0);">	
+							<td  id='left'  colspan="2"><select id = "task_writer_interface_combobox" name = "task_select_box[]" onchange="javascript:selectEvent(this,0);">	
 									<?php
 											$query = "SELECT * FROM master_task_level_info_table";
 											$result = mysqli_query($conn,$query);  
+											 echo "<option value='15'>전체</option>";  
 													while( $row=mysqli_fetch_array($result) ){         
 															if($row['master_task_level_code']!=15){
 															if($row['master_task_level_code']==$_SESSION['process_hold_level']){
@@ -255,14 +318,14 @@ function toWeekNum($get_year, $get_month, $get_day){
 									?>         
 								</select>	
 							</td>
-								<!--
+								
 								<td  colspan="1">사 업 명</td>
-						<td  colspan="2">
+						<td  id='left'  colspan="2">
 						<select name = "task_select_box[]" onchange="javascript:selectEvent(this,1);">	
-       							 <?php/*
+       							 <?php
 										$query = "SELECT * FROM master_task_level_sub_info_table";
      					        		$result = mysqli_query($conn,$query); 
-										 		 echo "<option value='' selected>--</option>"; 
+										 		 echo "<option value='999' selected>전체</option>"; 
            										 while( $row=mysqli_fetch_array($result) ){    
 														
 														if(($row['master_task_level_code']==$_SESSION['process_hold_level'])&&($row['master_task_level_sub_code']!=999)){
@@ -275,16 +338,15 @@ function toWeekNum($get_year, $get_month, $get_day){
 														}
 													
 													}
-      							  */?>         
+      							  ?>         
    							</select>	
 					</td>
-					-->
 					</tr>
 
 					<tr>
 						
 						<td  colspan="1">우 선 도</td>
-						<td  colspan="2">
+						<td  id='left'  colspan="2">
 							<select  name = "task_select_box[]" name = "task_select_box[]" onchange="javascript:selectEvent(this,2);">	
        							 <?php
 										$query = "SELECT * FROM master_priority_info_table";
@@ -307,7 +369,7 @@ function toWeekNum($get_year, $get_month, $get_day){
 						</td>
 
 						<td  colspan="1">상 태 명</td>
-						<td  colspan="2">
+						<td  id='left'  colspan="2">
 							<select  name = "task_select_box[]" name = "task_select_box[]" onchange="javascript:selectEvent(this,3);">	
        							 <?php
 										$query = "SELECT * FROM master_state_info_table";
@@ -333,7 +395,7 @@ function toWeekNum($get_year, $get_month, $get_day){
 
 					<tr>
 						<td>기 준 시 간</td>
-										<td colspan=2>
+										<td  id='left'  colspan=2>
 													<?php
 
 															switch ($_SESSION['process_radio_index']){
@@ -357,8 +419,10 @@ function toWeekNum($get_year, $get_month, $get_day){
 													?>
 										</td>
 						<td>조 회 기 간</td>
-						<td><input type="text" name = "task_select_box[]" id="datepicker1" value=<?php echo $_SESSION['process_current_personal_base_date']; ?>></td>
-						<td><input type="text" name = "task_select_box[]" id="datepicker2" value=<?php echo $_SESSION['process_current_personal_limit_date']; ?>></td>
+						<td  id='left'  >
+								<input type="text" name = "task_select_box[]" id="datepicker1" value=<?php echo $_SESSION['process_current_personal_base_date']; ?>>
+								<input type="text" name = "task_select_box[]" id="datepicker2" value=<?php echo $_SESSION['process_current_personal_limit_date']; ?>>
+						</td>
 
 					</tr>
 						
@@ -371,53 +435,32 @@ function toWeekNum($get_year, $get_month, $get_day){
 					
 		
 					
-					<a href=#none onclick=this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';> 
-						<div align="center">상세</div>
-					</a><DIV  style='display:block';> 
-					<div style="width:100%; height:500px; overflow:auto">
+
+					<div class="fixed-table-container">
+					<div class="header-bg"></div>
+					<div class="table-wrapper" style="width:100%; height:500px; overflow:auto">
 					<table>
+						<thead>
 						<tr>
-							<td colspan = 5>
-								<select name = "task_select_box[]" onchange="javascript:selectEvent(this,1);">	
-									<?php
-											$query = "SELECT * FROM master_task_level_sub_info_table";
-											$result = mysqli_query($conn,$query); 
-													echo "<option value='999' selected>전체</option>"; 
-													while($row=mysqli_fetch_array($result)){    
-															
-															if(($row['master_task_level_code']==$_SESSION['process_hold_level'])&&($row['master_task_level_sub_code']!=999)){
-																if($row['master_task_level_sub_code']==$_SESSION['process_sub_hold_level']){
-																	echo "<option value='".$row['master_task_level_sub_code']."' selected>".$row['master_task_level_sub_name']."</option>";
-																}else{
-																echo "<option value='".$row['master_task_level_sub_code']."'>".$row['master_task_level_sub_name']."</option>";
-																}
-															
-															}
-														
-														}
-									?>         
-								</select>
-								</form>   
-							</td>		
-						</tr>
-						<tr>
-							<td width=25%>
-								업무명
-							</td>
-							
-							<th  width=25% colspan=2>
-								과업기간
+							<th width=25% text-align="center">
+								<div class="th-text">업무명</div>
 							</th>
 							
-							<td  width=15%>
-								수행일수
-							</td>
+							<th  width=25% text-align="center" colspan=2>
+								<div class="th-text">과업기간</div>
+							</th>
+							
+							<th  width=10% text-align="center">
+								<div class="th-text"><div>수행일수</div>
+							</th>
 
-							<td  width=35%>
-								진행률
-							</td>
+							<th  width=35% text-align="center">
+								<div class="th-text">진행률</div>
+							</th>
 						</tr>
-
+						</thead>
+						
+						
 						<tr>
 
 							<!-- 하위 업무 루프문 시작 -->
@@ -431,7 +474,7 @@ function toWeekNum($get_year, $get_month, $get_day){
 							?>
 
 								<tr>
-									<td><?php
+									<td id='left'><?php
 										echo"<a href='#' onclick='hrefClick_of_sub_task(".$row['task_level_code'].','.$row['task_level_sub_code'].','.$row['TID'].");'/>"; echo $row['task_name'];
 
 									?>
@@ -446,10 +489,10 @@ function toWeekNum($get_year, $get_month, $get_day){
 									</td>
 
 									
-									<td><?php
+									<td><font size='6%'><?php
 										$tmp = strtotime($row['task_elapsed_limit_date'])-strtotime($row['task_base_date']);
 										echo $tmp/86400;
-										?>
+										?>&nbsp&nbsp일</font>
 									</td>
 
 
@@ -516,7 +559,7 @@ function toWeekNum($get_year, $get_month, $get_day){
 					</table>
 					</div>
 
-					</div>
+					
 			
 
 					     
@@ -534,13 +577,16 @@ function toWeekNum($get_year, $get_month, $get_day){
 				<p style="background-color:coffee" class="bd" align="center">COPYRIGHT(C) 2017 SUNUNENG.ENG ALL RIGHTS RESERVED&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp주소 : 광주광역시 광산구 송정동 735 선운빌딩 3층 <br/> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp연락처 : 062-651-9272 / FAX : 062-651-9271</p>
 		
 </header>
-
-
-	<div style="height:1000px">
+<div style="height:1000px">
 
 	<nav id="cd-lateral-nav" >
 		<ul class="cd-navigation" >
+												<br />
+															<br />
+																		<br />
 		<p align="center"><img src="./src/su_rsc_sulogo_back.png" width="200" height="100" title="선운로고"/></p>
+															<br />
+												<br />
 			<li><a class="current" href="#0">* * * *</a></li>
 
 				<a >이름
@@ -572,28 +618,8 @@ function toWeekNum($get_year, $get_month, $get_day){
 		<ul class="cd-navigation cd-single-item-wrapper">
 			<li><a class="current" href="#0">* * * *</a></li>
 
-			<li>
-			
-			<a href="#0"> 
-			<a href=#none onclick=this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';> 
-						<div>! 공지사항</div>
-					</a><DIV style='display:none'> 
-					<a href = "./su_script_notice_active_only_interface.php" align = "right">
-				<font color='white' >
-				공지사항
-				</font></a>
-			
-				<a href = "./su_script_notice_interface.php" align = "right">
-					<font color='white'>
-					공지사항 게시판
-					</font></a>		
-			
-						</DIV>
-			</a>
-			
-			
-			</li>
 
+<li><a href="./su_script_notice_interface.php"> # 공지사항</a></li>
 			
 			<li>
 			
@@ -601,10 +627,6 @@ function toWeekNum($get_year, $get_month, $get_day){
 			<a href=#none onclick=this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';> 
 						<div>! 업무관리</div>
 					</a><DIV style='display:none'> 
-					<a href = "su_script_user_interface.php" align = "right">
-				<font color='white' >
-				전체 업무 검색
-				</font></a>
 			
 				<a href = "su_script_user_personal_interface.php" align = "right">
 					<font color='white'>
@@ -624,6 +646,7 @@ function toWeekNum($get_year, $get_month, $get_day){
 
 			<li><a href="su_script_approbation_interface.php"> # 결제함</a></li>
 			<li><a href="su_script_configure_interface.php"> # 설정</a></li>
+			<li><a href="rhksflwk.php"> # 관리자 모드</a></li>
 		</ul> <!-- cd-single-item-wrapper -->
 
 		

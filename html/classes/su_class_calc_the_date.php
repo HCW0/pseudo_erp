@@ -2,6 +2,15 @@
 
     class su_class_calc_the_date{
 
+
+            function su_function_date_conflict_senser($date1_begin,$date1_end,$date2_begin,$date2_end){
+
+                    if(($date1_begin>$date2_end)||($date1_end<$date2_begin)){
+                        return false;
+                    }
+                    return true;
+            }
+
             function su_function_convert_this_week_begin($date_string){
 
                       $day_o_week = date('w', strtotime($date_string));

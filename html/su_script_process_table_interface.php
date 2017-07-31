@@ -200,7 +200,7 @@ function toWeekNum($get_year, $get_month, $get_day){
 	}
 
 	 .fixed-table-container {
-        width: 1000px;
+        width: 1250px;
         height: 550px;
         border: 1px solid #000;
         position: relative;
@@ -286,10 +286,10 @@ function toWeekNum($get_year, $get_month, $get_day){
 	<div id="wrapper" style="width:1900px" "height:300px">
 
 		<div style="width:200px" "height:300px"  style="float:left;">
-		<a id="cd-menu-trigger" href="#0"><span class="cd-menu-text">메뉴</span></a>
+		<a id="cd-menu-trigger" href="#0"><span class="cd-menu-text">메뉴&nbsp &nbsp &nbsp &nbsp</span></a>
 		</div>
 
-		<div id = 'fly' style="width:1050px" "height:300px"  style="float:right;" >
+		<div id = 'fly' style="width:1300px" "height:300px"  style="float:right;" >
 
 				<form action = 'outsource2.php' method='POST' name="table_filter">
 					<a href=#none onclick=this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';> 
@@ -450,7 +450,7 @@ function toWeekNum($get_year, $get_month, $get_day){
 								<div class="th-text">과업기간</div>
 							</th>
 							
-							<th  width=10% text-align="center">
+							<th  width=15% text-align="center">
 								<div class="th-text"><div>수행일수</div>
 							</th>
 
@@ -466,96 +466,102 @@ function toWeekNum($get_year, $get_month, $get_day){
 							<!-- 하위 업무 루프문 시작 -->
 
 
-							<?php
-							
-									$task_table_query = $ob3->su_function_combine_query_to_task_header_table_with_depth($_SESSION['process_hold_level'],$_SESSION['process_sub_hold_level'],15,8388607,$_SESSION['process_current_personal_task_priority'],$_SESSION['process_current_personal_task_state'],$_SESSION['process_current_personal_base_date'],$_SESSION['process_current_personal_limit_date']);
-									$result_set = mysqli_query($conn,$task_table_query);
-									while($row = mysqli_fetch_array($result_set)) {
-							?>
-
-								<tr>
-									<td id='left'><?php
-										echo"<a href='#' onclick='hrefClick_of_sub_task(".$row['task_level_code'].','.$row['task_level_sub_code'].','.$row['TID'].");'/>"; echo $row['task_name'];
-
-									?>
-									</td>
 
 
-									<td><?php
-										echo $row['task_base_date'];?>
-									</td>
-									<td><?php
-										echo $row['task_limit_date'];?>
-									</td>
+													<?php
+													
+															$task_table_query = $ob3->su_function_combine_query_to_task_header_table_with_depth($_SESSION['process_hold_level'],$_SESSION['process_sub_hold_level'],15,8388607,$_SESSION['process_current_personal_task_priority'],$_SESSION['process_current_personal_task_state'],$_SESSION['process_current_personal_base_date'],$_SESSION['process_current_personal_limit_date']);
+															$result_set = mysqli_query($conn,$task_table_query);
+															while($row = mysqli_fetch_array($result_set)) {
+													?>
 
-									
-									<td><font size='6%'><?php
-										$tmp = strtotime($row['task_elapsed_limit_date'])-strtotime($row['task_base_date']);
-										echo $tmp/86400;
-										?>&nbsp&nbsp일</font>
-									</td>
+														<tr>
+															<td id='left'><?php
+																echo"<a href='#' onclick='hrefClick_of_sub_task(".$row['task_level_code'].','.$row['task_level_sub_code'].','.$row['TID'].");'/>"; echo $row['task_name'];
 
-
-									<td>
-
-										<!-- 공정표 그래프의 퍼센트 연산하는 파트 -->
-
-										<?php
-												$sup = strtotime($_SESSION['now_date'])-strtotime($row['task_base_date']);
-												$sub = strtotime($row['task_limit_date'])-strtotime($row['task_base_date']);
-												if($sub==0){
-													 $rate = 100;				 
-												}else{
-													$rate = $sup/$sub;
-													$rate = $rate*100;
-
-													$rate = $rate >100 ? 100 : $rate;
-													$rate = $rate <0 ? 0 : $rate;
-												}
-
-													$rate_elapse = $ob4->su_recruit_function_calc_elapse_rate($conn,$ob3,$row['TID']);
-													if($rate_elapse > $rate) $rate = $rate_elapse;
-
-												echo "<div class='graph'>";
-													echo "<strong class='bar' style='width: ".round($rate)."%;'>".round($rate,1)."%</strong>";
-													echo "<strong class='bar2' style='width: ".round($rate_elapse)."%;'>".round($rate_elapse,1)."%</strong>";						
-												echo "</div>";
-
-										?>
-									</td>	
-								</tr>
-							<?php
+															?>
+															</td>
 
 
-									if($ob4->su_function_is_have_extra_task($conn,$ob3,$row['TID'],0)){
-										echo"<tr>";
-										echo"<td colspan=6>";
-									 	echo"<a href=#none onclick=this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';>"; 
-										echo"<div style='background-color:#FFF'><font color='black' /> &nbsp▼</div>";
-										echo"</a><DIV style='display:none';>";
-										echo"<table style='background-color:#DDD'>";
-										$ob4->su_recruit_function_make_tree($conn,$ob3,$row['TID'],0);
-										echo"</table>";
-										
-                                 		echo"</DIV>";
-										echo"</td>";
-										echo"</tr>";
-									}else{
-										echo"<tr>";
-										echo"<td colspan=6>";
-										echo"<div><font color='black' /> &nbsp▽</div>";
-										echo"</td>";
-										echo"</tr>";
-									}
+															<td><?php
+																echo $row['task_base_date'];?>
+															</td>
+															<td><?php
+																echo $row['task_limit_date'];?>
+															</td>
+
+															
+															<td><font size='6%'><?php
+																$tmp = strtotime($row['task_elapsed_limit_date'])-strtotime($row['task_base_date']);
+																echo $tmp/86400;
+																?>&nbsp&nbsp일</font>
+															</td>
+
+
+															<td>
+
+																<!-- 공정표 그래프의 퍼센트 연산하는 파트 -->
+
+																<?php
+																		$sup = strtotime($_SESSION['now_date'])-strtotime($row['task_base_date']);
+																		$sub = strtotime($row['task_limit_date'])-strtotime($row['task_base_date']);
+																		if($sub==0){
+																			$rate = 100;				 
+																		}else{
+																			$rate = $sup/$sub;
+																			$rate = $rate*100;
+
+																			$rate = $rate >100 ? 100 : $rate;
+																			$rate = $rate <0 ? 0 : $rate;
+																		}
+
+																			$rate_elapse = $ob4->su_recruit_function_calc_elapse_rate($conn,$ob3,$row['TID']);
+																			if($rate_elapse > $rate) $rate = $rate_elapse;
+
+																		echo "<div class='graph'>";
+																			echo "<strong class='bar' style='width: ".round($rate)."%;'>".round($rate,1)."%</strong>";
+																			echo "<strong class='bar2' style='width: ".round($rate_elapse)."%;'>".round($rate_elapse,1)."%</strong>";						
+																		echo "</div>";
+
+																?>
+															</td>	
+														</tr>
+													<?php
+
+
+															if($ob4->su_function_is_have_extra_task($conn,$ob3,$row['TID'],0)){
+																echo"<tr>";
+																echo"<td colspan=6>";
+																echo"<a href=#none onclick=this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';>"; 
+																echo"<div style='background-color:#FFF'><font color='black' /> &nbsp▼</div>";
+																echo"</a><DIV style='display:none';>";
+																echo"<table style='background-color:#DDD'>";
+																$ob4->su_recruit_function_make_tree($conn,$ob3,$row['TID'],0);
+																echo"</table>";
+																
+																echo"</DIV>";
+																echo"</td>";
+																echo"</tr>";
+															}else{
+																echo"<tr>";
+																echo"<td colspan=6>";
+																echo"<div><font color='black' /> &nbsp▽</div>";
+																echo"</td>";
+																echo"</tr>";
+															}
 
 
 
-           			 			}
-							?>
-							<!-- 루프문 끝 -->
+														}
+													?>
+													<!-- 루프문 끝 -->
 
 
-						
+
+
+
+
+
 					</table>
 					</div>
 

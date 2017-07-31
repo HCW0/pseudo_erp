@@ -32,34 +32,45 @@
                       $result_set = mysqli_query($conn,$query);
                       if(mysqli_num_rows($result_set)==0) return; 
 
+
+
+
+                                            $offset = 10*($count+1);
                                             						echo"<tr>";
-                                                                        echo"<td width=25%>하위업무</td>";
+                                                                        echo"<td width=".$offset."%></td>";
+                                                                        echo"<td width=15%>하위업무</td>";
                                                                         echo"<th width=25% colspan=2>과업기간</th>";
                                                                         echo"<td width=15%>수행일수</td>";
-                                                                        echo"<td width=35%>진행률</td>";
+                                                                        echo"<td width=45%>진행률</td>";
                                                                     echo"</tr>";
 
                                             while($row = mysqli_fetch_array($result_set)) {
                                                             echo "<tr>";
+
                                                                 echo "<td>";
+                                                                echo "</td>";
+
+                                                                echo "<td id='left'>";
                                                                     echo"<a href='#' onclick='hrefClick_of_sub_task(".$row['task_level_code'].','.$row['task_level_sub_code'].','.$row['TID'].");'/>"; echo $row['task_name'];
-                                                                
                                                                 echo "</td>";
 
 
                                                                 echo "<td>";
                                                                     echo $row['task_base_date'];
                                                                 echo "</td>";
+
+
                                                                 echo "<td>";
                                                                     echo $row['task_limit_date'];
                                                                 echo "</td>";
 
-                                                                
+
                                                                 echo "<td>";
                                                                     $tmp = strtotime($row['task_elapsed_limit_date'])-strtotime($row['task_base_date']);
-                                                                    echo $tmp/86400;
-                                                                    
+                                                                    echo $tmp/86400; 
                                                                 echo "</td>";
+
+
                                                                 echo "<td>";
                                                                     $sup = strtotime($_SESSION['now_date'])-strtotime($row['task_base_date']);
                                                                     $sub = strtotime($row['task_limit_date'])-strtotime($row['task_base_date']);
@@ -81,7 +92,7 @@
                                                                 echo "<strong class='bar2' style='width: ".round($rate_elapse)."%;'>".round($rate_elapse,1)."%</strong>";						
                                                                 echo "</div>";
                                                                 echo "</td>";
-                                                                echo "</tr>";
+                                                            echo "</tr>";
 
 
 
@@ -93,7 +104,8 @@
 										echo"<div style='background-color:#FFF'><font color='black' /> &nbsp▼</div>";
 										echo"</a><DIV style='display:none';>";
 										echo"<table style='background-color:#DDD'>";
-										$this->su_recruit_function_make_tree($conn,$ob3,$row['TID'],0);
+                                        $count++;
+										$this->su_recruit_function_make_tree($conn,$ob3,$row['TID'],$count);
 										echo"</table>";
 										
                                  		echo"</DIV>";

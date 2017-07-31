@@ -239,7 +239,11 @@ function hrefClick(course){
 						</th>
 
 						</thead>
-		<?php
+
+
+
+						
+		<?php   // kokokara honhen
 			$cnt = 1;
 			$task_table_query = "select * from notice_document_header_table order by notice_birth_date DESC,notice_priority DESC;";
 			$result_set = mysqli_query($conn,$task_table_query);
@@ -275,8 +279,16 @@ function hrefClick(course){
 							echo $ob2->su_function_convert_name($conn,"master_department_info_table","sid_combine_department",$row['notice_order_section'],"master_department_info_name");
 						?></td>
 					<td width=7%><?php 
-						$is_valid = (time() >= strtotime($row['notice_base_date'])) && (time() <= strtotime($row['notice_limit_date']));
-					echo $is_valid ? "<img src='./src/off_sign.png'/ width=50% height=5%>" : "<img src='./src/on_sign.png'/ width=50% height=5%>"; ?></td>
+						$is_valid = (strtotime($_SESSION['now_date']) >= strtotime($row['notice_base_date'])) && (strtotime($_SESSION['now_date']) <= strtotime($row['notice_limit_date']));
+
+
+						if($is_valid){
+							echo "<img src='./src/on_sign.png'/ width=50% height=5%>";
+						}else{
+							echo "<img src='./src/off_sign.png'/ width=50% height=5%>";
+						}
+						?>
+					</td>
                 </tr>
 
             <?php

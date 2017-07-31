@@ -42,7 +42,7 @@
 		if(isset($_GET['task_title'])){
 			$default_title = $_GET['task_title'];
 		}else{
-			$default_title = ' ';
+			$default_title = '';
 		}
 ?>
 
@@ -252,6 +252,27 @@
 
 
 	<body>
+
+		<?php
+
+			/*
+				if($_SESSION['my_department_code']!=$_SESSION['task_master_section']){
+
+						echo("<script> 
+
+                                    alert('다른 부서에 실적등록을 할 수 없습니다.'); 
+
+                                    self.close();    
+
+                                    </script>");
+
+
+				}
+			*/
+			
+		?>
+
+
 	
 		<div id="wapper" style="background-color:#f5f4e9; width:100%; height:100%; border:1px solid black">
 			<div id="first" style="background-color:skyblue; width:100%;height:30px; border:2px solid black">
@@ -307,7 +328,7 @@
 						<td  colspan="2">
 						
 									<select onchange="generate_reserve()"  name = "reserve_flag" id='ajax_state_header2'>	
-										<option value=0>현행업무</option>
+										<option value=0>실적업무</option>
 										<option value=1>계확업무</option>	
    									</select>
 						

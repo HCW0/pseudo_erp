@@ -138,7 +138,7 @@ header.is-fixed {
 
 #cd-menu-trigger {
   position: left;
-  right: 0;
+  right: 50%;
   top: 0;
   height: 100%;
   width: 23px;

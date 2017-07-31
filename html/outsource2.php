@@ -133,11 +133,11 @@
     $msg_ob = new su_class_message_handler();
     
 
-   // $bool = (!$task_title)||($_POST['task_select_box'][2]=='')||($_POST['task_select_box'][3]=='')||($_POST['task_select_box'][4]=='')||($_POST['task_select_box'][5]=='')||($_POST['pathnum']=='');
+    $bool = ($task_title==='')||($_POST['task_select_box'][3]=='')||($_POST['task_select_box'][4]=='')||($_POST['task_select_box'][5]=='')||($_POST['pathnum']=='');
 
 
 
-    if(false){
+    if($bool){
               echo "uninvalid input error in task add module";
               echo "<br />";
               

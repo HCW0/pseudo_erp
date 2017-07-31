@@ -84,14 +84,14 @@
 
         case 12 :
         $_SESSION['reserve_index']=0;
-           echo "case  9";
-                       echo "<br />";
+        $_SESSION['current_task_check_bottan']=!$_SESSION['current_task_check_bottan'];
+
            break;
 
         case 13 :
         $_SESSION['reserve_index']=1;
-           echo "case  9";
-                       echo "<br />";
+        $_SESSION['reserve_task_check_bottan']=!$_SESSION['reserve_task_check_bottan'];
+
            break;
 
 

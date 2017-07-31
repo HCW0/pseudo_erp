@@ -34,7 +34,7 @@
 		$ob2 = new su_class_value_name_convert_with_code();
 		$ob3 = new su_class_value_combine_combobox_value_to_mysql_query();
 		$UI_form_ob = new su_class_UI_format_generator();
-
+        $ob4 = new su_class_calc_the_date();
 
 // 테이블 콤보박스의 필드값 초기화
 		
@@ -45,8 +45,8 @@
 		if(isset($_SESSION['current_personal_gate_task_level_code'])==false){
 			$_SESSION['current_personal_gate_task_level_code'] = $ob1->su_function_init_config($conn,$_SESSION['my_sid_code'],"task_level_code");
 			$_SESSION['current_personal_gate_task_level_sub_code'] = 999;
-			$_SESSION['current_personal_gate_base_date']="";
-			$_SESSION['current_personal_gate_limit_date']="";
+			$_SESSION['current_personal_gate_base_date']=$ob4->su_function_convert_this_week_begin($_SESSION['now_date']);;
+			$_SESSION['current_personal_gate_limit_date']=$ob4->su_function_convert_this_week_end($_SESSION['now_date']);;
 			$_SESSION['current_personal_gate_task_order_section'] = $_SESSION['my_department_code'];
 		}
 
@@ -256,7 +256,7 @@ function toWeekNum($get_year, $get_month, $get_day){
 
 	
 	<header>
-		<a id="cd-menu-trigger" href="#0"><span class="cd-menu-text">메뉴</span></a>
+		<a id="cd-menu-trigger" href="#0"><span class="cd-menu-text">메뉴&nbsp &nbsp &nbsp &nbsp</span></a>
 		
 		
 	<div id="wrapper" style="width:100%"; "height:300px">
@@ -446,7 +446,7 @@ function toWeekNum($get_year, $get_month, $get_day){
 				*/
 
 
-				$task_table_query = $ob3->su_function_combine_query_to_task_header_table_ms_page($_SESSION['current_personal_gate_task_level_code'],$_SESSION['current_personal_gate_task_level_sub_code'],	$_SESSION['current_personal_gate_base_date'],$_SESSION['current_personal_gate_limit_date'],$_SESSION['current_personal_gate_task_order_section']);
+				$task_table_query = $ob3->su_function_combine_query_to_task_header_table_ms_page($_SESSION['current_personal_gate_task_level_code'],$_SESSION['current_personal_gate_task_level_sub_code'],$_SESSION['current_personal_gate_task_order_section']);
 				$result_set = mysqli_query($conn,$task_table_query);
 
 				
@@ -482,6 +482,13 @@ function toWeekNum($get_year, $get_month, $get_day){
 			$seconde_tmp_field_compare='';
 
             while($row = mysqli_fetch_array($result_set)) {
+
+
+				
+						if(!$ob4->su_function_date_conflict_senser($_SESSION['current_personal_gate_base_date'],$_SESSION['current_personal_gate_limit_date'],$row['sub_level_from_date'],$row['sub_level_to_date'])){
+							continue;
+						}
+
             ?>
                 <tr>
 
