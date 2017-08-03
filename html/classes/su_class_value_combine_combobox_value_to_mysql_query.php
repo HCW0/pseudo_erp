@@ -23,6 +23,10 @@
 
             function su_function_combine_query_to_task_header_table_spaghetti_wo_kiwameru($level,$sub_level,$order_dpt,$orderer,$priority,$state,$dstate){
 
+                        $revision = $dstate;
+
+
+
                     $query_head = "select * from task_document_header_table u where ";
                     if($_SESSION['current_task_check_bottan']&&$_SESSION['reserve_task_check_bottan']){
                                                                  $query_reserve = " ";
@@ -39,7 +43,7 @@
                     $query_where_order_dpt = $order_dpt!=15 ? "u.task_order_section = $order_dpt AND ": "";
                     $query_where_orderer = $orderer!=8388607 ? "u.task_orderer = $orderer AND ": "";
                     $query_where_state = $state!=99 ? "u.task_state = $state AND " :  "";
-                    $query_where_dstate = $dstate!=99 ? "u.task_detail_state = $dstate AND " :  "";
+                    $query_where_dstate = $dstate!=99 ? "u.task_detail_state = $revision  AND " :  "";
                     $query_where_priority = $priority!=3 ? "u.task_priority = $priority ": "(u.task_priority = 0 OR u.task_priority = 1)";
                         $query_where_semi_colon = ";";
                       

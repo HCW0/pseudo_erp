@@ -109,6 +109,41 @@ function findTotal(){
     </script>
 
 
+		<script> 
+		function hrefClick(course,course2){
+			// You can't define php variables in java script as $course etc.
+
+
+		var popUrl = "/su_script_task_approbation_detail_pop_up.php";	//팝업창에 출력될 페이지 URL
+		var popOption = "resizable=no, scrollbars=no, status=no;";    //팝업창 옵션(optoin)
+		window.open(popUrl+'?AID=' + course + '&TID=' + course2,popOption,'width=680,height=680');
+
+
+
+		}
+
+
+		function confirm_message(target_tid){
+			
+
+
+		var retVal = confirm("해당 업무를 상신하시겠습니까?");
+
+			if( retVal == true ){
+				alert("상신처리되었습니다.");
+				window.location.href='outsource5go_appro.php?target=' + target_tid;
+			}else{
+				alert("취소하셨습니다.");
+			}
+
+		}
+
+
+
+		</script>	
+
+
+
 <script language="javascript">
 				window.resizeTo(screen.availWidth/2,screen.availHeight*0.86); // 지정한 크기로 변한다.(가로,세로)
 				//window.resizeBy(500,500); // 지정한 크기만큼 더하거나 빼져서 변한다.
@@ -128,7 +163,120 @@ function findTotal(){
 					}
 
 
+function generate_reserve(){
+							var dt = new Date();
+							var dt2 = new Date();
+							var arr = document.getElementsByName('reserve_flag');
+							if(arr[0].value==1){
+							
+							// 예약의 경우
 
+							var dayOfMonth = dt.getDate();
+							dt.setDate(dayOfMonth + 7);
+							dt2.setDate(dayOfMonth + 14);
+
+
+
+								var month = dt.getMonth()+1;
+								var day = dt.getDate();
+								var year = dt.getFullYear();
+
+								day=prependZero(day, 2);
+								month=prependZero(month, 2);
+
+								document.getElementById('datepicker1').value =year  + '-' + month + '-' + day;
+								document.getElementById('datepicker3').value =year  + '-' + month + '-' + day;
+								
+								var month = dt2.getMonth()+1;
+								var day = dt2.getDate();
+								var year = dt2.getFullYear();
+
+								day=prependZero(day, 2);
+								month=prependZero(month, 2);
+
+								document.getElementById('datepicker2').value =year  + '-' + month + '-' + day;
+
+								reservedFunc(1);
+
+							}else{
+
+
+							// 실적의 경우
+
+								var month = dt.getMonth()+1;
+								var day = dt.getDate();
+								var year = dt.getFullYear();
+
+								day=prependZero(day, 2);
+								month=prependZero(month, 2);
+
+								document.getElementById('datepicker1').value =year  + '-' + month + '-' + day;
+								document.getElementById('datepicker2').value =year  + '-' + month + '-' + day;
+								document.getElementById('datepicker3').value =year  + '-' + month + '-' + day;
+
+								reservedFunc(0);
+							}
+						}
+
+
+						function prependZero(num, len) {
+									while(num.toString().length < len) {
+										num = "0" + num;
+									}
+									return num;
+							}
+
+
+
+						function reservedFunc(val){
+								//예약을 선택하면 관련 상태의 콤보박스가 선택되는 그것
+								
+								if(val==1){
+
+
+									document.getElementById('ajax_state_header').value = 10 ;
+									
+																		
+														$.ajax({
+															url:'./ajax_code_generator/dstate_ajax_target.php',
+															dataType:'json',
+															success:function(data){
+																var str = '';
+																var selected = $('#ajax_state_header option:selected').val();
+																for(var index in data){
+																	if(index-selected>0 && index-selected<9)
+																	str += '<option value='+index+'>'+data[index]+'</option>';
+																}
+																$('#dstate_zone').html('<ul>'+str+'</ul>');
+															}
+														})
+
+
+
+								}else{
+
+									document.getElementById('ajax_state_header').value = 50 ;
+
+
+														$.ajax({
+															url:'./ajax_code_generator/dstate_ajax_target.php',
+															dataType:'json',
+															success:function(data){
+																var str = '';
+																var selected = $('#ajax_state_header option:selected').val();
+																for(var index in data){
+																	if(index-selected>0 && index-selected<9)
+																	str += '<option value='+index+'>'+data[index]+'</option>';
+																}
+																$('#dstate_zone').html('<ul>'+str+'</ul>');
+															}
+														})
+
+																			
+
+								}
+
+						}
 
  </script>
 
@@ -222,6 +370,20 @@ function findTotal(){
 
 
 
+		<script> 
+					function hrefClick_of_sub_task(level,sub_level,tid){
+						// You can't define php variables in java script as $course etc.
+
+					var popOption = "fullscreen=yes, resizable=0, scrollbars=no, status=no;";    //팝업창 옵션(optoin)
+					var popUrl = "/outsource5.php";	//팝업창에 출력될 페이지 URL
+					window.open(popUrl+'?level=' + level +'&sub_level=' + sub_level +'&tid=' + tid,popOption,'height=' + (screen.height-50) + ',width=' + (screen.width+50));
+				
+				
+
+
+					}
+
+		</script>
 
 
 	</head>
@@ -239,7 +401,7 @@ function findTotal(){
 					<table width=100% border='1'>
 			
 					<tr>
-						<td  colspan="1">업 무 레 벨</td>
+						<td  colspan="1">업 무 등 급</td>
 							<td  colspan="2">
 
 									<?php
@@ -255,7 +417,7 @@ function findTotal(){
 
 							</td>
 
-								<td  colspan="1">업 무 코 드</td>
+								<td  colspan="1">사 업 명</td>
 						<td  colspan="2">
 						
        							 <?php
@@ -277,8 +439,24 @@ function findTotal(){
 					</tr>
 							<tr>
 						<td>진 행 업 무</td>
-						<td  colspan="5"><input id='task_title' type=text name=task_select_box[] size=60 value="<?php echo $target_field['task_name']; ?>"></td>
+						<td  colspan="2"><input id='task_title' type=text name=task_select_box[] size=50% value="<?php echo $target_field['task_name']; ?>"></td>
+
+
 						
+
+						<td>업 무 타 입</td>
+						<td>
+									<select onchange="generate_reserve()"  name = "reserve_flag" id='ajax_state_header2'>	
+										<option value=0>실적업무</option>
+										<option value=1>계획업무</option>	
+   									</select>
+						</td>
+
+
+
+
+
+					
 					</tr>
 					<tr>
 						<td  colspan="1">발 주 처</td>
@@ -287,8 +465,8 @@ function findTotal(){
 						<td  colspan="2"><?php echo $_SESSION['my_name'];?></td>
 					</tr>
 					<tr>
-						
-						<td  colspan="1">우 선 도</td>
+
+	<td  colspan="1">우 선 도</td>
 						<td  colspan="2">
 							<select  name = "task_select_box[]">	
        							 <?php
@@ -307,8 +485,8 @@ function findTotal(){
       							  ?>          
    							</select>
 						</td>
-
 						
+
 
 						<td  colspan="1">상 태 명</td>
 						<td  colspan="2">
@@ -346,30 +524,41 @@ function findTotal(){
 					</tr>
 						<tr>
 							
-							<td>상위 업무명</td>
+							<!-- <td>상위 업무명</td>
 							<td>
-							<select  name = "sub_task_select_box[]">	
+							<select  name = "sub_task_select_box">	
        							 <?php
-										$query = "SELECT * FROM task_document_header_table u WHERE ".$_SESSION['sub_hold_level']."=u.task_level_sub_code";
-     					        		$result = mysqli_query($conn,$query);  
-										 echo "<option value='' selected>신규</option>"; 
-            										 while( $row=mysqli_fetch_array($result) ){
+										// $query = "SELECT * FROM task_document_header_table u WHERE ".$_SESSION['sub_hold_level']."=u.task_level_sub_code";
+     					        		// $result = mysqli_query($conn,$query);  
+										//  echo "<option value='' selected>신규</option>"; 
+            							// 			 while( $row=mysqli_fetch_array($result) ){
 
-														if($target_field['super_task_TID']==$row['TID']){ 
-															if($target_field['super_task_TID']!=$target_field['TID'])
-															echo "<option value='".$row['TID']."' selected>".$row['task_name']."</option>";
-														}else{
-															echo "<option value='".$row['TID']."'>".$row['task_name']."</option>";
-														}
-													}
+										// 				if($target_field['super_task_TID']==$row['TID']){ 
+										// 					if($target_field['super_task_TID']!=$target_field['TID'])
+										// 					echo "<option value='".$row['TID']."' selected>".$row['task_name']."</option>";
+										// 				}else{
+										// 					echo "<option value='".$row['TID']."'>".$row['task_name']."</option>";
+										// 				}
+										// 			}
       							  ?>         
    							</select>	
 							
-							</td>
+							</td> -->
+
+						<td  colspan="1">결제현황</td>
+						<td  colspan="2">
+								<?php
+
+
+										echo $ob2->su_function_convert_name($conn,"master_state_info_table","master_task_state_info_code",$target_field['task_state'],"master_task_state_info_name");
+      							?>  
+						</td>
+
+
 
 
 						</tr>
-				
+						
 					</table>
 
 					</div>
@@ -466,6 +655,136 @@ function findTotal(){
 					</div>
 					
 
+					<div class="h_graph">
+
+							<?php
+
+						
+							
+								$task_table_query2 = "SELECT * FROM task_document_header_table u where ".$_SESSION['current_focused_TID']." = u.super_task_TID AND u.task_state!=5 AND u.TID != u.super_task_TID ;";
+								$result_set2 = mysqli_query($conn,$task_table_query2);
+								if(mysqli_num_rows($result_set2)!=0){
+								echo "<table  border='1' width='100%'>";
+
+								
+							
+									echo "<tr>";
+
+											echo "<td><span><strong />NO</span></td>";
+
+											echo "<td>";
+												echo "<strong />하위업무명";
+											echo "</td>";
+											
+											echo "<td>";
+												echo "<strong />담당자";
+												
+											echo "</td>";
+
+											echo "<td>";
+												echo "<strong />우선도";
+
+											echo "</td>";
+							
+											echo "<td>";
+												echo "<strong />상태명";
+
+											echo "</td>";
+
+											echo "<td>";
+												echo "<strong />작성일";
+												
+											echo "</td>";
+
+											echo "<td>";
+											
+												echo "<strong />결제상태";
+												
+											echo "</td>";
+
+				
+									echo "</tr>";
+
+									
+					
+									
+
+								$cnt = 1;
+								while($row2 = mysqli_fetch_array($result_set2)) {
+							
+									echo "<tr>";
+
+
+										echo "<td>";
+											echo $cnt++;
+										echo "</td>";
+
+										echo "<td>";
+											echo"<a href='#' onclick='hrefClick_of_sub_task(".$row2['task_level_code'].','.$row2['task_level_sub_code'].','.$row2['TID'].");'/>".$row2['task_name'];
+										echo "</td>";
+
+										echo "<td>";
+											echo $ob2->su_function_convert_name($conn,"master_user_info_table","SID",$row2['task_orderer'],"master_user_info_name");
+										echo "</td>";
+					
+										echo "<td>";
+											echo $ob2->su_function_convert_name($conn,"master_priority_info_table","master_task_priority_info_code",$row2['task_priority'],"master_task_priority_info_name");
+										echo "</td>";
+						
+										echo "<td>";
+											echo $ob2->su_function_convert_name($conn,"dmaster_state_info_table","master_code",$row2['task_detail_state'],"master_state_detail_name");
+										echo "</td>";
+
+										echo "<td>";
+											echo $row2['task_birth_date'];
+										echo "</td>";
+
+										if($row['task_state'] != 70){
+
+
+										$query4 = "select * from task_approbation_table where " . $row2['TID'] . " = TID";
+										$result4 = mysqli_query($conn, $query4);
+										$row4 = mysqli_fetch_array($result4);
+
+
+
+										// ** 하위 업무에 각각 결제 버튼을 추가하고 싶은 경우 사용하는 로직
+										// 
+										//	echo "<td>";
+										// if($row2['task_state']!=70){
+										// 		echo "<a href='#' onclick='hrefClick(" . $row4['AID'] . ',' . $row4['TID'] . ");'/>결제하기</a><br>";
+										// 	echo "</td>";
+										// }else{
+										// 	echo '결제완료';
+										// }
+										
+										
+										
+										echo "<td>";
+										
+										echo $ob2->su_function_convert_name($conn,"master_state_info_table","master_task_state_info_code",$row2['task_state'],"master_task_state_info_name");
+										
+										
+										
+										echo "</td>";
+										
+										
+										
+										}
+
+
+									echo "</tr>";
+							
+									}
+								}
+							?>
+
+
+
+								</table>
+					
+							</div>
+
 					<table id='insertTable' border=0 cellpadding=0 cellspacing=0>
 
 						<tr>
@@ -497,8 +816,13 @@ function findTotal(){
 
 						</table>
 						<div align = 'right' style="padding: 0px 40px 0px 0px">
-							<?php echo"<input type='button' value='삭제' onclick='hrefClick_of_delete_task(".$target_tid.");'/>"?>
-							<input type="submit" value="완료" >
+							<?php //echo"<input type='button' value='삭제' onclick='hrefClick_of_delete_task(".$target_tid.");'/>"?>
+							<?php
+									if($target_field['task_state']==5){
+										echo"<input type='button' value='상신' onclick='confirm_message(".$target_tid.");'/>";
+									}
+							?>
+							&nbsp &nbsp &nbsp<input type="submit" value="수정" >
 							
 						</div>
 						<input type="hidden" name="rowCount" value="1">

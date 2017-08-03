@@ -94,6 +94,12 @@
 
            break;
 
+        case 14 :
+        $_SESSION['radio_index']=-1;
+        $_SESSION['current_personal_base_date']=$_SESSION['now_date'];
+        $_SESSION['current_personal_limit_date']=$_SESSION['now_date'];
+        
+           break;
 
 
        }

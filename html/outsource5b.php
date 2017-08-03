@@ -20,7 +20,7 @@
            
 
           	
-
+          $_SESSION['current_focused_TID'] = $tid;
                   
 
             header('location: ./su_script_user_personal_detail_interface_b.php?tid='.$tid);

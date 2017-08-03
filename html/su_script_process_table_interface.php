@@ -4,28 +4,7 @@
 
 <?php
     session_start();
-
-// 유저 세션 검증
-	if(!isset($_SESSION['is_login'])){
-		header('Location: ./su_script_logout_support.php');
-	};
-
-
-// include function
-     function my_autoloader($class){
-         include './classes/'.$class.'.php';
-    }
-
- spl_autoload_register('my_autoloader');
-
-
-//db 연결 파트
-        $conn = mysqli_connect('localhost','root','9708258a');
-        if(!$conn) { $_SESSION['msg']='DB연결에 실패하였습니다.';
-                     header('Location: ./su_script_login_interface.php');
-        }
-        $use = mysqli_select_db($conn,"suproject");
-        if(!$use) die('cannot open db'.mysqli_error($conn));
+	include('./classes/su_class_common_header.php');
 
 
 // class 객체 생성
@@ -57,27 +36,6 @@
 			
 			$_SESSION['process_sub_hold_level']=999;
 		}
-
-
-		/*	
-		if(isset($_SESSION['process_current_personal_task_state'])==false){
-			$_SESSION['process_current_personal_task_order_section'] = $ob1->su_function_init_config($conn,$_SESSION['my_sid_code'],"task_order_section");
-			$_SESSION['process_current_personal_task_orderer'] = 8388607;
-			$_SESSION['process_current_personal_task_priority'] = $ob1->su_function_init_config($conn,$_SESSION['my_sid_code'],"task_priority");
-			$_SESSION['process_current_personal_task_state'] = $ob1->su_function_init_config($conn,$_SESSION['my_sid_code'],"task_state");
-		}
-		*/
-
-// 하드 코딩된 함수 이하
-
-function toWeekNum($get_year, $get_month, $get_day){
- $timestamp = mktime(0, 0, 0, $get_month, $get_day, $get_year);
- $w = date('w',mktime(0,0,0,date('n',$timestamp),1,date('Y',$timestamp)));
- return ceil(($w + date('j',$timestamp) - 1)/7);
-}
-
-
-
 
 
 		
@@ -583,86 +541,6 @@ function toWeekNum($get_year, $get_month, $get_day){
 				<p style="background-color:coffee" class="bd" align="center">COPYRIGHT(C) 2017 SUNUNENG.ENG ALL RIGHTS RESERVED&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp주소 : 광주광역시 광산구 송정동 735 선운빌딩 3층 <br/> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp연락처 : 062-651-9272 / FAX : 062-651-9271</p>
 		
 </header>
-<div style="height:1000px">
-
-	<nav id="cd-lateral-nav" >
-		<ul class="cd-navigation" >
-												<br />
-															<br />
-																		<br />
-		<p align="center"><img src="./src/su_rsc_sulogo_back.png" width="200" height="100" title="선운로고"/></p>
-															<br />
-												<br />
-			<li><a class="current" href="#0">* * * *</a></li>
-
-				<a >이름
-				<font color='white'><?php
-					echo $_SESSION['my_name'];
-				?></font></a>
-			
-				<a>부서
-					<font color='white'><?php
-					echo $_SESSION['my_department'];
-				?></font></a>		
-			
-				<a>직급
-					<font color='white'><?php
-					echo $_SESSION['my_position'];
-				?></font></a>
-
-				<a>사번
-					<font color='white'><?php
-					echo $_SESSION['my_sid_code'];
-				?></font></a>
-
-				<a href = "./su_script_logout_support.php">로그아웃</a>
-			
-			</li> 
-				
-		</ul> 
-
-		<ul class="cd-navigation cd-single-item-wrapper">
-			<li><a class="current" href="#0">* * * *</a></li>
-
-
-<li><a href="./su_script_notice_interface.php"> # 공지사항</a></li>
-			
-			<li>
-			
-			<a href="#0"> 
-			<a href=#none onclick=this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';> 
-						<div>! 업무관리</div>
-					</a><DIV style='display:none'> 
-			
-				<a href = "su_script_user_personal_interface.php" align = "right">
-					<font color='white'>
-					내 업무
-					</font></a>	
-
-				<a href = "su_script_process_table_interface.php" align = "right">
-					<font color='white'>
-					공정표 조회
-					</font></a>		
-			
-						</DIV>
-			</a>
-			
-			
-			</li>
-
-			<li><a href="su_script_approbation_interface.php"> # 결제함</a></li>
-			<li><a href="su_script_configure_interface.php"> # 설정</a></li>
-			<li><a href="rhksflwk.php"> # 관리자 모드</a></li>
-		</ul> <!-- cd-single-item-wrapper -->
-
-		
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-		<script src="assets/js/main.js"></script> <!-- Resource jQuery -->
-		<script language="JavaScript" src="assets/js/date_picker.js"></script>
-
- 		<!-- 새로운 달력 자바 스크립트 소스-->
-		<script src="https://code.jquery.com/jquery-1.12.4.js"></script>                     
-      	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-		</div>
+	<?php include('./classes/su_class_common_rear.php');?>
 	</body>     
 </html>

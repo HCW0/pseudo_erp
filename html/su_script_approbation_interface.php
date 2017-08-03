@@ -4,37 +4,8 @@
 
 <?php
     session_start();
+	include('./classes/su_class_common_header.php');
 
-
-// 유저 세션 검증
-	if(!isset($_SESSION['is_login'])){
-		header('Location: ./su_script_logout_support.php');
-	};
-
-
-// include function
-     function my_autoloader($class){
-         include './classes/'.$class.'.php';
-    }
-
- spl_autoload_register('my_autoloader');
-
-
-//db 연결 파트
-        $conn = mysqli_connect('localhost','root','9708258a');
-        if(!$conn) { $_SESSION['msg']='DB연결에 실패하였습니다.';
-                     header('Location: ./su_script_login_interface.php');
-        }
-        $use = mysqli_select_db($conn,"suproject");
-        if(!$use) die('cannot open db'.mysqli_error($conn));
-
-
-// class 객체 생성
-
-		$ob1 = new su_class_task_table_config();
-
-
-		//임시코드
 
 		if(isset($_SESSION['current_ap_task_level_code'])==false){
 			$_SESSION['current_ap_base_date']=$_SESSION['now_date'];
@@ -46,25 +17,15 @@
 			$_SESSION['current_ap_task_priority'] = 3;
 			$_SESSION['current_ap_task_state'] = 99;
 		}
+		
 
+// class 객체 생성
+
+		$ob1 = new su_class_task_table_config();
 		$ob2 = new su_class_value_name_convert_with_code();
 		$ob3 = new su_class_value_combine_combobox_value_to_mysql_query();
-		$UI_form_ob = new su_class_UI_format_generator();		
+		$UI_form_ob = new su_class_UI_format_generator();	
 
-
-// 하드 코딩된 함수 이하
-
-function toWeekNum($get_year, $get_month, $get_day){
- $timestamp = mktime(0, 0, 0, $get_month, $get_day, $get_year);
- $w = date('w',mktime(0,0,0,date('n',$timestamp),1,date('Y',$timestamp)));
- return ceil(($w + date('j',$timestamp) - 1)/7);
-}
-
-
-
-
-
-		
 ?>
 
 <!-- 하드 코딩된 함수 이하 -->
@@ -360,7 +321,7 @@ function toWeekNum($get_year, $get_month, $get_day){
 							<div class="th-text">요청자
 							<select name = "task_select_box[]" onchange="javascript:selectEvent(this,2);">	
        							 <?php
-										$query = "SELECT * FROM sid_combine_table u where ".$_SESSION['my_department_code']." = u.sid_combine_department AND ".$_SESSION['my_position_code']."> u.sid_combine_position AND u.is_valid=1";
+										$query = "SELECT * FROM sid_combine_table u where ".$_SESSION['my_department_code']." = u.sid_combine_department AND u.is_valid=1";
      					        		$result = mysqli_query($conn,$query);
 										 		echo "<option value='8388607'>전체</option>";
            										 while( $row=mysqli_fetch_array($result) ){    
@@ -477,7 +438,9 @@ function toWeekNum($get_year, $get_month, $get_day){
 				*/
 
 
-				$task_table_query = $ob3->su_function_combine_query_to_task_header_table_lower_only($_SESSION['current_ap_task_level_code'],$_SESSION['current_ap_task_level_sub_code'],$_SESSION['current_ap_task_order_section'],$_SESSION['current_ap_task_orderer'],$_SESSION['current_ap_task_priority'],$_SESSION['current_ap_task_state'],$_SESSION['current_ap_base_date'],$_SESSION['current_ap_limit_date']);
+				$task_table_query = $ob3->su_function_combine_query_to_task_header_table($_SESSION['current_ap_task_level_code'],$_SESSION['current_ap_task_level_sub_code'],$_SESSION['current_ap_task_order_section'],$_SESSION['current_ap_task_orderer'],$_SESSION['current_ap_task_priority'],$_SESSION['current_ap_task_state'],$_SESSION['current_ap_base_date'],$_SESSION['current_ap_limit_date']);
+				$task_table_query = substr($task_table_query,0,strlen($task_table_query)-1);
+				$task_table_query = $task_table_query." AND u.task_state !=5;";
 				$result_set = mysqli_query($conn,$task_table_query);
 				$row = mysqli_fetch_array($result_set);
 
@@ -510,7 +473,9 @@ function toWeekNum($get_year, $get_month, $get_day){
 						
 		<?php
 			$cnt = 1;
-			$task_table_query = $ob3->su_function_combine_query_to_task_header_table_lower_only($_SESSION['current_ap_task_level_code'],$_SESSION['current_ap_task_level_sub_code'],$_SESSION['current_ap_task_order_section'],$_SESSION['current_ap_task_orderer'],$_SESSION['current_ap_task_priority'],$_SESSION['current_ap_task_state'],$_SESSION['current_ap_base_date'],$_SESSION['current_ap_limit_date']);
+			$task_table_query = $ob3->su_function_combine_query_to_task_header_table($_SESSION['current_ap_task_level_code'],$_SESSION['current_ap_task_level_sub_code'],$_SESSION['current_ap_task_order_section'],$_SESSION['current_ap_task_orderer'],$_SESSION['current_ap_task_priority'],$_SESSION['current_ap_task_state'],$_SESSION['current_ap_base_date'],$_SESSION['current_ap_limit_date']);
+			$task_table_query = substr($task_table_query,0,strlen($task_table_query)-1);
+			$task_table_query = $task_table_query." AND u.task_state !=5;";
 			$result_set = mysqli_query($conn,$task_table_query);
             while($row = mysqli_fetch_array($result_set)) {
 
@@ -633,107 +598,7 @@ function toWeekNum($get_year, $get_month, $get_day){
 </header>
 
 
-<div style="height:1000px">
-
-	<nav id="cd-lateral-nav" >
-												<br />
-															<br />
-																		<br />
-		<p align="center"><img src="./src/su_rsc_sulogo_back.png" width="200" height="100" title="선운로고"/></p>
-															<br />
-												<br />
-			<li><a class="current" href="#0">* * * *</a></li>
-
-				<a >이름
-				<font color='white'><?php
-					echo $_SESSION['my_name'];
-				?></font></a>
-			
-				<a>부서
-					<font color='white'><?php
-					echo $_SESSION['my_department'];
-				?></font></a>		
-			
-				<a>직급
-					<font color='white'><?php
-					echo $_SESSION['my_position'];
-				?></font></a>
-
-				<a>사번
-					<font color='white'><?php
-					echo $_SESSION['my_sid_code'];
-				?></font></a>
-
-				<a href = "./su_script_logout_support.php">로그아웃</a>
-			
-			</li> 
-				
-		</ul> 
-
-		<ul class="cd-navigation cd-single-item-wrapper">
-			<li><a class="current" href="#0">* * * *</a></li>
-
-
-<li><a href="./su_script_notice_interface.php"> # 공지사항</a></li>
-			
-			<li>
-			
-			<a href="#0"> 
-			<a href=#none onclick=this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';> 
-						<div>! 업무관리</div>
-					</a><DIV style='display:none'> 
-			
-				<a href = "su_script_user_personal_interface.php" align = "right">
-					<font color='white'>
-					내 업무
-					</font></a>	
-
-				<a href = "su_script_process_table_interface.php" align = "right">
-					<font color='white'>
-					공정표 조회
-					</font></a>		
-			
-						</DIV>
-			</a>
-			
-			
-			</li>
-
-			<li><a href="su_script_approbation_interface.php"> # 결제함</a></li>
-			<li><a href="su_script_configure_interface.php"> # 설정</a></li>
-						<li>
-			
-			<a href="#0"> 
-			<a href=#none onclick=this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';> 
-						<div># 관리자 기능</div>
-					</a><DIV style='display:none'> 
-			
-				<a href = "su_script_approbation_management_interface.php" align = "right">
-					<font color='white'>
-					결제 루트 설정
-					</font></a>	
-
-				<a href = "su_script_process_table_interface.php" align = "right">
-					<font color='white'>
-					이하 추가예정
-					</font></a>		
-			
-						</DIV>
-			</a>
-			
-			
-			</li>
-		</ul> <!-- cd-single-item-wrapper -->
-
-		
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-		<script src="assets/js/main.js"></script> <!-- Resource jQuery -->
-		<script language="JavaScript" src="assets/js/date_picker.js"></script>
-
- 		<!-- 새로운 달력 자바 스크립트 소스-->
-		<script src="https://code.jquery.com/jquery-1.12.4.js"></script>                     
-      	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-		</div>
+	<?php include('./classes/su_class_common_rear.php');?>
 	</body>    
 
 </html>

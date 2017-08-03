@@ -174,15 +174,28 @@
                 $result = mysqli_query($conn,$task_detail_table_query3);
                 if(mysqli_num_rows($result)==0){
                                 $task_detail_table_query3 = "update task_document_header_table set task_state = 70 where TID = $TID;";
+                                echo $task_detail_table_query3;
                                 //완료
                 }else{
                                 $task_detail_table_query3 = "update task_document_header_table set task_state = 30 where TID = $TID;";
+                                echo $task_detail_table_query3;
                                 //진행
+                                $tmp_flag = true;
+                               while($row = mysqli_fetch_array($result)){
+                                       if($row['task_state']!=70){
+                                               $tmp_flag = false;
+                                       } 
+                               }
+                               if($tmp_flag){
+                                       $task_detail_table_query3 = "update task_document_header_table set task_state = 70 where TID = $TID;";
+                               }
+
                 };
                 mysqli_query($conn,$task_detail_table_query3);
 
 
                 $task_detail_table_query3 = "update task_approbation_table set ".$var." = '".$approb_content."' where AID = $AID;";
+                echo $task_detail_table_query3;
                 mysqli_query($conn,$task_detail_table_query3);
                 $msg_ob->su_function_call_message_callback($conn,616);
 
@@ -191,7 +204,7 @@
                 
        }
                 echo "<script> opener.location.reload(); </script>";
-                echo "<script> self.close(); </script>"; 
+               echo "<script> self.close(); </script>"; 
 
        
 

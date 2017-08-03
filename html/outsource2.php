@@ -30,13 +30,13 @@
     $task_sub_level = $_SESSION['sub_hold_level'];
     $task_title = $_POST['task_select_box'][0];
     $task_priority = $_POST['task_select_box'][1];
-    $task_state = $_POST['task_select_box'][2];
+    $task_state = $_POST['task_state'];
 
-    $task_base_date = $_POST['task_select_box'][3];
-    $task_limit_date = $_POST['task_select_box'][4];
+    $task_base_date = $_POST['task_select_box'][2];
+    $task_limit_date = $_POST['task_select_box'][3];
 
-    $task_base_elapsed_date = $_POST['task_select_box'][5];
-    $task_limit_elapsed_date = $_POST['task_select_box'][5];
+    $task_base_elapsed_date = $_POST['task_select_box'][4];
+    $task_limit_elapsed_date = $_POST['task_select_box'][4];
 
     $_rflag = $_POST['reserve_flag'];
 
@@ -59,7 +59,7 @@
         $cworksp = $_POST['relate_sp'] ? $_POST['relate_sp'] : '--'; 
 
      $task_index_contents = $_POST['task_0layer_content']; 
-     $upper_task_id = $_POST['sub_task_select_box'][0];
+     $upper_task_id = $_POST['sub_task_select_box'];
 
 
      
@@ -67,7 +67,7 @@
     echo "<br />";
     echo "task_title";
     echo "<br />";
-
+    echo $task_title;
 
     //debug
     echo "<br />";
@@ -119,6 +119,9 @@
     echo "upper";
     echo $upper_task_id;
     echo "<br />";
+    echo "dstate";
+    echo $task_detail_status;
+    echo "<br />";
 
 
 
@@ -133,7 +136,7 @@
     $msg_ob = new su_class_message_handler();
     
 
-    $bool = ($task_title==='')||($_POST['task_select_box'][3]=='')||($_POST['task_select_box'][4]=='')||($_POST['task_select_box'][5]=='')||($_POST['pathnum']=='');
+    $bool = ($task_title==='')||($_POST['task_select_box'][3]=='')||($_POST['task_select_box'][4]=='')||($_POST['task_state']=='')||($_POST['pathnum']=='');
 
 
 
@@ -141,7 +144,7 @@
               echo "uninvalid input error in task add module";
               echo "<br />";
               
-              $msg_ob->su_function_call_message($conn,514,'su_script_table_write_interface');
+             $msg_ob->su_function_call_message($conn,514,'su_script_table_write_interface');
 
     }
     else if($task_base_date>$task_limit_date){
@@ -324,7 +327,7 @@
 
 
             $date = date("Y-m-d");
-    	    $task_table_query = "Insert into task_document_header_table(task_level_code,task_level_sub_code,task_name,task_order_section,task_order_position,task_orderer,task_priority,task_base_date,task_limit_date,task_elapsed_base_date,task_elapsed_limit_date,task_state,task_birth_date,all_money_master_code_field,use_money_master_code_field,remaind_money_master_code_field,etcetera,coworker,coworkspace,reserve_flag) Values($task_level,$task_sub_level,'$task_title',$my_department_code,$my_position_code,$my_name_code,$task_priority,'$task_base_date','$task_limit_date','$task_base_elapsed_date','$task_limit_elapsed_date',10,'$date',$all_money,$use_money,$rema_money,'$task_detail_content','$cworker','$cworksp',$_rflag);";      
+    	    $task_table_query = "Insert into task_document_header_table(task_level_code,task_level_sub_code,task_name,task_order_section,task_order_position,task_orderer,task_priority,task_base_date,task_limit_date,task_elapsed_base_date,task_elapsed_limit_date,task_state,task_birth_date,all_money_master_code_field,use_money_master_code_field,remaind_money_master_code_field,etcetera,coworker,coworkspace,reserve_flag) Values($task_level,$task_sub_level,'$task_title',$my_department_code,$my_position_code,$my_name_code,$task_priority,'$task_base_date','$task_limit_date','$task_base_elapsed_date','$task_limit_elapsed_date',5,'$date',$all_money,$use_money,$rema_money,'$task_detail_content','$cworker','$cworksp',$_rflag);";      
             echo $task_table_query;
             echo "<br />";
    

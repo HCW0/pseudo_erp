@@ -30,7 +30,7 @@
            
             $level = $_GET['level'];
             $sub_level = $_GET['sub_level'];
-            $master = $_GET['master'];
+
       
    
             echo "검색하려는 업무 코드";
@@ -50,20 +50,12 @@
                   //detail init
                   $_SESSION['hold_level'] = $level;
                   $_SESSION['sub_hold_level'] = $sub_level;
-                  $_SESSION['task_master'] = $master;
 
-                  $_SESSION['task_master_section'] = $ob2->su_function_convert_name($conn,"sid_combine_table","SID",$master,"sid_combine_department");
 
-                  echo $_SESSION['task_master'];
-             echo "<br />";                 
-                  echo $_SESSION['task_master_section'];
-            echo "<br />";
-                  
-			if($_SESSION['task_master']!=$_SESSION['my_sid_code']){
+
+
 				$_SESSION['current_personal_task_orderer'] = $_SESSION['my_sid_code'];
-			}else{
-				$_SESSION['current_personal_task_orderer'] = 8388607;
-			}
+
 
                   $_SESSION['current_personal_task_level_code'] = $level;
 			$_SESSION['current_personal_task_level_sub_code'] = $sub_level;

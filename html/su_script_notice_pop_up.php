@@ -106,7 +106,7 @@
 						<td>내 용</td>
 						
 						<td>
-						<textarea name="ir1" class="nse" rows ="20" cols="70"><?php echo $row['notice_content']?></textarea>
+						<textarea name="ir1"  readonly="readonly" class="nse" rows ="20" cols="70"><?php echo $row['notice_content']?></textarea>
 						</td>
 
 

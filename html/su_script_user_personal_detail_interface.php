@@ -179,6 +179,24 @@
 		</script>
 
 
+
+		<script> 
+		function hrefClick(course,course2){
+			// You can't define php variables in java script as $course etc.
+
+
+		var popUrl = "/su_script_task_approbation_detail_pop_up.php";	//팝업창에 출력될 페이지 URL
+		var popOption = "resizable=no, scrollbars=no, status=no;";    //팝업창 옵션(optoin)
+		window.open(popUrl+'?AID=' + course + '&TID=' + course2,popOption,'width=680,height=680');
+
+
+
+		}
+
+		</script>	
+
+
+
 		<script> 
 					function hrefClick_of_sub_task(level,sub_level,tid){
 						// You can't define php variables in java script as $course etc.
@@ -334,7 +352,7 @@
       							?>  
 						</td>
 
-						<td>수 행 기 간</td>
+						<td>수 행 일</td>
 
 						<td>
 								<?php
@@ -380,11 +398,66 @@
 
 						<td class='td5'>업 무 진 행</td>
 						<td colspan=5>
-						<textarea name="task_select_box[]" class="nse_content2" rows ="1" cols="35"><?php echo $row['etcetera']?></textarea>
+						<textarea name="task_select_box[]"  readonly="readonly" class="nse_content2" rows ="1" cols="35"><?php echo $row['etcetera']?></textarea>
 						</td>	
 
 					</tr>
 
+					<tr>
+					<td>
+					결제 현황 2
+					</td>
+					<td>
+
+							<?php
+						
+										$query2 = "select * from task_approbation_table where TID = ".$row['TID'].";";
+     					        		$result2 = mysqli_query($conn,$query2);  
+										$row4=mysqli_fetch_array($result2);
+										
+													 	echo $ob2->su_function_convert_name($conn,"master_user_info_table","SID",$row4['first_order'],"master_user_info_name");
+														for($cnt=1;$cnt<8;$cnt++){
+
+															if($row4[$cnt."_layer_aida_sid"]){
+																if($cnt!=$row4['current_sid']){
+																	echo ' → '."<font color='black'>".$ob2->su_function_convert_name($conn,"master_user_info_table","SID",$row4[$cnt."_layer_aida_sid"],"master_user_info_name")."</font>";
+																}else{
+																	echo ' → '."<font color='red'>".$ob2->su_function_convert_name($conn,"master_user_info_table","SID",$row4[$cnt."_layer_aida_sid"],"master_user_info_name")."</font>";
+																}
+															}
+														}
+														echo ' → '.$ob2->su_function_convert_name($conn,"master_user_info_table","SID",$row4['end_order'],"master_user_info_name");
+														if($row4['current_sid']>=8 && $row['task_state']==70){
+															echo ' ( 최종승인됨 )';
+														}
+												 		
+										
+							?>
+
+
+
+
+					</td>
+					</tr>
+					<?php
+					if($row['task_state']!=70 && $row['task_order_position']>$_SESSION['my_sid_code']){
+					echo "<tr>";
+						echo "<td>";
+						
+							echo "<input type='button' name='버튼' value='실적등록' onclick=\"window.location.href='./su_script_table_write_interface.php?type=".$row['TID']."'\"/><br />";
+						
+					echo "</td>";
+					echo "</tr>";
+					}else if($row4['end_order']==$_SESSION['my_sid_code'] && $row['task_state']!=70){
+					echo "<tr>";
+						echo "<td>";
+						
+							echo "<a href='#' onclick='hrefClick(" . $row4['AID'] . ',' . $row4['TID'] . ");'/>결제하기</a><br>";
+						
+					echo "</td>";
+					echo "</tr>";	
+					}
+					?>
 					</table>
 				
 
@@ -400,7 +473,7 @@
 
 						
 							
-								$task_table_query2 = "SELECT * FROM task_document_header_table u where ".$_SESSION['current_focused_TID']." = u.super_task_TID AND u.TID != u.super_task_TID ;";
+								$task_table_query2 = "SELECT * FROM task_document_header_table u where ".$_SESSION['current_focused_TID']." = u.super_task_TID AND u.task_state!=5  AND u.TID != u.super_task_TID ;";
 								$result_set2 = mysqli_query($conn,$task_table_query2);
 								if(mysqli_num_rows($result_set2)!=0){
 								echo "<table  border='1' width='100%'>";
@@ -431,7 +504,7 @@
 											echo "</td>";
 
 											echo "<td>";
-												echo "<strong />결제의견";
+												echo "<strong />작성일";
 												
 											echo "</td>";
 				
@@ -468,8 +541,14 @@
 										echo "</td>";
 
 										echo "<td>";
-											echo "<a href='#' onclick='hrefClick(".$row2['TID'].");'/>결제현황</a><br>";
+											echo $row2['task_birth_date'];
 										echo "</td>";
+
+										if($row['task_orderer']==$_SESSION['my_sid_code'] && $row['task_state'] != 70){
+											echo "<td>";
+												echo "<a href='#' onclick='hrefClick(" . $row4['AID'] . ',' . $row4['TID'] . ");'/>결제하기</a><br>";
+											echo "</td>";
+										}
 
 
 									echo "</tr>";

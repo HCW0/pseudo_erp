@@ -18,9 +18,10 @@ session_start();
         $use = mysqli_select_db($conn,"suproject");
         if(!$use) die('cannot open db'.mysqli_error($conn));
 // 객체 생성
-        $msg_ob = new su_class_message_handler();
+       
 
 // 서버 점검 확인 파트
+        $msg_ob = new su_class_message_handler();
          $flag = 'shut_down';
          $mquery = 'select * from server_state_table u where u.FLAG_NAME = \''.$flag.'\';';
          $result_set = mysqli_query($conn,$mquery);

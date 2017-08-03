@@ -4,7 +4,7 @@
 	session_start();
 
 
-	
+
 // 유저 세션 검증
 	if(!isset($_SESSION['is_login'])){
 		header('Location: ./su_script_logout_support.php');
@@ -44,6 +44,21 @@
 		}else{
 			$default_title = '';
 		}
+
+		if(isset($_GET['type'])){
+			$_SESSION['table_write_type'] = $_GET['type'];
+		}
+
+
+
+
+		
+		if (isset($_GET['key']) == true) {
+			$magic_key = $_GET['key'];
+		}else{
+			$magic_key = -1;
+		}
+
 ?>
 
 
@@ -93,12 +108,22 @@
 							document.getElementById('total').value = tot;
 						}
 
+						function generate_superTask(){
+							
+							var arr = document.getElementsByName('sub_task_select_box');
+							var tmp = arr[0].value;
+							var title = document.getElementById('task_title').value;
+							
+							window.location.href = './su_script_table_write_interface.php?type='+tmp+'&task_title='+title;
+						}
+
 						function generate_reserve(){
 							var dt = new Date();
 							var dt2 = new Date();
 							var arr = document.getElementsByName('reserve_flag');
 							if(arr[0].value==1){
-
+							
+							// 예약의 경우
 
 							var dayOfMonth = dt.getDate();
 							dt.setDate(dayOfMonth + 7);
@@ -124,7 +149,14 @@
 								month=prependZero(month, 2);
 
 								document.getElementById('datepicker2').value =year  + '-' + month + '-' + day;
+
+								reservedFunc(1);
+
 							}else{
+
+
+							// 실적의 경우
+
 								var month = dt.getMonth()+1;
 								var day = dt.getDate();
 								var year = dt.getFullYear();
@@ -135,6 +167,8 @@
 								document.getElementById('datepicker1').value =year  + '-' + month + '-' + day;
 								document.getElementById('datepicker2').value =year  + '-' + month + '-' + day;
 								document.getElementById('datepicker3').value =year  + '-' + month + '-' + day;
+
+								reservedFunc(0);
 							}
 						}
 
@@ -147,6 +181,56 @@
 							}
 
 
+
+						function reservedFunc(val){
+								//예약을 선택하면 관련 상태의 콤보박스가 선택되는 그것
+								
+								if(val==1){
+
+
+									document.getElementById('ajax_state_header').value = 10 ;
+
+																		
+														$.ajax({
+															url:'./ajax_code_generator/dstate_ajax_target.php',
+															dataType:'json',
+															success:function(data){
+																var str = '';
+																var selected = $('#ajax_state_header option:selected').val();
+																for(var index in data){
+																	if(index-selected>0 && index-selected<9)
+																	str += '<option value='+index+'>'+data[index]+'</option>';
+																}
+																$('#dstate_zone').html('<ul>'+str+'</ul>');
+															}
+														})
+
+
+
+								}else{
+
+									document.getElementById('ajax_state_header').value = 50 ;
+
+
+														$.ajax({
+															url:'./ajax_code_generator/dstate_ajax_target.php',
+															dataType:'json',
+															success:function(data){
+																var str = '';
+																var selected = $('#ajax_state_header option:selected').val();
+																for(var index in data){
+																	if(index-selected>0 && index-selected<9)
+																	str += '<option value='+index+'>'+data[index]+'</option>';
+																}
+																$('#dstate_zone').html('<ul>'+str+'</ul>');
+															}
+														})
+
+																			
+
+								}
+
+						}
 						
 
     </script>
@@ -284,7 +368,7 @@
 					<table width=100% border='1'>
 			
 					<tr>
-						<td  colspan="1">업 무 레 벨</td>
+						<td  colspan="1">업 무 등 급</td>
 							<td  colspan="2">
 
 									<?php
@@ -300,7 +384,7 @@
 
 							</td>
 
-								<td  colspan="1">업 무 코 드</td>
+								<td  colspan="1">사 업 명</td>
 						<td  colspan="2">
 						
        							 <?php
@@ -310,6 +394,7 @@
 														
 														if(($row['master_task_level_code']==$_SESSION['hold_level'])&&($row['master_task_level_sub_code']!=999)){
 															if($row['master_task_level_sub_code']==$_SESSION['sub_hold_level']){
+																
             											 		echo "<option value='".$row['master_task_level_sub_code']."' selected>".$row['master_task_level_sub_name']."</option>";
 															}
 														   
@@ -322,14 +407,14 @@
 					</tr>
 							<tr>
 						<td  colspan="1">진 행 업 무</td>
-						<td  colspan="2"><input id='task_title' type=text name=task_select_box[] size=50% value="<?php echo $default_title; ?>"></td>
+						<td  colspan="2"><input id='task_title' type=text name=task_select_box[] size=50% value="<?php echo $default_title;?>"></td>
 						
 						<td  colspan="1">업 무 타 입</td>
 						<td  colspan="2">
 						
 									<select onchange="generate_reserve()"  name = "reserve_flag" id='ajax_state_header2'>	
 										<option value=0>실적업무</option>
-										<option value=1>계확업무</option>	
+										<option value=1>계획업무</option>	
    									</select>
 						
 						</td>
@@ -364,16 +449,17 @@
 
 						<td  colspan="1">상 태 명</td>
 						<td  colspan="2">
-							<select  name = "task_select_box[]" id="ajax_state_header">	
+							<select  name = "task_state" id="ajax_state_header">	
        							 <?php
 										$query = "SELECT * FROM dmaster_state_info_table";
      					        		$result = mysqli_query($conn,$query);  
 										 echo "<option value='50'>완료</option>";
            										 while( $row=mysqli_fetch_array($result) ){    
 
-														if($row['master_code']!=99 && $row['master_code']%10==0)
+														if($row['master_code']!=99 && $row['master_code']%10==0){
+															if($row['master_code']!=50)
             											  echo "<option value='".$row['master_code']."'>".$row['master_state_detail_name']."</option>";
-       										    		                                             
+														}
             											 
        										     }
       							  ?>          
@@ -394,15 +480,28 @@
 							
 							<td>상위 업무명</td>
 							<td>
-							<select  name = "sub_task_select_box[]">	
+							<select onchange="generate_superTask()"  name = "sub_task_select_box">	
        							 <?php
-										$query = "SELECT * FROM task_document_header_table u WHERE ".$_SESSION['sub_hold_level']."=u.task_level_sub_code";
+
+									if($_SESSION['table_write_type']=='new'){
+										$query = "SELECT * FROM task_document_header_table u WHERE ".$_SESSION['sub_hold_level']."=u.task_level_sub_code AND u.task_state!=70 AND u.task_orderer !=".$_SESSION['my_sid_code'];
      					        		$result = mysqli_query($conn,$query);  
 										 echo "<option value='' selected>신규</option>"; 
            										 while( $row=mysqli_fetch_array($result) ){   
 															echo "<option value='".$row['TID']."'>".$row['task_name']."</option>";
 													
 													}
+									}else{
+										$query = "SELECT * FROM task_document_header_table u WHERE ".$_SESSION['sub_hold_level']."=u.task_level_sub_code AND u.task_orderer !=".$_SESSION['my_sid_code'];
+     					        		$result = mysqli_query($conn,$query); 
+           										 while( $row5=mysqli_fetch_array($result) ){   
+														if($row5['TID'] == $_SESSION['table_write_type']){
+															echo "<option value='".$row5['TID']."'selected>".$row5['task_name']."</option>";
+														}else{
+															echo "<option value='".$row5['TID']."'>".$row5['task_name']."</option>";
+														}
+													}
+									}
       							  ?>         
    							</select>	
 							
@@ -462,11 +561,11 @@
 							</td>
 							<td>관련업체</td>
 							<td>
-								<input id='task_title' type=text name=relate_sp>
+								<input type=text name=relate_sp>
 							</td>
 							<td>감독관</td>
 							<td>
-								<input id='task_title' type=text name=relate_org>
+								<input type=text name=relate_org>
 							</td>
 						</tr>
 
@@ -515,7 +614,7 @@
 						<select name = "pathnum">	
        							 <?php
 
-										
+									if($_SESSION['table_write_type']=='new'){	
 
 										$query = "select * from task_approbation_path_table where SID = ".$_SESSION['my_sid_code'].";";
      					        		$result = mysqli_query($conn,$query);  
@@ -531,18 +630,71 @@
 														}
 														$name = $ob2->su_function_convert_name($conn,"master_user_info_table","SID",$row['end_user_sid'],"master_user_info_name");
 														$approbation_path = $approbation_path.' → '.$name;	
-
-												echo "<option value=".$row['key_index'].">".$approbation_path."</option>"; 
-															  
+											if($magic_key == $row['key_index']){
+												echo "<option value=".$row['key_index']." selected>".$approbation_path."</option>"; 
+											}else{
+													echo "<option value=".$row['key_index'].">".$approbation_path."</option>"; 											
+											}
 												 		
 											}
-      							  ?>         
-   							</select>	
-							   </td>
-							   <td>
-							   		<div><input type="button" onclick="get_path_index(task_title.value);" value="신규 경로 생성" ></div>
-							   </td>
 
+									}else{
+
+										// 하위업무의 결제루트라고 하는 것은 다음과 같은 간단한 구조이다.$_COOKIE
+										// 최초 발안자 => 현재 자신
+										// 최종 승인자 => 추가하려는 업무의 담당자
+										// 중간 검토자 => null
+										// 따라서 최초에 위와 같은 결제루트가 존재하는지 검색하고, 없다면 추가하도록 로직을 만든다.
+
+
+
+										$query3 = "SELECT * FROM task_document_header_table u WHERE ".$_SESSION['sub_hold_level']."=u.task_level_sub_code AND u.TID = ".$_SESSION['table_write_type'];
+     					        		$result3 = mysqli_query($conn,$query3);  
+           								$row5=mysqli_fetch_array($result3);
+
+
+
+										$bgmquery = "SELECT * from task_approbation_path_table where SID = ".$_SESSION['my_sid_code']." AND end_user_sid = ".$row5['task_orderer']." AND 1_layer_aida_sid IS NULL AND 2_layer_aida_sid IS NULL AND 3_layer_aida_sid IS NULL AND 4_layer_aida_sid IS NULL AND 5_layer_aida_sid IS NULL AND 6_layer_aida_sid IS NULL AND 7_layer_aida_sid IS NULL;";
+										$bgmresult = mysqli_query($conn,$bgmquery);
+											if(!mysqli_num_rows($bgmresult)){
+												$bmgquery2 = "SELECT MAX(key_index) as max from task_approbation_path_table where SID = ".$_SESSION['my_sid_code'].";";
+												$bmgresult = mysqli_query($conn,$bmgquery2);
+														if(mysqli_num_rows($bmgresult) == 0){
+															$target_key_index = 0;
+														}else{
+															$row4=mysqli_fetch_array($bmgresult);
+															$target_key_index = $row4['max']+1;
+														}
+												$bmg2query = "INSERT INTO task_approbation_path_table(SID,key_index,end_user_sid,min_sid) VALUES(".$_SESSION['my_sid_code'].",$target_key_index,".$row5['task_orderer'].",8);";
+												$bmg2result = mysqli_query($conn,$bmg2query);
+
+
+												$name = $ob2->su_function_convert_name($conn,"master_user_info_table","SID",$_SESSION['my_sid_code'],"master_user_info_name");
+												$name2 = $ob2->su_function_convert_name($conn,"master_user_info_table","SID",$row5['task_orderer'],"master_user_info_name");
+												echo "<option value=".$target_key_index." selected>$name → $name2</option>"; 
+
+											}else{
+												$row4=mysqli_fetch_array($bgmresult);
+												$target_key_index = $row4['key_index'];
+												$name = $ob2->su_function_convert_name($conn,"master_user_info_table","SID",$_SESSION['my_sid_code'],"master_user_info_name");
+												$name2 = $ob2->su_function_convert_name($conn,"master_user_info_table","SID",$row4['end_user_sid'],"master_user_info_name");
+												echo "<option value=".$target_key_index." selected>$name → $name2</option>"; 
+											}
+													
+
+
+									}
+																	
+      							  ?>         
+   							</select>
+							   </td>
+							<?php
+							   if($_SESSION['table_write_type']=='new'){	
+									echo "<td>";
+										echo "<div><input type='button' onclick='get_path_index(task_title.value);' value='신규 경로 생성' ></div>";
+									echo "</td>";
+								}
+							?>
 					</tr>
 					<tr>
 							<td class='td5'>상 신 의 견</td>

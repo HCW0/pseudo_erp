@@ -236,9 +236,16 @@ function toWeekNum($get_year, $get_month, $get_day){
         border-left: none;
     }
 	#wrapper{
-	  padding: 0px 0px 0px 200px;
+	  padding: 0px 0px 0px 70px;
   }
 </style>
+
+<script language="javascript">
+				window.resizeTo(screen.availWidth/1.29,screen.availHeight*0.36); // 지정한 크기로 변한다.(가로,세로)
+				//window.resizeBy(500,500); // 지정한 크기만큼 더하거나 빼져서 변한다.
+ </script>
+
+
 
 	<script>               /*달력 함수*/
          $(function() {
@@ -333,7 +340,7 @@ function toWeekNum($get_year, $get_month, $get_day){
 						<form action = 'outsource6path_add_not_manager.php' method='POST' name="table_filter">	
 						<select name = "task_select_box[]">	
        							 <?php
-										$query = "SELECT * FROM sid_combine_table u where u.sid_combine_department = ".$_SESSION['my_department_code'].";";
+										$query = "SELECT * FROM sid_combine_table u where u.sid_combine_department = ".$_SESSION['my_department_code']." AND u.SID != ".$_SESSION['my_sid_code'].";";
      					        		$result = mysqli_query($conn,$query);
 										 		echo "<option value='-1'>--</option>";
            										 while( $row=mysqli_fetch_array($result) ){
@@ -348,7 +355,7 @@ function toWeekNum($get_year, $get_month, $get_day){
 					<td>
 						<select name = "task_select_box[]">	
        							 <?php
-										$query = "SELECT * FROM sid_combine_table u where u.sid_combine_department = ".$_SESSION['my_department_code'].";";
+										$query = "SELECT * FROM sid_combine_table u where u.sid_combine_department = ".$_SESSION['my_department_code']." AND u.SID != ".$_SESSION['my_sid_code'].";";
      					        		$result = mysqli_query($conn,$query);
 										 		echo "<option value='-1'>--</option>";
            										 while( $row=mysqli_fetch_array($result) ){
@@ -363,7 +370,7 @@ function toWeekNum($get_year, $get_month, $get_day){
 					<td>
 						<select name = "task_select_box[]">	
        							 <?php
-										$query = "SELECT * FROM sid_combine_table u where u.sid_combine_department = ".$_SESSION['my_department_code'].";";
+										$query = "SELECT * FROM sid_combine_table u where u.sid_combine_department = ".$_SESSION['my_department_code']." AND u.SID != ".$_SESSION['my_sid_code'].";";
      					        		$result = mysqli_query($conn,$query);
 										 		echo "<option value='-1'>--</option>";
            										 while( $row=mysqli_fetch_array($result) ){
@@ -378,7 +385,7 @@ function toWeekNum($get_year, $get_month, $get_day){
 					<td>
 						<select name = "task_select_box[]">	
        							 <?php
-										$query = "SELECT * FROM sid_combine_table u where u.sid_combine_department = ".$_SESSION['my_department_code'].";";
+										$query = "SELECT * FROM sid_combine_table u where u.sid_combine_department = ".$_SESSION['my_department_code']." AND u.SID != ".$_SESSION['my_sid_code'].";";
      					        		$result = mysqli_query($conn,$query);
 										 		echo "<option value='-1'>--</option>";
            										 while( $row=mysqli_fetch_array($result) ){
@@ -393,7 +400,7 @@ function toWeekNum($get_year, $get_month, $get_day){
 					<td>
 						<select name = "task_select_box[]">	
        							 <?php
-										$query = "SELECT * FROM sid_combine_table u where u.sid_combine_department = ".$_SESSION['my_department_code'].";";
+										$query = "SELECT * FROM sid_combine_table u where u.sid_combine_department = ".$_SESSION['my_department_code']." AND u.SID != ".$_SESSION['my_sid_code'].";";
      					        		$result = mysqli_query($conn,$query);
 										 		echo "<option value='-1'>--</option>";
            										 while( $row=mysqli_fetch_array($result) ){
@@ -408,7 +415,7 @@ function toWeekNum($get_year, $get_month, $get_day){
 					<td>
 						<select name = "task_select_box[]">	
        							 <?php
-										$query = "SELECT * FROM sid_combine_table u where u.sid_combine_department = ".$_SESSION['my_department_code'].";";
+										$query = "SELECT * FROM sid_combine_table u where u.sid_combine_department = ".$_SESSION['my_department_code']." AND u.SID != ".$_SESSION['my_sid_code'].";";
      					        		$result = mysqli_query($conn,$query);
 										 		echo "<option value='-1'>--</option>";
            										 while( $row=mysqli_fetch_array($result) ){
@@ -423,7 +430,7 @@ function toWeekNum($get_year, $get_month, $get_day){
 					<td>
 						<select name = "task_select_box[]">	
        							 <?php
-										$query = "SELECT * FROM sid_combine_table u where u.sid_combine_department = ".$_SESSION['my_department_code'].";";
+										$query = "SELECT * FROM sid_combine_table u where u.sid_combine_department = ".$_SESSION['my_department_code']." AND u.SID != ".$_SESSION['my_sid_code'].";";
      					        		$result = mysqli_query($conn,$query);
 										 		echo "<option value='-1'>--</option>";
            										 while( $row=mysqli_fetch_array($result) ){
@@ -438,7 +445,7 @@ function toWeekNum($get_year, $get_month, $get_day){
 					<td>
 						<select name = "task_select_box[]">	
        							 <?php
-										$query = "SELECT * FROM sid_combine_table u where u.sid_combine_department = ".$_SESSION['my_department_code'].";";
+										$query = "SELECT * FROM sid_combine_table u where u.sid_combine_department = ".$_SESSION['my_department_code']." AND u.SID != ".$_SESSION['my_sid_code'].";";
      					        		$result = mysqli_query($conn,$query);
 										 		echo "<option value='-1'>--</option>";
            										 while( $row=mysqli_fetch_array($result) ){

@@ -80,7 +80,7 @@
         $cworksp = $_POST['relate_sp'] ? $_POST['relate_sp'] : '--'; 
 
      $task_index_contents = $_POST['task_0layer_content']; 
-     $upper_task_id = $_POST['sub_task_select_box'][0];
+     $upper_task_id = $_POST['sub_task_select_box'];
 
 
     //
@@ -350,6 +350,11 @@ $result_set = mysqli_query($conn,$update_query);
 
 $result_set = mysqli_query($conn,$update_query);
             $update_query = "update task_document_header_table set use_money_master_code_field = $use_money where TID = $target_tid";   
+
+
+$result_set = mysqli_query($conn,$update_query);
+            $update_query = "update task_document_header_table set super_task_TID = $upper_task_id where TID = $target_tid";   
+
 
 $result_set = mysqli_query($conn,$update_query);
             $update_query = "update task_document_header_table set remaind_money_master_code_field = $rema_money where TID = $target_tid";                                      

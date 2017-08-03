@@ -3,29 +3,8 @@
 <html>
 
 <?php
-    session_start();
-
-// 유저 세션 검증
-	if(!isset($_SESSION['is_login'])){
-		header('Location: ./su_script_logout_support.php');
-	};
-
-
-// include function
-     function my_autoloader($class){
-         include './classes/'.$class.'.php';
-    }
-
- spl_autoload_register('my_autoloader');
-
-
-//db 연결 파트
-        $conn = mysqli_connect('localhost','root','9708258a');
-        if(!$conn) { $_SESSION['msg']='DB연결에 실패하였습니다.';
-                     header('Location: ./su_script_login_interface.php');
-        }
-        $use = mysqli_select_db($conn,"suproject");
-        if(!$use) die('cannot open db'.mysqli_error($conn));
+       session_start();
+	include('./classes/su_class_common_header.php');
 
 
 // class 객체 생성
@@ -77,18 +56,6 @@
 
 
 
-// 하드 코딩된 함수 이하
-
-function toWeekNum($get_year, $get_month, $get_day){
- $timestamp = mktime(0, 0, 0, $get_month, $get_day, $get_year);
- $w = date('w',mktime(0,0,0,date('n',$timestamp),1,date('Y',$timestamp)));
- return ceil(($w + date('j',$timestamp) - 1)/7);
-}
-
-
-
-
-
 		
 ?>
 
@@ -99,12 +66,12 @@ function toWeekNum($get_year, $get_month, $get_day){
 						
 
 	<script> 
-						function hrefClick_of_sub_task(level,sub_level,master){
+						function hrefClick_of_sub_task(level,sub_level){
      					 // You can't define php variables in java script as $course etc.
 
 						var popOption = "fullscreen=yes, resizable=no, scrollbars=no, status=no;";    //팝업창 옵션(optoin)
 	  					var popUrl = "/outsource5adapter.php";	//팝업창에 출력될 페이지 URL
-						window.location.href = popUrl+'?level=' + level +'&sub_level=' + sub_level +'&master=' + master;
+						window.location.href = popUrl+'?level=' + level +'&sub_level=' + sub_level;
 
 					
 
@@ -392,9 +359,6 @@ function toWeekNum($get_year, $get_month, $get_day){
 						<th   width="25%" text-align="center">
 							<div class="th-text">사업명</div>
 						</th>
-						<th width = "10%" text-align="center">
-							<div class="th-text">담당자</div>
-						</th>
 						<th   width="20%" text-align="center">
 							<div class="th-text">사업기간</div>
 						</th>
@@ -506,7 +470,7 @@ function toWeekNum($get_year, $get_month, $get_day){
 						<?php
 							$second_tmp_field_compare = $ob2->su_function_convert_name($conn,"master_department_info_table","sid_combine_department",$row['sub_level_order_section'],"master_department_info_name"); 
 							if($second_tmp_field_name!=$second_tmp_field_compare){
-							echo"<a href='#' onclick='hrefClick_of_sub_task(15,999,".$row['sub_level_master_sid'].");'/>";
+							echo"<a href='#' onclick='hrefClick_of_sub_task(15,999);'/>";
 							echo $second_tmp_field_compare;
 							 $second_tmp_field_name = $second_tmp_field_compare;
 							}
@@ -514,16 +478,10 @@ function toWeekNum($get_year, $get_month, $get_day){
 					</td>				
 					<td id='left'>
 						<?php 
-						echo"<a href='#' onclick='hrefClick_of_sub_task(".$row['master_task_level_code'].','.$row['master_task_level_sub_code'].','.$row['sub_level_master_sid'].");'/>";
+						echo"<a href='#' onclick='hrefClick_of_sub_task(".$row['master_task_level_code'].','.$row['master_task_level_sub_code'].");'/>";
 						echo $ob2->su_function_convert_name($conn,"master_task_level_sub_info_table","master_task_level_sub_code",$row['master_task_level_sub_code'],"master_task_level_sub_name");
 						
 						
-						?>
-					</td>
-					<td>
-						<?php 
-							
-							echo $ob2->su_function_convert_name($conn,"master_user_info_table","SID",$row['sub_level_master_sid'],"master_user_info_name");
 						?>
 					</td>
 					<td>
@@ -629,124 +587,7 @@ function toWeekNum($get_year, $get_month, $get_day){
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div style="height:1000px">
-
-	<nav id="cd-lateral-nav" >
-		<ul class="cd-navigation" >
-												<br />
-															<br />
-																		<br />
-		<p align="center"><img src="./src/su_rsc_sulogo_back.png" width="200" height="100" title="선운로고"/></p>
-															<br />
-												<br />
-			<li><a class="current" href="#0">* * * *</a></li>
-
-				<a >이름
-				<font color='white'><?php
-					echo $_SESSION['my_name'];
-				?></font></a>
-			
-				<a>부서
-					<font color='white'><?php
-					echo $_SESSION['my_department'];
-				?></font></a>		
-			
-				<a>직급
-					<font color='white'><?php
-					echo $_SESSION['my_position'];
-				?></font></a>
-
-				<a>사번
-					<font color='white'><?php
-					echo $_SESSION['my_sid_code'];
-				?></font></a>
-
-				<a href = "./su_script_logout_support.php">로그아웃</a>
-			
-			</li> 
-				
-		</ul> 
-
-		<ul class="cd-navigation cd-single-item-wrapper">
-			<li><a class="current" href="#0">* * * *</a></li>
-
-
-<li><a href="./su_script_notice_interface.php"> # 공지사항</a></li>
-			
-			<li>
-			
-			<a href="#0"> 
-			<a href=#none onclick=this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';> 
-						<div>! 업무관리</div>
-					</a><DIV style='display:none'> 
-			
-				<a href = "su_script_user_personal_interface.php" align = "right">
-					<font color='white'>
-					내 업무
-					</font></a>	
-
-				<a href = "su_script_process_table_interface.php" align = "right">
-					<font color='white'>
-					공정표 조회
-					</font></a>		
-			
-						</DIV>
-			</a>
-			
-			
-			</li>
-
-			<li><a href="su_script_approbation_interface.php"> # 결제함</a></li>
-			<li><a href="su_script_configure_interface.php"> # 설정</a></li>
-						<li>
-			
-			<a href="#0"> 
-			<a href=#none onclick=this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';> 
-						<div># 관리자 기능</div>
-					</a><DIV style='display:none'> 
-			
-				<a href = "su_script_approbation_management_interface.php" align = "right">
-					<font color='white'>
-					결제 루트 설정
-					</font></a>	
-
-				<a href = "su_script_process_table_interface.php" align = "right">
-					<font color='white'>
-					이하 추가예정
-					</font></a>		
-			
-						</DIV>
-			</a>
-			
-			
-			</li>
-		</ul> <!-- cd-single-item-wrapper -->
-
-		
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-		<script src="assets/js/main.js"></script> <!-- Resource jQuery -->
-		<script language="JavaScript" src="assets/js/date_picker.js"></script>
-
- 		<!-- 새로운 달력 자바 스크립트 소스-->
-		<script src="https://code.jquery.com/jquery-1.12.4.js"></script>                     
-      	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-		</div>
+	<?php include('./classes/su_class_common_rear.php');?>
 	</body>    
    
 </html>
