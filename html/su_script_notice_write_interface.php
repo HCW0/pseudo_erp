@@ -67,7 +67,7 @@
 	
 
 <script language="javascript">
-				window.resizeTo(screen.availWidth*0.5,screen.availHeight*0.65); // 지정한 크기로 변한다.(가로,세로)
+				window.resizeTo(screen.availWidth*0.33,screen.availHeight*0.65); // 지정한 크기로 변한다.(가로,세로)
 				//window.resizeBy(500,500); // 지정한 크기만큼 더하거나 빼져서 변한다.
  </script>
 
@@ -147,10 +147,10 @@
 					<a href=#none onclick=this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';> 
 						<div align="center">공지등록</div>
 					</a><DIV style='display:block'> 
-					<table border='1'>
+					<table width=100% border='1'>
 					<tr>
 						<td>공 지 명</td>
-						<td colspan=3><input type=text name=task_select_box[] size=60 ></td>
+						<td colspan=3><input type=text name=task_select_box[] style="width:99%; border: 0; resize: none;"></td>
 						
 					</tr>
 					<tr>
@@ -181,22 +181,16 @@
 
 					<tr>
 						<td>공 지 기 간</td>
-						<td><input type="text" name = "task_select_box[]" id="datepicker1" value = <?php echo date("Y-m-d");?> ></td>
-						<td> ~ </td>
-						<td><input type="text" name = "task_select_box[]" id="datepicker2" value = <?php echo date("Y-m-d");?> ></td>
+						<td colspan=3><input type="text" name = "task_select_box[]" id="datepicker1" value = <?php echo date("Y-m-d");?> >
+						 ~ 
+						<input type="text" name = "task_select_box[]" id="datepicker2" value = <?php echo date("Y-m-d");?> ></td>
 					</tr>
-						<tr>
-							<td><br /></td>
-						</tr>
 
 
 					<tr>
-						<td colspan=1>
+						<td colspan=1>내 용</td>
 					
-					
-						내 용</td>
-					
-					<td colspan=3><textarea name="task_select_box[]" id="task_select_box[]" class="nse_content" rows ="17" cols="50">간단한 공지 사항에 대한 설명을 적어주세요.</textarea></td>
+					<td colspan=3><textarea name="task_select_box[]" rows=15 style="width:99%; border: 0; resize: none;"placeholder="간단한 공지 사항에 대한 설명을 적어주세요."></textarea></td>
 
 				
 				

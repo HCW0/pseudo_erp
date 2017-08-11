@@ -16,6 +16,7 @@
 			$_SESSION['current_ap_task_orderer'] = 8388607;
 			$_SESSION['current_ap_task_priority'] = 3;
 			$_SESSION['current_ap_task_state'] = 99;
+			$_SESSION['current_ap_task_detail_state'] = 99;
 		}
 		
 
@@ -33,6 +34,21 @@
 
 
 	<script> 
+						function hrefClick_former(course,type,index){
+							// You can't define php variables in java script as $course etc.
+
+								if(type==1){
+									var popUrl = "/su_script_notice_pop_up.php";	//팝업창에 출력될 페이지 URL
+								}else{
+									var popUrl = "/su_format_former_doc.php";
+								}
+								var popOption = "resizable=no, scrollbars=no, status=no;";    //팝업창 옵션(optoin)
+								window.open(popUrl+'?notice_id=' + course  +'&index='+index,popOption,'width=491px,height=' +  screen.availHeight/3);
+						
+						}
+
+
+
 						function hrefClick(course,course2){
      					 // You can't define php variables in java script as $course etc.
 
@@ -213,7 +229,7 @@
 
 	
 	<header>
-		<a id="cd-menu-trigger" href="#0"><span class="cd-menu-text">메뉴</span></a>
+		<a id="cd-menu-trigger" href="#0"><span class="cd-menu-text">메뉴&nbsp &nbsp &nbsp &nbsp</span></a>
 
 		
 	<div id="wrapper" style="width:100%" "height:300px">
@@ -229,7 +245,6 @@
 
 
 					<div>
-					
 								업무등급
 								<select name = "task_select_box[]"  onchange="javascript:selectEvent(this,0);">	
 									<?php
@@ -366,7 +381,33 @@
 
 						<th width="13%" text-align="center">
 							<div class="th-text">상태명
-							<select name = "task_select_box[]" onchange="javascript:selectEvent(this,4);">		
+							<select name = "task_select_box[]" onchange="javascript:selectEvent(this,7);">		
+       							 <?php
+										$query = "SELECT * FROM dmaster_state_info_table";
+										$result = mysqli_query($conn,$query);
+										 echo "<option value='99'>전체</option>";
+           										 while( $row=mysqli_fetch_array($result) ){   
+														if($row['master_code']!=99 && $row['master_code']%10==0){  
+														if($row['master_code']==$_SESSION['current_ap_task_detail_state']){
+															echo "<option value='".$row['master_code']."' selected>".$row['master_state_detail_name']."</option>";
+														}
+														else{
+            											  echo "<option value='".$row['master_code']."'>".$row['master_state_detail_name']."</option>";
+       										    		 }                                             
+														}
+       										     }
+      							  ?>          
+   							</select> </div>
+						</th>
+
+
+						<th  width="16%" text-align="center">
+							<div class="th-text">작성일자</div>
+						</th>
+					
+						</form>		
+						<th  width="16%" text-align="center">
+							<div class="th-text">결제상태 <select name = "task_select_box[]" onchange="javascript:selectEvent(this,4);">		
        							 <?php
 										$query = "SELECT * FROM master_state_info_table";
 										$result = mysqli_query($conn,$query);
@@ -383,16 +424,6 @@
        										     }
       							  ?>          
    							</select> </div>
-						</th>
-
-
-						<th  width="16%" text-align="center">
-							<div class="th-text">작성일자</div>
-						</th>
-					
-						</form>		
-						<th  width="16%" text-align="center">
-							<div class="th-text">☆★</div>
 						</th>
 							
 						</tr>
@@ -438,7 +469,7 @@
 				*/
 
 
-				$task_table_query = $ob3->su_function_combine_query_to_task_header_table($_SESSION['current_ap_task_level_code'],$_SESSION['current_ap_task_level_sub_code'],$_SESSION['current_ap_task_order_section'],$_SESSION['current_ap_task_orderer'],$_SESSION['current_ap_task_priority'],$_SESSION['current_ap_task_state'],$_SESSION['current_ap_base_date'],$_SESSION['current_ap_limit_date']);
+				$task_table_query = $ob3->su_function_combine_query_to_task_header_table($_SESSION['current_ap_task_level_code'],$_SESSION['current_ap_task_level_sub_code'],$_SESSION['current_ap_task_order_section'],$_SESSION['current_ap_task_orderer'],$_SESSION['current_ap_task_priority'],$_SESSION['current_ap_task_state'],$_SESSION['current_ap_base_date'],$_SESSION['current_ap_limit_date'],$_SESSION['current_ap_task_detail_state']);
 				$task_table_query = substr($task_table_query,0,strlen($task_table_query)-1);
 				$task_table_query = $task_table_query." AND u.task_state !=5;";
 				$result_set = mysqli_query($conn,$task_table_query);
@@ -473,7 +504,7 @@
 						
 		<?php
 			$cnt = 1;
-			$task_table_query = $ob3->su_function_combine_query_to_task_header_table($_SESSION['current_ap_task_level_code'],$_SESSION['current_ap_task_level_sub_code'],$_SESSION['current_ap_task_order_section'],$_SESSION['current_ap_task_orderer'],$_SESSION['current_ap_task_priority'],$_SESSION['current_ap_task_state'],$_SESSION['current_ap_base_date'],$_SESSION['current_ap_limit_date']);
+			$task_table_query = $ob3->su_function_combine_query_to_task_header_table($_SESSION['current_ap_task_level_code'],$_SESSION['current_ap_task_level_sub_code'],$_SESSION['current_ap_task_order_section'],$_SESSION['current_ap_task_orderer'],$_SESSION['current_ap_task_priority'],$_SESSION['current_ap_task_state'],$_SESSION['current_ap_base_date'],$_SESSION['current_ap_limit_date'],$_SESSION['current_ap_task_detail_state']);
 			$task_table_query = substr($task_table_query,0,strlen($task_table_query)-1);
 			$task_table_query = $task_table_query." AND u.task_state !=5;";
 			$result_set = mysqli_query($conn,$task_table_query);
@@ -482,7 +513,7 @@
 				$orderer = $row['task_orderer'];
 			
 
-				$task_table_query2 = "select * from task_approbation_table u where u.TID = ".$row['TID'].";";
+				$task_table_query2 = "select * from task_approbation_table u where u.TID = ".$row['TID']." AND u.appro_type_flag=0;";
 				$result_set2 = mysqli_query($conn,$task_table_query2);
 				$row2 = mysqli_fetch_array($result_set2);
 
@@ -510,7 +541,7 @@
 					?></td>
 
 					<td><?php echo  
-						 $ob2->su_function_convert_name($conn,"master_state_info_table","master_task_state_info_code",$row['task_state'],"master_task_state_info_name");
+						 $ob2->su_function_convert_name($conn,"dmaster_state_info_table","master_code",$row['task_detail_state'],"master_state_detail_name");
 					?></td>
 					<td>
 					<?php
@@ -522,20 +553,92 @@
 					?>
 					</td>
 
-						<td>
-					<?php
-    
-     					 echo "<a href='#' onclick='hrefClick(".$row2['AID'].','.$row2['TID'].");'/>결제하기</a><br>";
-    
-					?>
-
-				
-
+					<td>
+						<?php
+							$name = $ob2->su_function_convert_name($conn,"master_state_info_table","master_task_state_info_code",$row['task_state'],"master_task_state_info_name");
+									echo "<a href='#' onclick='hrefClick(".$row2['AID'].','.$row2['TID'].");'/>$name</a><br>";
+							
+						?>
 					</td>
                 </tr>
 
+			<?php
+            	}
+			?>
 
 
+<!-- appro_type_flag가 0인 경우(위)는 순차적으로 결재가 올라가는 방식, 1인 경우(아래)는 중간 검토자가 순서 없이 모두 확인을 하면 최종결재자가 보고 결재하는 형식
+전자는 일반 업무 후자는 공문에서 사용되고 있다. -->
+
+		<?php
+			$task_table_query = "select * from former_document_header_table where appro_state = 10 OR appro_state = 70;";
+			$result_set = mysqli_query($conn,$task_table_query);
+            while($row = mysqli_fetch_array($result_set)) {
+
+
+				$task_table_query3 = "select * from task_approbation_table u where u.TID = ".$row['former_id']." AND u.appro_type_flag=1;";
+				$result_set3 = mysqli_query($conn,$task_table_query3);
+				$row3 = mysqli_fetch_array($result_set3);
+
+
+
+				// 순차 결제가 아닌, 검토자 동시확인의 경우
+				// flag가 true가 되는 경우 해당 공문의 검토자 목록에 현재 유저가 포함되어 있다는 것이 됨.
+				$flag = false;
+				$index = 0;
+				for($cnt=1 ; $cnt<8 ; $cnt++){
+					$field_name = $cnt."_layer_aida_sid";
+					if($row3[$field_name]==$_SESSION['my_sid_code']) {
+																		$flag = true;
+																		$index = $cnt;
+																	}
+				}
+
+				if($row3['end_order']==$_SESSION['my_sid_code']){
+											$flag = true;
+											$index = 8;					
+				}
+
+				if($flag==false) continue;
+
+            ?> 
+                <tr>
+					<td><?php echo $cnt++?></td>
+					<td id='left'>
+						<?php
+						 	echo "<a href='#' onclick='hrefClick_former(".$row['former_id'].",5,$index);'/>".$row['former_title']."</a><br>";
+						?>
+					</td>
+					<td><?php echo 
+						 $ob2->su_function_convert_name($conn,"master_user_info_table","SID",$row['orderer'],"master_user_info_name");
+					?></td>
+					<td><?php
+					 	 $tmp = ($row['priority'] == 1) ? "긴급" : "일반";
+						 echo $tmp;
+					?></td>
+
+					<td>
+					<?php
+					if($row['appro_state']!=70){
+					 		echo "검토자 외 비공개";
+						}else{
+							echo "공개됨";
+						}  	
+					?>
+					</td>
+					<td>
+					<?php
+						echo $row['birth_date'];
+											
+					?>
+					</td>
+
+					<td>
+						<?php
+							 echo $ob2->su_function_convert_name($conn,"master_state_info_table","master_task_state_info_code",$row['appro_state'],"master_task_state_info_name");
+						?>
+					</td>
+                </tr>
 
 
             <?php
@@ -557,7 +660,7 @@
 				echo "</th></tr>";
 
             ?>
-</tr>
+
 					</table>
 				</div>
 

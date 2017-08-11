@@ -31,9 +31,12 @@
 
 			$task_table_query = "select * from notice_document_header_table u where u.notice_id = $notice_id ;";
 			$result_set = mysqli_query($conn,$task_table_query);
-			$row = mysqli_fetch_array($result_set)
-			
+			$row = mysqli_fetch_array($result_set);
 
+//php class inst	
+		$ob5 = new su_class_sid_cache_manager($conn,$_SESSION['my_sid_code']);
+		$ob5->su_fucntion_add_data_to_cache($conn,0,$_SESSION['my_sid_code'],$row['notice_id']);
+		echo "<script> opener.location.reload(); </script>";
 ?>
 
 
@@ -50,11 +53,7 @@
 						font-family: 'Nanum Gothic', sans-serif;
 						height:98%;
 					}
-					.nse {
-						max-width: 100%;
-						width : 100%;
-						height : 100%;
-						}
+
 			</style>
 
 
@@ -62,7 +61,7 @@
 	
 
 <script language="javascript">
-				window.resizeTo(screen.availWidth/2.5,screen.availHeight*0.65); // 지정한 크기로 변한다.(가로,세로)
+				window.resizeTo(screen.availWidth/3.2,screen.availHeight*0.58); // 지정한 크기로 변한다.(가로,세로)
 				//window.resizeBy(500,500); // 지정한 크기만큼 더하거나 빼져서 변한다.
  </script>
 
@@ -83,7 +82,7 @@
 			<table summary="글쓰기 전체 테이블">
 	
 				
-				<table summary="테이블 구성" >
+				<table border=1; width=88%>
 				<caption>공지사항</caption>	
 				
 					
@@ -106,7 +105,7 @@
 						<td>내 용</td>
 						
 						<td>
-						<textarea name="ir1"  readonly="readonly" class="nse" rows ="20" cols="70"><?php echo $row['notice_content']?></textarea>
+						<textarea name="ir1"  readonly="readonly" class="nse" rows ="20" style="width:99%; border: 0; resize: none;""><?php echo $row['notice_content']?></textarea>
 						</td>
 
 

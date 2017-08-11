@@ -8,7 +8,6 @@ session_start();
     }
 
  spl_autoload_register('my_autoloader');
-
  $conn = mysqli_connect('localhost','root','9708258a');
         if(!$conn) { $_SESSION['msg']='DB연결에 실패하였습니다.';
                      header('Location: ./su_script_login_interface.php');

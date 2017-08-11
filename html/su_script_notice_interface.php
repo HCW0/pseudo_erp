@@ -13,8 +13,8 @@
 		$ob2 = new su_class_value_name_convert_with_code();
 		$ob3 = new su_class_value_combine_combobox_value_to_mysql_query();
 		$UI_form_ob = new su_class_UI_format_generator();		
-
-
+		$ob5 = new su_class_sid_cache_manager($conn,$_SESSION['my_sid_code']);
+		$ob6 = new su_class_sid_variable_container_manager();
 		
 ?>
 
@@ -22,16 +22,19 @@
 
 
 <script> 
-function hrefClick(course){
+function hrefClick(course,type){
       // You can't define php variables in java script as $course etc.
 
-
-	  	var popUrl = "/su_script_notice_pop_up.php";	//팝업창에 출력될 페이지 URL
+		if(type==1){
+	  		var popUrl = "/su_script_notice_pop_up.php";	//팝업창에 출력될 페이지 URL
+		}else if(type==5){
+			var popUrl = "/su_format_former_doc.php";
+		}else{
+			var popUrl = "/su_script_former_modify_interface.php";		
+		}
 		var popOption = "resizable=no, scrollbars=no, status=no;";    //팝업창 옵션(optoin)
 		window.open(popUrl+'?notice_id=' + course,popOption,'width=491px,height=' +  screen.availHeight/3);
-
-
-    
+ 
 }
 </script>
 
@@ -99,6 +102,16 @@ function hrefClick(course){
         left: 0;
         border-bottom: 1px solid #000;
     }
+	.foot-bg {
+		background: skyblue;
+		height: 20px;
+		/* header-bg height값 */
+		position: absolute;
+		bottom: 0;
+		right: 0;
+		left: 0;
+		border-bottom: 1px solid #000;
+	}
     .table-wrapper {
         overflow-x: hidden;
         overflow-y: auto;
@@ -127,6 +140,14 @@ function hrefClick(course){
         line-height: 30px; /* header-bg height값 */
         border-left: 1px solid #000;
     }
+	.th-text2 {
+		position: absolute;
+		bottom: 0;
+		width: inherit;
+		line-height: 20px;
+		/* header-bg height값 */
+		border-left: 1px solid #000;
+	}
     th:first-child .th-text {
         border-left: none;
     }
@@ -149,7 +170,7 @@ function hrefClick(course){
 
 	
 	<header>
-		<a id="cd-menu-trigger" href="#0"><span class="cd-menu-text">메뉴</span></a>
+		<a id="cd-menu-trigger" href="#0"><span class="cd-menu-text">메뉴&nbsp &nbsp &nbsp &nbsp</span></a>
 
 		
 	<div id="wrapper" style="width:1050px" "height:300px">
@@ -175,19 +196,20 @@ function hrefClick(course){
 						<tr>
 						<th  width=3%><div class="th-text">NO</div></th>
 
-
+						<th width="7%">
+							<div class="th-text">등급</div>
+						</th>
 						
 						<th width="7%">
-							<div class="th-text">공지등급</div>
-						</th>
+							<div class="th-text">종류</div>
+						</th>						
 						
-						
-						<th  width=25% >
-							<div class="th-text" >공지이름</div>
+						<th  width=21% >
+							<div class="th-text" >문서제목</div>
 						</th>
 
-						<th  width=30% >
-							<div class="th-text" >공지기간</div>
+						<th  width=25% >
+							<div class="th-text" >유효기간</div>
 						</th>
 
 						<th  width=11% >
@@ -199,7 +221,7 @@ function hrefClick(course){
 						</th>
 
 
-						<th width=8% >
+						<th width=10% >
 							<div class="th-text" >담당부서</div>
 						</th>
 						
@@ -214,13 +236,22 @@ function hrefClick(course){
 
 						
 		<?php   // kokokara honhen
-			$cnt = 1;
+			$cnt = 0;
 			$task_table_query = "select * from notice_document_header_table order by notice_birth_date DESC,notice_priority DESC;";
 			$result_set = mysqli_query($conn,$task_table_query);
             while($row = mysqli_fetch_array($result_set)) {
+
+
+			// 신규 표시 프로세스 파트
+			$new_icon_flag = false;	
+			if($ob5->su_fucntion_is_cache_have($conn,0,$_SESSION['my_sid_code'],$row['notice_id'])==0){
+				$new_icon_flag = true;
+			}
+
+
             ?>
                 <tr>
-					<td><?php echo $cnt++?></td>
+					<td><?php echo ++$cnt?></td>
 
 					<td><?php 
 						switch($row['notice_priority']){
@@ -228,14 +259,19 @@ function hrefClick(course){
 							case 1 : echo "<font color='red' />긴급"; break;
 						}
 					?></td>
-
+					<td>
+						공지
+					</td>
 					<td>
 
-<?php
-    
-      echo "<a href='#' onclick='hrefClick(".$row['notice_id'].");'/>".$row['notice_name']."</a><br>";
-    
-?>
+							<?php
+								if($new_icon_flag){
+									echo "<a href='#' onclick='hrefClick(".$row['notice_id'].",1);'/>".$row['notice_name']."</a>";
+									echo "<font color='red'> new ! </font>";
+								}else{
+									echo "<a href='#' onclick='hrefClick(".$row['notice_id'].",1);'/>".$row['notice_name']."</a>";
+								}
+							?>
 
 
 					</td>
@@ -263,19 +299,123 @@ function hrefClick(course){
 
             <?php
             }
+
+			$cnt2=0;
+			$task_table_query = "select * from former_document_header_table where (appro_state=70 or orderer=".$_SESSION['my_sid_code']." or former_ref=".$_SESSION['my_department_code'].") order by birth_date DESC,priority DESC;";
+			$result_set = mysqli_query($conn,$task_table_query);
+            while($row = mysqli_fetch_array($result_set)) {
+
+			// 수신 대상 잡는거
+
+				if($row['orderer']!=$_SESSION['my_sid_code']){
+					if(!$ob6->su_function_thesse_code_have_parameter($conn,$_SESSION['my_sid_code'],$row['former_recv'])){
+						continue;
+					};
+				}
+
+
+
+			// 신규 표시 프로세스 파트
+			$new_icon_flag = false;	
+			if($ob5->su_fucntion_is_cache_have($conn,1,$_SESSION['my_sid_code'],$row['former_id'])==0){
+				$new_icon_flag = true;
+			}
+
             ?>
+                <tr>
+					<td><?php echo ++$cnt2?></td>
+
+					<td><?php 
+						switch($row['priority']){
+							case 0 : echo '보통'; break;
+							case 1 : echo "<font color='red' />긴급"; break;
+						}
+					?></td>
+					<td>
+						공문
+					</td>
+					<td>
+							<?php	
+								$name = $row['former_title'];
+								$type=5;
+								if($row['appro_state']==5){
+										$name = '<font color=\'red\'>'.$row['former_title'].'(반려됨)</font>';
+										$type = 10;
+								}
+
+
+
+								if($new_icon_flag){
+									echo "<a href='#' onclick='hrefClick(".$row['former_id'].",$type);'/>".$name."</a>";
+									echo "<font color='red'> new ! </font>";
+								}else{
+									echo "<a href='#' onclick='hrefClick(".$row['former_id'].",$type);'/>".$name."</a>";
+								}
+							?>
+
+
+					</td>
+
+					<td><?php echo $row['from_date']."~".$row['to_date']?></td>
+					<td><?php echo $row['birth_date']?></td>
+					<td><?php
+							echo $ob2->su_function_convert_name($conn,"master_user_info_table","SID",$row['orderer'],"master_user_info_name");
+						?></td>
+					<td><?php
+							echo $ob2->su_function_convert_name($conn,"master_department_info_table","sid_combine_department",$row['order_section'],"master_department_info_name");
+						?></td>
+					<td width=7%><?php 
+						$is_valid = (strtotime($_SESSION['now_date']) >= strtotime($row['from_date'])) && (strtotime($_SESSION['now_date']) <= strtotime($row['to_date']));
+
+
+						if($is_valid && $row['appro_state']==70){
+							echo "<img src='./src/on_sign.png'/ width=50% height=5%>";
+						}else{
+							echo "<img src='./src/off_sign.png'/ width=50% height=5%>";
+						}
+						?>
+					</td>
+                </tr>
+
+				<?php
+
+						
+					}
+
+
+//statistical summary
+					echo "<div class='foot-bg'></div>";
+					echo "<tr><th>";
+					echo "<div class='th-text2'>";
+					$all=$cnt+$cnt2;
+					if ($all==0) {
+						echo "일치하는 항목이 없습니다.";
+					}
+					else {
+						echo "합계 : ";
+						echo $all;
+						echo "건 / ";
+						echo "공지 : ";
+						echo $cnt;
+						echo "건 / ";
+						echo "공문 : ";
+						echo $cnt2;
+						echo "건";
+					}
+					echo "</div>";
+					echo "</th></tr>";
+
+				?>
+
 
 					</table>
 				</div>
 
-			<div  id="footer" style="padding:70px 0px 0px 930px;">
-				<input type="button" name="버튼" value="공지등록" onclick="window.open('./su_script_notice_write_interface.php','win','width=630,height=286,toolbar=0,scrollbars=0,resizable=0')";>
+			<div style="padding:70px 0px 0px 0px;">
+				<div style="float:right" /><input type="button" name="버튼" value="공지등록" onclick="window.open('./su_script_notice_write_interface.php','win','width=630,height=286,toolbar=0,scrollbars=0,resizable=0')";>
+				<div style="float:right" /><input type="button" name="버튼" value="공문등록" onclick="window.open('./su_script_former_write_interface.php','win','width=630,height=286,toolbar=0,scrollbars=0,resizable=0')";>
+			</div>
 
-			</div>
-			<div id="footer" style="padding:50px 0px 0px 800px;">
-						
-			</div>
-				<p style="background-color:coffee" class="bd" align="center">COPYRIGHT(C) 2017 SUNUNENG.ENG ALL RIGHTS RESERVED&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp주소 : 광주광역시 광산구 송정동 735 선운빌딩 3층 <br/> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp연락처 : 062-651-9272 / FAX : 062-651-9271</p>
 		</div>
 </header>
 

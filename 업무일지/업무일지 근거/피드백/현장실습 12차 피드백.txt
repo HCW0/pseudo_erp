@@ -1,0 +1,80 @@
+placeholder
+
+
+
+
+
+
+
+
+스크립트 초기화 관련 코드
+
+
+	include($_SERVER['DOCUMENT_ROOT'].'/header/su_header_user_login_check.php');
+	include($_SERVER['DOCUMENT_ROOT'].'/header/su_header_class_loader.php');
+	include($_SERVER['DOCUMENT_ROOT'].'/header/su_header_db_connecter.php');
+
+
+
+css스타일 헤더 코드
+
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+<?php include($_SERVER['DOCUMENT_ROOT'].'/header/su_header_include_jquery.php'); ?>
+
+
+
+
+
+절대경로 서버 루트 이동 코드
+
+
+	       header("location: ".$_SESSION['root']."module/task_management/su_script_user_personal_interface.php");
+
+
+
+
+주요 모듈의 변경된 이름
+
+아웃소스 5 --> su_script_gate_view_of_task
+
+아웃소스 2 --> su_script_new_task_register
+
+
+
+1. 단위 테스트라고 함은 로직 레벨의 기능 검증이다.
+
+ 예를 들어, 시나리오라고 하여 여러가지 상황에 대해 해당 모듈이 어떻게 움직이는가
+
+보고 불합리한 요소를 잡아 정리하도록 하는 것.
+
+예를 들어, 아이디 입력 모듈의 경우에는 sql 인젝션이나 ''등의 문제
+
+입력가능한 문자열의 길이문제 등을 시나리오라고 볼 수 있고 그런 입력에 대한
+
+것으 검증한다는 이야기
+
+
+
+
+
+2. 문서작성이 엄청나게 중요하다는 것을 실시간으로 느끼고 있다.
+
+
+주로 두가지 측면에서 아주 중요하다. 개발이랑은 관련없고 피플 투 피플
+
+
+갑과 을 관계에서 서로 밑장을 빼지 못하게 하는 용도로 아주아주 중요하다.
+
+
+예를 들어, 지난주 금요일날 받은 요구사항에 대한 문서를 제대로 작성도 안하고
+
+그에 대해서 상대방과 제대로 된 검증과정을 거치지 않은채로 작업을 진행하는 경우에는
+
+좆되는 수가 있다.
+
+
+월요일날 왔더니 지난 주말동안 했던 일이 안맞는다는 이유로 갑질이 시작될 수 있기 때문이다.
+
+따라서 중요한것은 그러한 밑장을 뺄 수 없게 서로가 합의하에 일을 주고 받았다는 증거로써
+
+관련된 문서를 작성해놓는 것이다. 안그러면 피도 보고, 일도 두번 하고 하여간 씨발이다 씨발

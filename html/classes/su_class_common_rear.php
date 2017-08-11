@@ -54,6 +54,12 @@
 								</font>
 							</a>
 
+							<a href="su_script_today_task_interface.php" align="right">
+								<font color='white'>
+									금일 업무
+								</font>
+							</a>
+
 							<a href="su_script_process_table_interface.php" align="right">
 								<font color='white'>
 									공정표 조회
@@ -67,7 +73,7 @@
 					</li>
 
 					<li><a href="su_script_approbation_interface.php"> # 결제함</a></li>
-					<li><a href="su_script_configure_interface.php"> # 설정</a></li>
+					<!-- <li><a href="su_script_former_document_interface.php"> # 공문함</a></li> -->
 					<li>
 
 						<a href="#0"> 
@@ -77,9 +83,9 @@
 								</font>
 							</a>
 
-							<a href="su_script_process_table_interface.php" align="right">
+							<a href="su_script_user_personal_dp_management_interface.php" align="right">
 								<font color='white'>
-									이하 추가예정
+									용역관리대장
 								</font>
 							</a>
 

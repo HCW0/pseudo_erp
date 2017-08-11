@@ -96,7 +96,6 @@
 
 			</style>
 
-
     <script type="text/javascript">
 function findTotal(){
     var arr = document.getElementsByName('qty');
@@ -123,22 +122,21 @@ function findTotal(){
 		}
 
 
-		function confirm_message(target_tid){
-			
+		function confirm_message(target_tid,id){
 
+			var arr = ["상신","승인","반려"];
 
-		var retVal = confirm("해당 업무를 상신하시겠습니까?");
+				var retVal = confirm("해당 업무를 "+arr[id]+"하시겠습니까?");
 
-			if( retVal == true ){
-				alert("상신처리되었습니다.");
-				window.location.href='outsource5go_appro.php?target=' + target_tid;
+			if(retVal==true){
+				alert(arr[id]+"처리되었습니다.");
+				window.location.href='outsource5go_appro.php?target=' + target_tid + '&type=' + id;
 			}else{
 				alert("취소하셨습니다.");
 			}
-
+		
+		
 		}
-
-
 
 		</script>	
 
@@ -364,6 +362,7 @@ function generate_reserve(){
 
 							 window.resizeTo(1300,370);
    							 window.location.href = './su_script_approbation_path_write_interface_not_manager.php';
+
 						}
 
 	</script>
@@ -378,8 +377,7 @@ function generate_reserve(){
 					var popUrl = "/outsource5.php";	//팝업창에 출력될 페이지 URL
 					window.open(popUrl+'?level=' + level +'&sub_level=' + sub_level +'&tid=' + tid,popOption,'height=' + (screen.height-50) + ',width=' + (screen.width+50));
 				
-				
-
+			
 
 					}
 
@@ -405,6 +403,7 @@ function generate_reserve(){
 							<td  colspan="2">
 
 									<?php
+											$last_appro_trigger=true;
 											$query = "SELECT * FROM master_task_level_info_table";
 											$result = mysqli_query($conn,$query);  
 													while( $row=mysqli_fetch_array($result) ){         
@@ -466,25 +465,25 @@ function generate_reserve(){
 					</tr>
 					<tr>
 
-	<td  colspan="1">우 선 도</td>
-						<td  colspan="2">
-							<select  name = "task_select_box[]">	
-       							 <?php
-										$query = "SELECT * FROM master_priority_info_table";
-     					        		$result = mysqli_query($conn,$query);  
-           										 while( $row=mysqli_fetch_array($result) ){    
-													if($row['master_task_priority_info_code']!=3){
+					<td  colspan="1">우 선 도</td>
+					<td  colspan="2">
+						<select  name = "task_select_box[]">	
+								<?php
+									$query = "SELECT * FROM master_priority_info_table";
+									$result = mysqli_query($conn,$query);  
+												while( $row=mysqli_fetch_array($result) ){    
+												if($row['master_task_priority_info_code']!=3){
 
-														if($target_field['task_priority']==$row['master_task_priority_info_code']){
-														echo "<option value='".$row['master_task_priority_info_code']."' selected>".$row['master_task_priority_info_name']."</option>";
-														}else{
-														echo "<option value='".$row['master_task_priority_info_code']."'>".$row['master_task_priority_info_name']."</option>";	
-														}                                           
-													}
-       										     }
-      							  ?>          
-   							</select>
-						</td>
+													if($target_field['task_priority']==$row['master_task_priority_info_code']){
+													echo "<option value='".$row['master_task_priority_info_code']."' selected>".$row['master_task_priority_info_name']."</option>";
+													}else{
+													echo "<option value='".$row['master_task_priority_info_code']."'>".$row['master_task_priority_info_name']."</option>";	
+													}                                           
+												}
+												}
+								?>          
+						</select>
+					</td>
 						
 
 
@@ -554,8 +553,22 @@ function generate_reserve(){
       							?>  
 						</td>
 
-
-
+						<?php
+						$file_delete_flag = 0;
+						echo"<td colspan=1>상위업무</td>";
+						echo"<td colspan=2>";
+										$squery = "SELECT * FROM task_document_header_table WHERE ".$target_field['TID']."!= TID AND TID = ".$target_field['super_task_TID'].";";
+										$sresult = mysqli_query($conn,$squery);
+										if($sresult){
+											$srow = mysqli_fetch_array($sresult);
+											$target_super_title = $srow['task_name'];
+											echo $target_super_title;
+											
+										}else{
+											echo"--";
+										}
+						echo"</td>";
+						?> 
 
 						</tr>
 						
@@ -661,7 +674,7 @@ function generate_reserve(){
 
 						
 							
-								$task_table_query2 = "SELECT * FROM task_document_header_table u where ".$_SESSION['current_focused_TID']." = u.super_task_TID AND u.task_state!=5 AND u.TID != u.super_task_TID ;";
+								$task_table_query2 = "SELECT * FROM task_document_header_table u where ".$target_tid." = u.super_task_TID AND u.TID != u.super_task_TID AND task_state>=5 AND task_state<=30;";
 								$result_set2 = mysqli_query($conn,$task_table_query2);
 								if(mysqli_num_rows($result_set2)!=0){
 								echo "<table  border='1' width='100%'>";
@@ -739,17 +752,15 @@ function generate_reserve(){
 											echo $row2['task_birth_date'];
 										echo "</td>";
 
-										if($row['task_state'] != 70){
-
-
-										$query4 = "select * from task_approbation_table where " . $row2['TID'] . " = TID";
-										$result4 = mysqli_query($conn, $query4);
-										$row4 = mysqli_fetch_array($result4);
-
-
+										
 
 										// ** 하위 업무에 각각 결제 버튼을 추가하고 싶은 경우 사용하는 로직
 										// 
+										// if($row['task_state'] != 70){
+										// $query4 = "select * from task_approbation_table where " . $row2['TID'] . " = TID";
+										// $result4 = mysqli_query($conn, $query4);
+										// $row4 = mysqli_fetch_array($result4);
+
 										//	echo "<td>";
 										// if($row2['task_state']!=70){
 										// 		echo "<a href='#' onclick='hrefClick(" . $row4['AID'] . ',' . $row4['TID'] . ");'/>결제하기</a><br>";
@@ -763,7 +774,9 @@ function generate_reserve(){
 										echo "<td>";
 										
 										echo $ob2->su_function_convert_name($conn,"master_state_info_table","master_task_state_info_code",$row2['task_state'],"master_task_state_info_name");
-										
+										if($row2['task_state']!=30){
+											$last_appro_trigger = false;
+										}
 										
 										
 										echo "</td>";
@@ -776,7 +789,7 @@ function generate_reserve(){
 									echo "</tr>";
 							
 									}
-								}
+								
 							?>
 
 
@@ -784,6 +797,20 @@ function generate_reserve(){
 								</table>
 					
 							</div>
+
+
+					<div style="padding: 0 40px 20px 0;">
+					<?php 
+					if(mysqli_num_rows($result_set2)>0){
+							echo"<input style='float:right;' type='button' value='승인' onclick='confirm_message(".$target_tid.",1);'/>";
+							echo"<input style='float:right;' type='button' value='반려' onclick='confirm_message(".$target_tid.",2);'/>";
+					}
+					?>
+					</div>
+
+					
+
+
 
 					<table id='insertTable' border=0 cellpadding=0 cellspacing=0>
 
@@ -794,16 +821,17 @@ function generate_reserve(){
 
 								<?php
 									echo "</td>";
+									echo "첨부된 파일 : ";
 									if($target_field['upload_id']){
-										echo "첨부된 파일 : ";
 										$query = "select * from master_upload_table u where u.upload_id = ".$target_field['upload_id'].";";
 										$result = mysqli_query($conn,$query);
 																$row = mysqli_fetch_array($result);
 																$real_name = $row['real_name'];
 																$server_name = $row['server_name'];
-
 																echo "<a href='./storage/task_sheet/".$_SESSION['my_department_code']."/$server_name' download>".$real_name."</a>";
 																echo "<td valign=bottom>";
+									}else{
+										echo "첨부된 파일 없음.<br />";
 									}
 									
 								?>
@@ -818,8 +846,8 @@ function generate_reserve(){
 						<div align = 'right' style="padding: 0px 40px 0px 0px">
 							<?php //echo"<input type='button' value='삭제' onclick='hrefClick_of_delete_task(".$target_tid.");'/>"?>
 							<?php
-									if($target_field['task_state']==5){
-										echo"<input type='button' value='상신' onclick='confirm_message(".$target_tid.");'/>";
+									if(($target_field['task_state']==5 OR $target_field['task_state']==20) && $last_appro_trigger==true){
+										echo"<input type='button' value='상신' onclick='confirm_message(".$target_tid.",0);'/>";
 									}
 							?>
 							&nbsp &nbsp &nbsp<input type="submit" value="수정" >
@@ -839,7 +867,8 @@ function generate_reserve(){
 			
 		</div>
 		
-		<!-- 새로운 달력 자바 스크립트 소스-->
+	
+	<!-- 새로운 달력 자바 스크립트 소스-->
 		<script src="https://code.jquery.com/jquery-1.12.4.js"></script>                     
       	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 

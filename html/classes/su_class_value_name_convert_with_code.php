@@ -7,8 +7,7 @@
                       $mquery = 'select * from '.$table.' u where u.'.$key_field_name.' = '.$key_entity.';'; 
                       $result_set = mysqli_query($conn,$mquery);
                         if(mysqli_num_rows($result_set)==0) {
-                                            echo $mquery;
-                                            die ("not existed such field value of master table");
+                                            
                                                 // redirect 추가
                                             }
 

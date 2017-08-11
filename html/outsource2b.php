@@ -66,7 +66,7 @@
 
         $task_detail_status = $_POST['dstate']; 
         $task_detail_content = $_POST['dcontent'];                            
-        $path_number = $_POST['pathnum']; 
+        //$path_number = $_POST['pathnum']; 
 
     $my_name_code =  $_SESSION['my_sid_code'];
     $my_department_code = $_SESSION['my_department_code'];
@@ -79,8 +79,8 @@
         $cworker = $_POST['relate_org'] ? $_POST['relate_org'] : '--'; 
         $cworksp = $_POST['relate_sp'] ? $_POST['relate_sp'] : '--'; 
 
-     $task_index_contents = $_POST['task_0layer_content']; 
-     $upper_task_id = $_POST['sub_task_select_box'];
+     //$task_index_contents = $_POST['task_0layer_content']; 
+     //$upper_task_id = $_POST['sub_task_select_box'];
 
 
     //
@@ -126,13 +126,13 @@
     echo "<br />";
     echo "path num";
     echo "<br />";
-    echo $path_number;
+   // echo $path_number;
     echo "<br />";
     echo "contents";
-    echo $task_index_contents;
+   // echo $task_index_contents;
     echo "<br />";
     echo "upper";
-    echo $upper_task_id;
+  //  echo $upper_task_id;
     echo "<br />";
 
 
@@ -175,7 +175,7 @@
 
                                     // 첨부 파일이 저장될 서버 디렉토리 지정(원하는 경로에 맞게 수정하세요)
 
-                                    $save_dir = './storage/tasksheet/'.$SESSION['my_department_code'];
+                                    $save_dir = './storage/tasksheet/'.$_SESSION['my_department_code'];
 
 
 
@@ -303,8 +303,28 @@
 
 
                   
+                if($target_field['upload_id']){
+                    $query = "update master_upload_table set real_name = '$real_name', server_name = '$change_file_name' where upload_id = ".$target_field['upload_id'].";";
+                }else{
 
-                $query = "update master_upload_table set real_name = '$real_name', server_name = '$change_file_name' where upload_id = ".$target_field['upload_id'].";";
+                    $query = "select max(upload_id) as target from master_upload_table";
+                    echo $query;
+                    $result = mysqli_query($conn,$query);
+                    if(!$result){
+                        $target = 0;
+                    }else{
+                        $row = mysqli_fetch_array($result);
+                        $target = $row['target']+1;
+                    }
+
+                    $query = "Insert into master_upload_table(upload_id,real_name,server_name) Values($target,'$real_name','$change_file_name');";
+                    $query2 = "update task_document_header_table set upload_id = $target  where TID = ".$target_field['TID'].";";
+                    $result = mysqli_query($conn,$query2);
+
+
+                    echo "$query";
+
+                }
                 $result = mysqli_query($conn,$query);
                 echo $query;
 
@@ -323,7 +343,7 @@
 
             $date = date("Y-m-d");
 
-        $result_set = mysqli_query($conn,$update_query);    
+
             
             $update_query = "update task_document_header_table set task_name = '$task_title'  where TID = $target_tid";
             
@@ -337,12 +357,12 @@ $result_set = mysqli_query($conn,$update_query);
             $update_query = "update task_document_header_table set task_limit_date = '$task_limit_date' where TID = $target_tid";
 $result_set = mysqli_query($conn,$update_query);
 
-            $update_query = "update task_document_header_table set task_elapsed_base_date = '$task_elapsed_base_date' where TID = $target_tid";
+//             $update_query = "update task_document_header_table set task_elapsed_base_date = '$task_elapsed_base_date' where TID = $target_tid";
 
-$result_set = mysqli_query($conn,$update_query);
-            $update_query = "update task_document_header_table set task_elapsed_limit_date = '$task_elapsed_limit_date' where TID = $target_tid";
+// $result_set = mysqli_query($conn,$update_query);
+//             $update_query = "update task_document_header_table set task_elapsed_limit_date = '$task_elapsed_limit_date' where TID = $target_tid";
 
-$result_set = mysqli_query($conn,$update_query);
+// $result_set = mysqli_query($conn,$update_query);
             $update_query = "update task_document_header_table set task_birth_date = '$date' where TID = $target_tid";           
             
             $result_set = mysqli_query($conn,$update_query);
@@ -353,10 +373,10 @@ $result_set = mysqli_query($conn,$update_query);
 
 
 $result_set = mysqli_query($conn,$update_query);
-            $update_query = "update task_document_header_table set super_task_TID = $upper_task_id where TID = $target_tid";   
+//             $update_query = "update task_document_header_table set super_task_TID = $upper_task_id where TID = $target_tid";   
 
 
-$result_set = mysqli_query($conn,$update_query);
+// $result_set = mysqli_query($conn,$update_query);
             $update_query = "update task_document_header_table set remaind_money_master_code_field = $rema_money where TID = $target_tid";                                      
          $result_set = mysqli_query($conn,$update_query);   
 

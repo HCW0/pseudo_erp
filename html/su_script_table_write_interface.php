@@ -104,7 +104,12 @@
 							var arr = document.getElementsByName('qty');
 							var arr2 = document.getElementsByName('qty2');
 							var tot=parseInt(arr[0].value) - parseInt(arr2[0].value);
-							if(arr[0].value>0&&arr2[0].value>0)
+							if(arr[0].value<0||arr2[0].value<0||tot<0){
+									alert('유효하지 않은 값입니다.')
+									arr[0].value=0;
+									arr2[0].value=0;
+									tot=0;
+							}
 							document.getElementById('total').value = tot;
 						}
 
@@ -242,52 +247,6 @@
  </script>
 
 
-			<script type="text/javascript">
-				//첨부파일 추가
-
-				var rowIndex = 1;
-
-						   
-
-				function addFile(form){
-
-					if(rowIndex > 10) return false;
-
-					rowIndex++;
-
-					var getTable = document.getElementById("insertTable");
-
-				var oCurrentRow = getTable.insertRow(getTable.rows.length);
-
-					var oCurrentCell = oCurrentRow.insertCell(0);
-
-					oCurrentCell.innerHTML = "<tr><td colspan=2><INPUT TYPE='FILE' NAME='filename" + rowIndex + "' size=25></td></tr>";
-
-				}
-
-			   
-
-				//첨부파일 삭제
-
-				function deleteFile(form){
-
-					if(rowIndex<2){
-
-						return false;
-
-					}else{
-
-						rowIndex--;
-
-						var getTable = document.getElementById("insertTable");
-
-						getTable.deleteRow(rowIndex);
-
-				   }
-
-				}
-
-			</script>
 
 			<script>               /*달력 함수*/
          $(function() {
@@ -484,7 +443,7 @@
        							 <?php
 
 									if($_SESSION['table_write_type']=='new'){
-										$query = "SELECT * FROM task_document_header_table u WHERE ".$_SESSION['sub_hold_level']."=u.task_level_sub_code AND u.task_state!=70 AND u.task_orderer !=".$_SESSION['my_sid_code'];
+										$query = "SELECT * FROM task_document_header_table u WHERE ".$_SESSION['sub_hold_level']."=u.task_level_sub_code AND u.task_state=5 AND u.task_orderer !=".$_SESSION['my_sid_code'];
      					        		$result = mysqli_query($conn,$query);  
 										 echo "<option value='' selected>신규</option>"; 
            										 while( $row=mysqli_fetch_array($result) ){   

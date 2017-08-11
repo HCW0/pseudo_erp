@@ -49,11 +49,6 @@
 
 
 
-// 뒤로가기 버튼 연타시, 로그아웃 해주는 플래그
-
-			$_SESSION['backword_flag'] = 514;
-
-
 
 
 		
@@ -144,7 +139,7 @@
   	
 
 	 .fixed-table-container {
-        width: 1200px;
+        width: 1400px;
         height: 550px;
         border: 1px solid #000;
         position: relative;
@@ -231,8 +226,8 @@
 			<?php
 				$UI_form_ob->su_function_get_title('업무 현황',$_SESSION['my_name'],$_SESSION['my_position'],$_SESSION['my_department'],'su_script_user_personal_interface');
 			?>
-				<input type="button" name="버튼" value="사업 등록" onclick="window.open('./su_script_table_write_personal_interface.php','win','width=800,height=700,toolbar=0,scrollbars=0,resizable=0')";>
-				<div id="head" style="padding:0px 0px 0px 766px;">
+				<input type="button" name="버튼" value="사업 등록" onclick="window.open('./su_script_table_write_personal_interface.php?type=0','win','width=800,height=700,toolbar=0,scrollbars=0,resizable=0')";>
+				<div id="head" style="padding:0px 0px 0px 946px;">
 						
 				<form action = 'outsource6.php' method='POST' name="table_filter">		
 
@@ -287,14 +282,6 @@
 				
 				
 				
-				
-				
-				
-				
-				
-				
-				
-				
 				</div>
 				
 
@@ -313,7 +300,7 @@
 
 
 						
-						<th   width="18%" text-align="center">
+						<th   width="17%" text-align="center">
 							<div class="th-text">업무등급
 							<select name = "task_select_box[]" onchange="javascript:selectEvent(this,0);">	
        							 <?php
@@ -334,8 +321,8 @@
    							</select>	
 							</div>
 						</th>
-						<th   width="20%" text-align="center">
-							<div class="th-text">발주처
+						<th   width="17%" text-align="center">
+							<div class="th-text">관리처
 							<select name = "task_select_box[]" onchange="javascript:selectEvent(this,2);">	
        							 <?php
 										$query = "SELECT * FROM master_department_info_table";
@@ -356,13 +343,23 @@
 							</div>
 						</th>
 						
-						<th   width="25%" text-align="center">
+						<th   width="23%" text-align="center">
 							<div class="th-text">사업명</div>
 						</th>
-						<th   width="20%" text-align="center">
-							<div class="th-text">사업기간</div>
+						
+						<th   width="17%" text-align="center">
+							<div class="th-text">계약기간</div>
 						</th>
-						<th   width="7%" text-align="center">
+
+						<th   width="10%" text-align="center">
+							<div class="th-text">발주처</div>
+						</td>
+
+						<th   width="10%" text-align="center">
+							<div class="th-text">감독관</div>
+						</td>
+
+						<th   width="6%" text-align="center">
 							<div class="th-text">상태</div>
 						</td>
 						
@@ -470,7 +467,7 @@
 						<?php
 							$second_tmp_field_compare = $ob2->su_function_convert_name($conn,"master_department_info_table","sid_combine_department",$row['sub_level_order_section'],"master_department_info_name"); 
 							if($second_tmp_field_name!=$second_tmp_field_compare){
-							echo"<a href='#' onclick='hrefClick_of_sub_task(15,999);'/>";
+							//echo"<a href='#' onclick='hrefClick_of_sub_task(15,999);'/>";
 							echo $second_tmp_field_compare;
 							 $second_tmp_field_name = $second_tmp_field_compare;
 							}
@@ -487,6 +484,19 @@
 					<td>
 						<?php echo $row['sub_level_from_date']."  ~  ".$row['sub_level_to_date']; ?>					
 					</td>
+
+					<td>
+						<?php
+							echo $ob2->su_function_convert_name($conn,"master_customer_table","master_code",$row['master_customer'],"master_name");
+						?>
+					</td>
+
+					<td>
+						<?php
+							echo $ob2->su_function_convert_name($conn,"master_superviser_table","master_code",$row['master_superviser'],"master_name");
+						?>
+					</td>
+
 					<td>
 						--
 					</td>

@@ -3,6 +3,13 @@
     class su_class_calc_the_date{
 
 
+            function su_function_calc_last_year($date_string){
+                        $time_stamp = strtotime($date_string);
+                        $time_stamp = $time_stamp - 86400 * 365;
+                        return date("Y-m-d",$time_stamp);
+            }
+
+
             function su_function_date_conflict_senser($date1_begin,$date1_end,$date2_begin,$date2_end){
 
                     if(($date1_begin>$date2_end)||($date1_end<$date2_begin)){

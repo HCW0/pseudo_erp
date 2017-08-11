@@ -36,98 +36,242 @@
 
 //모듈 제원 초기화
 
-      if(isset($_GET['valid'])){
-                  $valid = $_GET['valid'];}
-                  else{
-                   $valid=1;   
-                  }
 
-if($valid==1){
-    $_SESSION['new_sub_level'] = $_POST['task_select_box'][0];
+    $task_sub_level = $_POST['task_select_box'][0];
 	$_SESSION['new_sub_sub_level'] = 'new';
-    if($_SESSION['new_sub_sub_level']=='new'){
-        $_SESSION['new_sub_title'] = $_POST['task_select_box'][2];
-    } 
+    $customer = $_POST['customer'];
+   $superviser = $_POST['superviser'];  
 
-   
-    $_SESSION['new_sub_base_date'] = $_POST['task_select_box'][3];
-    $_SESSION['new_sub_limit_date'] = $_POST['task_select_box'][4];
-}
+        $start_money = $_POST['start_money'];
+        $suketo1 = $_POST['suketo1'];
+        $suketo2 = $_POST['suketo2'];
+        $state = $_POST['state'];
+        $opinion = $_POST['opinion'];
+
+    if($_SESSION['new_sub_sub_level']=='new'){
+        $task_title = $_POST['task_select_box'][1];
+    }
+
+    $task_base_date = $_POST['task_select_box'][2];
+     $task_limit_date = $_POST['task_select_box'][3];
+
     $my_name_code =  $_SESSION['my_sid_code'];
     $my_department_code = $_SESSION['my_department_code'];
     $my_position_code = $_SESSION['my_position_code'];
+ 
+
+
+$type = $_GET['type']; // 0이면 관리자 외 유저가 사업 등록 요청한 것, 1이면 관리자가 직접 등록한 것.
+
+if($type==0){
+    $dp_state = 10;
+}else{
+    $dp_state = 30;
+}
 
 
 
 //메시지 파트
 
-    if($valid==1){
-    $msg_ob->su_function_call_confirm_message_no_next_binary($conn,911,'outsource2new_sub.php',0,514);
-    }
-    
-
-    //debug
-    echo "<br />";
-    echo "task_title";
-    echo "<br />";
-    echo $_SESSION['new_sub_title'];
-    
-    echo "<br />";
-    echo "task_level";
-    echo "<br />";
-    echo $_SESSION['new_sub_level'];
-
-    echo "<br />";
-    echo "task_sub_level";
-    echo "<br />";
-    echo $_SESSION['new_sub_sub_level'];
-   
-    echo "<br />";
-    echo "date";
-    echo "<br />";
-    echo $_SESSION['new_sub_base_date'];
-    echo "<br />";
-    echo $_SESSION['new_sub_limit_date'];
-    echo "<br />";
-
-
-
-
-
   
-    if(($_SESSION['new_sub_sub_level']=='new'&&$_SESSION['new_sub_title']=='')||$_SESSION['new_sub_base_date']==''||$_SESSION['new_sub_limit_date']==''||$_SESSION['new_sub_sub_level']==''){
+    if(($_SESSION['new_sub_sub_level']=='new'&&$task_title=='')||$task_base_date==''||$task_limit_date==''||$_SESSION['new_sub_sub_level']==''){
               echo "uninvalid input error in task add module";
               echo "<br />";
-              
+              $msg_ob->su_function_call_message($conn,514,'su_script_table_write_personal_interface'); 
              // $msg_ob->su_function_call_message($conn,514,'su_script_table_write_personal_interface');
 
     }
-    else if($_SESSION['new_sub_base_date']>$_SESSION['new_sub_limit_date']){
+    else if($task_base_date>$task_limit_date){
               $msg_ob->su_function_call_message($conn,513,'su_script_table_write_personal_interface');
     }
-
+    else if($suketo1!=''&&$suketo1==$suketo2){
+            $msg_ob->su_function_call_message($conn,512,'su_script_table_write_personal_interface');
+    }
+    else if($start_money<0){
+            $msg_ob->su_function_call_message($conn,511,'su_script_table_write_personal_interface');
+    }
     else{      
 
+
+
+
+                                
+                                $file_name = $_FILES['upload_file']['name'];                // 업로드한 파일명
+                                $file_tmp_name = $_FILES['upload_file']['tmp_name'];        // 임시 디렉토리에 저장된 파일명
+                                $file_size = $_FILES['upload_file']['size'];                // 업로드한 파일의 크기
+                                $mimeType = $_FILES['upload_file']['type'];                 // 업로드한 파일의 MIME Type
+
+
+
+                                    // 첨부 파일이 저장될 서버 디렉토리 지정(원하는 경로에 맞게 수정하세요)
+
+                                    $save_dir = './storage/notice/';
+
+
+/*
+                            // 업로드 파일 확장자 검사 (필요시 확장자 추가)
+
+                            if($mimeType=="html" || 
+
+                            $mimeType=="htm" || 
+
+                            $mimeType=="php" || 
+
+                            $mimeType=="php3" || 
+
+                            $mimeType=="inc" || 
+
+                            $mimeType=="pl" || 
+
+                            $mimeType=="cgi" || 
+
+                            $mimeType=="txt" || 
+
+                            $mimeType=="TXT" || 
+
+                            $mimeType=="asp" || 
+
+                            $mimeType=="jsp" || 
+
+                            $mimeType=="phtml" || 
+
+                            $mimeType=="js" || 
+
+                            $mimeType=="") { 
+
+                                    echo("<script> 
+
+                                    alert('업로드를 할 수 없는 파일형식입니다.'); 
+
+                                    document.location.href = './su_script_notice_write_interface.php';    
+
+                                    </script>"); 
+
+                                    exit;
+
+                            } 
+
+*/
+
+                            
+
+                            // 파일명 변경 (업로드되는 파일명을 별도로 생성하고 원래 파일명을 별도의 변수에 지정하여 DB에 기록할 수 있습니다.)
+
+                                $real_name = $file_name;     // 원래 파일명(업로드 하기 전 실제 파일명) 
+
+                                $arr = explode(".", $real_name);	 // 원래 파일의 확장자명을 가져와서 그대로 적용 $file_exe	
+
+                                $arr1 = $arr[0];	
+
+                                $arr2 = $arr[1];	
+
+                                $arr3 = $arr[2];	
+
+                                $arr4 = $arr[3];	
+
+                                if($arr4) { 
+
+                                    $file_exe = $arr4;
+
+                                } else if($arr3 && !$arr4) { 
+
+                                    $file_exe = $arr3;					
+
+                                } else if($arr2 && !$arr3) { 
+
+                                    $file_exe = $arr2;					
+
+                                }
+
+                                                        
+
+                                $file_time = time(); 
+
+                                $file_Name = "file_".$file_time.".".$file_exe;	 // 실제 업로드 될 파일명 생성	(본인이 원하는 파일명 지정 가능)	 
+
+                                $change_file_name = $file_Name;			 // 변경된 파일명을 변수에 지정 
+
+                                $real_name = addslashes($real_name);		// 업로드 되는 원래 파일명(업로드 하기 전 실제 파일명) 
+
+                                $real_size = $file_size;                         // 업로드 되는 파일 크기 (byte)
+
+
+
+                            
+
+                            //파일을 저장할 디렉토리 및 파일명 전체 경로
+
+                            $dest_url = $save_dir . $change_file_name;
+
+                            
+
+                            //파일을 지정한 디렉토리에 업로드
+
+
+                                $abspath = $_SERVER["DOCUMENT_ROOT"].'/storage/former/'.$change_file_name;
+                            echo $abspath;
+                            move_uploaded_file($file_tmp_name, $abspath);
+                            chmod($abspath,0777); 
+
+
+
+
+                            // DB에 기록할 파일 변수 (DB에 저장이 필요한 경우 아래 변수명을 기록하시면 됩니다.)
+
+                            /*
+
+                                $change_file_name : 실제 서버에 업로드 된 파일명. 예: file_145736478766.gif
+
+                                $real_name : 원래 파일명. 예: 풍경사진.gif 
+
+                                $real_size : 파일 크기(byte)
+
+                            */
+
+
+
+                    $query = "select max(upload_id) as target from master_upload_table";
+                    echo $query;
+                    $result = mysqli_query($conn,$query);
+                    if(!$result){
+                        $target = 0;
+                    }else{
+                        $row = mysqli_fetch_array($result);
+                        $target = $row['target']+1;
+                    }
+
+            if($real_name!=''){
+                $query = "Insert into master_upload_table(upload_id,real_name,server_name) Values($target,'$real_name','$change_file_name');";
+                $result = mysqli_query($conn,$query);
+                echo $query;
+            }
+
+
+
+
+
+
+
+
+
+
             $date = date("Y-m-d");
-            $task_sub_level =  $_SESSION['new_sub_level'];
-            $task_title = $_SESSION['new_sub_title'];
-            $task_base_date = $_SESSION['new_sub_base_date'];
-            $task_limit_date = $_SESSION['new_sub_limit_date'];
-    	    $task_table_query = "Insert into master_task_level_sub_info_table(master_task_level_code,master_task_level_sub_name,sub_level_order_section,sub_level_position,sub_level_orderer,sub_level_from_date,sub_level_to_date,sub_level_birth_date) Values($task_sub_level,'$task_title',$my_department_code,$my_position_code,$my_name_code,'$task_base_date','$task_limit_date','$date');";      
+            if($start_money=='') $start_money = 'NULL';
+            if($suketo1=='') $suketo1 = 'NULL';
+            if($suketo2=='') $suketo2 = 'NULL';    
+            if($opinion=='') $opinion = 'NULL';  
+
+    	    $task_table_query = "Insert into master_task_level_sub_info_table(master_task_level_code,master_task_level_sub_name,sub_level_order_section,sub_level_position,sub_level_orderer,sub_level_from_date,sub_level_to_date,sub_level_birth_date,master_customer,master_superviser,all_money_master_code_field,sub_level_order_section_sub1,sub_level_order_section_sub2,upload_id,task_detail_state,etcetera,task_dp_state) Values($task_sub_level,'$task_title',$my_department_code,$my_position_code,$my_name_code,'$task_base_date','$task_limit_date','$date',$customer,$superviser,$start_money,$suketo1,$suketo2,$target,$state,'$opinion',$dp_state);";      
             echo $task_table_query;
             echo "<br />";
-   if($valid==0){
+   
            $result_set = mysqli_query($conn,$task_table_query);
    
            $msg_ob->su_function_call_message_callback($conn,912);
-           echo "<script> opener.location.reload(); </script>";
-           echo "<script> self.close(); </script>"; 
-             }
-             else if($valid==514){
-                    $msg_ob->su_function_call_message_callback($conn,913);
-                    echo "<script> opener.location.reload(); </script>";
-                    echo "<script> self.close(); </script>"; 
-             }
+        echo "<script> opener.location.reload(); </script>";
+        echo "<script> self.close(); </script>"; 
+   
+           
              
     };
     ?>

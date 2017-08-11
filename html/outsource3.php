@@ -202,9 +202,13 @@
                         $target = $row['target']+1;
                     }
 
+
+            if($real_name!=''){
                 $query = "Insert into master_upload_table(upload_id,real_name,server_name) Values($target,'$real_name','$change_file_name');";
                 $result = mysqli_query($conn,$query);
                 echo $query;
+            }
+
 
             $date = date("Y-m-d");
     	    $task_table_query = "Insert into notice_document_header_table(notice_name,notice_priority,notice_birth_date,notice_base_date,notice_limit_date,notice_content,notice_orderer,notice_order_section,upload_id) Values('$notice_title',$notice_level,'$date','$notice_base_date','$notice_limit_date','$notice_contents',$my_name,$my_department,$target);";      

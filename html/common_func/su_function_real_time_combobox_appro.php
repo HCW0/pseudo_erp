@@ -43,6 +43,11 @@
            echo "case  6";
                        echo "<br />";
            break;
+        case 7 :
+           $_SESSION['current_ap_task_detail_state']=$var;
+           echo "case  6";
+                       echo "<br />";
+           break;
        
 
        }

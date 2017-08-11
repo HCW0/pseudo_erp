@@ -2,7 +2,8 @@
 
     class su_class_value_combine_combobox_value_to_mysql_query{
 
-            function su_function_combine_query_to_task_header_table($level,$sub_level,$order_dpt,$orderer,$priority,$state,$base_date,$limit_date){
+            
+            function su_function_combine_query_to_task_header_table($level,$sub_level,$order_dpt,$orderer,$priority,$state,$base_date,$limit_date,$task_dstate){
 
                     $query_head = 'select * from task_document_header_table u where ';
 
@@ -14,10 +15,11 @@
                     $query_where_state = $state!=99 ? "u.task_state = $state AND " :  "";
                     $query_where_base_date = $base_date!="" ? "u.task_base_date >= '$base_date' AND ": "";
                     $query_where_limit_date = $limit_date!="" ? "u.task_limit_date <= '$limit_date' AND ": "";
+                    $query_where_dstate = $task_dstate!=99 ? "u.task_detail_state <= $task_dstate + 9 AND u.task_detail_state >= $task_dstate AND ": "";
                     $query_where_priority = $priority!=3 ? "u.task_priority = $priority ": "(u.task_priority = 0 OR u.task_priority = 1)";
                         $query_where_semi_colon = ";";
                       
-                      return $query_head.$query_where_level.$query_where_sub_level.$query_where_order_dpt.$query_where_orderer.$query_where_state.$query_where_base_date.$query_where_limit_date.$query_where_priority.$query_where_semi_colon;
+                      return $query_head.$query_where_level.$query_where_sub_level.$query_where_order_dpt.$query_where_orderer.$query_where_state.$query_where_base_date.$query_where_limit_date.$query_where_dstate.$query_where_priority.$query_where_semi_colon;
 
             }
 

@@ -685,7 +685,7 @@ if (isset($_SESSION['radio_index']) == false) { // 0 = 전체 1 = 현업 2 = 계
 							$tag = " (계획)";
 						}
 
-						if ($_SESSION['my_sid_code'] == $row['task_orderer'] && $row['task_state'] == 5) {
+						if ($_SESSION['my_sid_code'] == $row['task_orderer'] && ($row['task_state'] == 5 OR $row['task_state'] == 20)) {
 							echo "<a href='#' onclick='hrefClick_of_sub_task_b(" . $row['task_level_code'] . ',' . $row['task_level_sub_code'] . ',' . $row['TID'] . ");'/>";
 							echo $row['task_name'] . $tag;
 						}

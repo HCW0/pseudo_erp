@@ -440,7 +440,7 @@
 					</td>
 					</tr>
 					<?php
-					if($row['task_state']!=70 && $row['task_order_position']>$_SESSION['my_sid_code']){
+					if($row['task_state']==5 && $row['task_order_position']>$_SESSION['my_position_code']){
 					echo "<tr>";
 						echo "<td>";
 						
@@ -473,7 +473,7 @@
 
 						
 							
-								$task_table_query2 = "SELECT * FROM task_document_header_table u where ".$_SESSION['current_focused_TID']." = u.super_task_TID AND u.task_state!=5  AND u.TID != u.super_task_TID ;";
+								$task_table_query2 = "SELECT * FROM task_document_header_table u where ".$_SESSION['current_focused_TID']." = u.super_task_TID  AND u.TID != u.super_task_TID ;";
 								$result_set2 = mysqli_query($conn,$task_table_query2);
 								if(mysqli_num_rows($result_set2)!=0){
 								echo "<table  border='1' width='100%'>";
@@ -505,6 +505,11 @@
 
 											echo "<td>";
 												echo "<strong />작성일";
+												
+											echo "</td>";
+
+											echo "<td>";
+												echo "<strong />결제현황";
 												
 											echo "</td>";
 				
@@ -544,12 +549,11 @@
 											echo $row2['task_birth_date'];
 										echo "</td>";
 
-										if($row['task_orderer']==$_SESSION['my_sid_code'] && $row['task_state'] != 70){
-											echo "<td>";
-												echo "<a href='#' onclick='hrefClick(" . $row4['AID'] . ',' . $row4['TID'] . ");'/>결제하기</a><br>";
-											echo "</td>";
-										}
 
+
+										echo "<td>";
+											echo $ob2->su_function_convert_name($conn,"master_state_info_table","master_task_state_info_code",$row2['task_state'],"master_task_state_info_name");
+										echo "</td>";
 
 									echo "</tr>";
 							
