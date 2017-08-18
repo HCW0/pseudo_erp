@@ -76,7 +76,7 @@
 <html>
 	<head>
 			<meta charset="utf-8" />
-			<meta name="viewport" content="width=device-width, initial-scale=1" />
+			<!-- <meta name="viewport" content="width=device-width, initial-scale=1" /> -->
 			<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		
 			<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">

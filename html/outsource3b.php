@@ -40,7 +40,7 @@
     $former_from = $_POST['from_date'];
     $former_to = $_POST['to_date'];
     $former_contents = $_POST['content'];
-
+    $former_recv_self = $_POST['rev_self_input'];
 
     
     $former_recv = $ob6->su_function_generate_array_miner($conn);
@@ -59,7 +59,7 @@
 
 
 
-    if($former_title==''||$former_rank==''||$former_from==''||$former_to==''||$former_contents==''||$former_recv==''){
+    if($former_title==''||$former_rank==''||$former_from==''||$former_to==''||$former_contents==''||$former_recv_self==''){
               echo "uninvalid input error in task add module";
               echo "<br />";
               
@@ -226,7 +226,7 @@
             }
 
             $date = date("Y-m-d");
-    	    $task_table_query = "Insert into former_document_header_table(former_title,priority,from_date,to_date,birth_date,former_content,orderer,order_section,former_recv) Values('$former_title',$former_rank,'$former_from','$former_to','$date','$former_contents',$my_name,$my_department_code,$former_recv);";      
+    	    $task_table_query = "Insert into former_document_header_table(former_title,priority,from_date,to_date,birth_date,former_content,orderer,order_section,former_recv,former_recv_self) Values('$former_title',$former_rank,'$former_from','$former_to','$date','$former_contents',$my_name,$my_department_code,$former_recv,$former_recv_self);";      
             echo $task_table_query;
             $result_set = mysqli_query($conn,$task_table_query);
 

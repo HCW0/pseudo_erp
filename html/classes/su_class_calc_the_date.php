@@ -3,9 +3,9 @@
     class su_class_calc_the_date{
 
 
-            function su_function_calc_last_year($date_string){
+            function su_function_calc_add_offset($date_string,$offset){
                         $time_stamp = strtotime($date_string);
-                        $time_stamp = $time_stamp - 86400 * 365;
+                        $time_stamp = $time_stamp + $offset;
                         return date("Y-m-d",$time_stamp);
             }
 
@@ -46,12 +46,59 @@
 
 
             }
+
+                                    
+            function su_function_convert_this_month_begin_with_offset($date_string,$offset){
+
+                        $year = date('Y', strtotime($date_string));
+                        $month = date('m', strtotime($date_string));
+
+                        $month += $offset;
+                        if($month>12){
+                            $month = 1;
+                            $year++;
+                        }
+                        if($month<1){
+                            $month = 12;
+                            $year--;
+                        }
+
+                        $start = date("Y-m-d", mktime(0, 0, 0, $month , 1, $year)); 
+
+                        return $start;
+
+
+            }
+
+
                                     
             function su_function_convert_this_month_end($date_string){
 
                         $year = date('Y', strtotime($date_string));
                         $month = date('m', strtotime($date_string));
 
+                        $end = date("Y-m-d", mktime(0, 0, 0, $month+1 , 0, $year)); 
+
+                        return $end;
+
+
+            }
+
+
+            function su_function_convert_this_month_end_with_offset($date_string,$offset){
+
+                        $year = date('Y', strtotime($date_string));
+                        $month = date('m', strtotime($date_string));
+
+                        $month += $offset;
+                        if($month>12){
+                            $month = 1;
+                            $year++;
+                        }
+                        if($month<1){
+                            $month = 12;
+                            $year--;
+                        }
                         $end = date("Y-m-d", mktime(0, 0, 0, $month+1 , 0, $year)); 
 
                         return $end;

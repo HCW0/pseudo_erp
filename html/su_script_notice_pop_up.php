@@ -43,7 +43,7 @@
 <html>
 	<head>
 			<meta charset="utf-8" />
-			<meta name="viewport" content="width=device-width, initial-scale=1" />
+			<!-- <meta name="viewport" content="width=device-width, initial-scale=1" /> -->
 			<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 			<script type="text/javascript" src="nse_files/js/HuskyEZCreator.js" charset="utf-8"></script>
 			<title>글쓰기</title>

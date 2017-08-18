@@ -353,6 +353,8 @@ function hrefClick(course,type){
 			$result_set = mysqli_query($conn,$task_table_query);
             while($row = mysqli_fetch_array($result_set)) {
 			$is_valid = (strtotime($_SESSION['now_date']) >= strtotime($row['from_date'])) && (strtotime($_SESSION['now_date']) <= strtotime($row['to_date']));
+						if(!$is_valid) continue;
+
 			// 수신 대상 잡는거
 
 				if($row['orderer']!=$_SESSION['my_sid_code']){

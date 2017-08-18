@@ -40,7 +40,13 @@ session_start();
    
         $mquery = 'select * from account_table u where u.ID = \''.$_POST['id'].'\';';
         $result_id = mysqli_query($conn,$mquery);
-        if(mysqli_num_rows($result_id)==0) echo "실패2!";
+        if(mysqli_num_rows($result_id)==0){
+
+       
+            $_SESSION['msg']='존재하지 않는 계정입니다.';
+            
+                header('Location: ./su_script_login_interface.php');
+        } 
 
          $row = mysqli_fetch_assoc($result_id);
           $_SESSION['my_sid_code']= $row['SID'];
@@ -58,12 +64,12 @@ session_start();
 
 if(($_POST['id']!=null)&&($_POST['pw']!=null)){
 
-    if(($result_id)&&($result_pw)){
+    if(($result_id)&&($result_pw)){ // 로그인 성공
         $_SESSION['is_login']=true;
         $_SESSION['id']=$_POST['id'];
         header("Location: ./test.php");
     }else{
-        if(($result_id)&&($result_pw==false)){
+        if(($result_id)&&($result_pw==false)){ // 아이디 잇는데 비번 틀림
             $worker = new su_class_login_support();
             $worker->incorrect_cnt($_POST['id'],$conn,$msg_ob);
         }else{

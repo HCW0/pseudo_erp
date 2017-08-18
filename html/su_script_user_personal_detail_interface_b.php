@@ -64,7 +64,7 @@
 <html>
 	<head>
 			<meta charset="utf-8" />
-			<meta name="viewport" content="width=device-width, initial-scale=1" />
+			<!-- <meta name="viewport" content="width=device-width, initial-scale=1" /> -->
 			<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		
 			<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
@@ -674,7 +674,7 @@ function generate_reserve(){
 
 						
 							
-								$task_table_query2 = "SELECT * FROM task_document_header_table u where ".$target_tid." = u.super_task_TID AND u.TID != u.super_task_TID AND task_state>=5 AND task_state<=30;";
+								$task_table_query2 = "SELECT * FROM task_document_header_table u where ".$target_tid." = u.super_task_TID AND u.TID != u.super_task_TID;";
 								$result_set2 = mysqli_query($conn,$task_table_query2);
 								if(mysqli_num_rows($result_set2)!=0){
 								echo "<table  border='1' width='100%'>";
@@ -774,7 +774,7 @@ function generate_reserve(){
 										echo "<td>";
 										
 										echo $ob2->su_function_convert_name($conn,"master_state_info_table","master_task_state_info_code",$row2['task_state'],"master_task_state_info_name");
-										if($row2['task_state']!=30){
+										if($row2['task_state']!=70){
 											$last_appro_trigger = false;
 										}
 										

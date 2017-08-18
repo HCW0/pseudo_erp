@@ -14,7 +14,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
 	
     <title>login</title>
-	<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width, height=device-height">
+	<!-- <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width, height=device-height"> -->
 	<script type="text/javascript"> 
 	<!-- 
 	// 주소창 자동 닫힘 

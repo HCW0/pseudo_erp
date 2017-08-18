@@ -5,7 +5,7 @@
 <?php
     session_start();
 	include('./classes/su_class_common_header.php');
-
+	$_SESSION['now_page_coord'] = 3; // 슬라이드 메뉴의 현재 위치 표시에 필요한 전역 변수 값을 변경하는 부분.
 
 		if(isset($_SESSION['current_ap_task_level_code'])==false){
 			$_SESSION['current_ap_base_date']=$_SESSION['now_date'];
@@ -103,7 +103,7 @@
 		<title>test</title>
 		<meta charset="utf-8" />
 		
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<!-- <meta name="viewport" content="width=device-width, initial-scale=1" /> -->
 
 		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
@@ -150,7 +150,7 @@
   
   
   .fixed-table-container {
-        width: 1300px;
+        width: 1600px;
         height: 550px;
         border: 1px solid #000;
         position: relative;
@@ -245,7 +245,7 @@
 
 
 					<div>
-								업무등급
+						업무등급
 								<select name = "task_select_box[]"  onchange="javascript:selectEvent(this,0);">	
 									<?php
 											$query = "SELECT * FROM master_task_level_info_table";
@@ -324,15 +324,25 @@
 
 					<table>
 						<tr>
+
+						<th width="5%" text-align="center">
+						<div class="th-text">타입</div>
+						</th>
+
 						<th width="3%"><div class="th-text">NO</div></th>
-						<th width="22%" text-align="center">
+
+						<th width="10%" text-align="center">
+						<div class="th-text">사업명</div>
+						</th>
+
+						<th width="17%" text-align="center">
 						<div class="th-text">업무명</div>
 						</th>
 
 
 
 
-						<th width="16%" text-align="center">
+						<th width="15%" text-align="center">
 							<div class="th-text">요청자
 							<select name = "task_select_box[]" onchange="javascript:selectEvent(this,2);">	
        							 <?php
@@ -355,7 +365,7 @@
 						</th>
 						
 
-						<th width="10%" text-align="center">
+						<th width="9%" text-align="center">
 							<div class="th-text">우선도
 							<select name = "task_select_box[]" onchange="javascript:selectEvent(this,3);">	
        							 <?php
@@ -379,7 +389,7 @@
 
 
 
-						<th width="13%" text-align="center">
+						<th width="11%" text-align="center">
 							<div class="th-text">상태명
 							<select name = "task_select_box[]" onchange="javascript:selectEvent(this,7);">		
        							 <?php
@@ -401,12 +411,12 @@
 						</th>
 
 
-						<th  width="16%" text-align="center">
+						<th  width="11%" text-align="center">
 							<div class="th-text">작성일자</div>
 						</th>
 					
 						</form>		
-						<th  width="16%" text-align="center">
+						<th  width="15%" text-align="center">
 							<div class="th-text">결제상태 <select name = "task_select_box[]" onchange="javascript:selectEvent(this,4);">		
        							 <?php
 										$query = "SELECT * FROM master_state_info_table";
@@ -503,11 +513,14 @@
 						
 						
 		<?php
-			$cnt = 1;
+			$cnt = 0;
 			$task_table_query = $ob3->su_function_combine_query_to_task_header_table($_SESSION['current_ap_task_level_code'],$_SESSION['current_ap_task_level_sub_code'],$_SESSION['current_ap_task_order_section'],$_SESSION['current_ap_task_orderer'],$_SESSION['current_ap_task_priority'],$_SESSION['current_ap_task_state'],$_SESSION['current_ap_base_date'],$_SESSION['current_ap_limit_date'],$_SESSION['current_ap_task_detail_state']);
 			$task_table_query = substr($task_table_query,0,strlen($task_table_query)-1);
 			$task_table_query = $task_table_query." AND u.task_state !=5;";
 			$result_set = mysqli_query($conn,$task_table_query);
+			$dupli_check = 0; // 여러번 중복되는 데이터를 체크하는 플래그
+			$dupli_check3 = -1;
+			$dupli_check3_cpr = -1;
             while($row = mysqli_fetch_array($result_set)) {
 
 				$orderer = $row['task_orderer'];
@@ -529,10 +542,30 @@
 
             ?> 
                 <tr>
-					<td><?php echo $cnt++?></td>
+					<td>
+						<?php
+							if($dupli_check==0){
+								echo '업무';
+								$dupli_check++;
+							};
+						?>
+					</td>
+									
+					<td><?php echo ++$cnt?></td>
+
+					<td><?php
+							$dupli_check3_cpr = $row['task_level_code'];
+							if($dupli_check3!=$dupli_check3_cpr){
+									$dupli_check3=$dupli_check3_cpr;
+									echo $ob2->su_function_convert_name($conn,"master_task_level_info_table","master_task_level_code",$row['task_level_code'],"master_task_level_name");
+							}
+						?>
+					</td>					
+
 					<td id='left'><?php
 						 echo"<a href='#' onclick='hrefClick_of_sub_task(".$row['task_level_code'].','.$row['task_level_sub_code'].','.$row['TID'].");'/>"; echo $row['task_name']?></td>
 					</td>
+
 					<td><?php echo 
 						 $ob2->su_function_convert_name($conn,"master_user_info_table","SID",$row['task_orderer'],"master_user_info_name");
 					?></td>
@@ -571,8 +604,11 @@
 전자는 일반 업무 후자는 공문에서 사용되고 있다. -->
 
 		<?php
-			$task_table_query = "select * from former_document_header_table where appro_state = 10 OR appro_state = 70;";
+			$task_table_query = $ob3->su_function_combine_query_to_task_former_table($_SESSION['current_ap_task_order_section'],$_SESSION['current_ap_task_orderer'],$_SESSION['current_ap_task_priority'],$_SESSION['current_ap_task_state'],$_SESSION['current_ap_base_date'],$_SESSION['current_ap_limit_date']);
 			$result_set = mysqli_query($conn,$task_table_query);
+			$cnt2=0;
+			$dupli_check2 = 0;
+			$dupli_check4 = 0;
             while($row = mysqli_fetch_array($result_set)) {
 
 
@@ -586,11 +622,11 @@
 				// flag가 true가 되는 경우 해당 공문의 검토자 목록에 현재 유저가 포함되어 있다는 것이 됨.
 				$flag = false;
 				$index = 0;
-				for($cnt=1 ; $cnt<8 ; $cnt++){
-					$field_name = $cnt."_layer_aida_sid";
+				for($cnt3=1 ; $cnt3<8 ; $cnt3++){
+					$field_name = $cnt3."_layer_aida_sid";
 					if($row3[$field_name]==$_SESSION['my_sid_code']) {
 																		$flag = true;
-																		$index = $cnt;
+																		$index = $cnt3;
 																	}
 				}
 
@@ -603,17 +639,40 @@
 
             ?> 
                 <tr>
-					<td><?php echo $cnt++?></td>
+
+					<td>
+						<?php
+							if($dupli_check2==0){
+								echo '공문';
+								$dupli_check2++;
+							};
+						?>
+					</td>
+
+
+					<td><?php echo ++$cnt2?></td>
+
+
+					<td>
+						<?php
+							if($dupli_check4==0){
+								echo '해당없음';
+								$dupli_check2++;
+							};
+						?>
+					</td>
+
 					<td id='left'>
 						<?php
 						 	echo "<a href='#' onclick='hrefClick_former(".$row['former_id'].",5,$index);'/>".$row['former_title']."</a><br>";
 						?>
 					</td>
+
 					<td><?php echo 
 						 $ob2->su_function_convert_name($conn,"master_user_info_table","SID",$row['orderer'],"master_user_info_name");
 					?></td>
 					<td><?php
-					 	 $tmp = ($row['priority'] == 1) ? "긴급" : "일반";
+					 	 $tmp = ($row['priority'] == 1) ? "긴급" : "보통";
 						 echo $tmp;
 					?></td>
 
@@ -650,11 +709,18 @@
 			echo "<div class='foot-bg'></div>";
 				echo "<tr><th colspan=10 width=100% id='left'>";
 					echo "<div class='th-text2'>";
-						if(($cnt-1)==0){ echo "일치하는 항목이 없습니다.";
+					$all = $cnt + $cnt2;
+						if(($all)==0){ echo "일치하는 항목이 없습니다.";
 							}else{
 								echo "합계 : ";
-								echo $cnt-1;
-								echo "건";
+								echo $all;
+								echo "건 / ";
+								echo "업무 : ";
+								echo $cnt;
+								echo "건 / ";
+								echo "공문 : ";
+								echo $cnt2;
+								echo "건";																
 							}
 					echo "</div>";
 				echo "</th></tr>";

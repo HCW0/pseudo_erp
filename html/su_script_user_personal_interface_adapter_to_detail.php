@@ -47,8 +47,28 @@ else {
 	$_SESSION['current_personal_task_state'] = $ob1->su_function_init_config($conn, $_SESSION['my_sid_code'], "task_state");
 }
 
-if (isset($_SESSION['radio_index']) == false) { // 0 = 전체 1 = 현업 2 = 계획
+if (isset($_SESSION['radio_index']) == false) { // -1 = 일일 0 = 주간 1 = 월간 2 = 연간
 	$_SESSION['radio_index'] = 0;
+}
+
+switch($_SESSION['radio_index']){
+
+	case -1:
+	$task_document_button_head = '일일';
+	break;
+
+	case 0:
+	$task_document_button_head = '주간';	
+	break;
+
+	case 1:
+	$task_document_button_head = '월간';		
+	break;
+
+	case 2:
+	$task_document_button_head = '연간';		
+	break;
+
 }
 
 
@@ -137,7 +157,7 @@ if (isset($_SESSION['radio_index']) == false) { // 0 = 전체 1 = 현업 2 = 계
 		<title>test</title>
 		<meta charset="utf-8" />
 
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<!-- <meta name="viewport" content="width=device-width, initial-scale=1" /> -->
 
 		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
@@ -317,6 +337,8 @@ if (isset($_SESSION['radio_index']) == false) { // 0 = 전체 1 = 현업 2 = 계
 						<?php 
 				if ($_SESSION['current_personal_task_level_sub_code'] != 999) {
 					echo "<input type='button' name='버튼' value='신규등록' onclick=\"window.open('./su_script_table_write_interface.php?type=new','win','width=800,height=700,toolbar=0,scrollbars=0,resizable=0')\"/><br />";
+
+					echo "<input type='button' name='버튼' value='$task_document_button_head 업무 일지' onclick=\"window.open('./su_script_table_view_interface.php?id=".$_SESSION['my_sid_code']."&type=".$_SESSION['radio_index']."','win','width=710,height=990,toolbar=0,scrollbars=0,resizable=0')\"/><br />";
 				}
 				?>
 
@@ -739,7 +761,7 @@ if (isset($_SESSION['radio_index']) == false) { // 0 = 전체 1 = 현업 2 = 계
 											$field_name = 'end_order';
 										}
 
-										if ($row['task_state'] != 70 && $row['task_state'] != 5) {
+										if ($row['task_state'] != 70 && $row['task_state'] != 20 && $row['task_state'] != 5) {
 										echo " ( ";
 										echo $ob2->su_function_convert_name($conn, "master_user_info_table", "SID", $row2[$field_name], "master_user_info_name");;
 										echo " ) ";
@@ -765,13 +787,13 @@ if (isset($_SESSION['radio_index']) == false) { // 0 = 전체 1 = 현업 2 = 계
 
 										<td>
 											<?php
-					if ($_SESSION['my_sid_code'] == $row2[$field_name] && $row['task_state'] != 70 && $row['task_state'] != 5) {
-						echo "<a href='#' onclick='hrefClick(" . $row2['AID'] . ',' . $row2['TID'] . ");'/>결제하기</a><br>";
-					}
-					else {
-						echo "--";
-					}
-					?>
+												if ($row['task_state'] != 20 && $_SESSION['my_sid_code'] == $row2[$field_name] && $row['task_state'] != 70 && $row['task_state'] != 5) {
+													echo "<a href='#' onclick='hrefClick(" . $row2['AID'] . ',' . $row2['TID'] . ");'/>결제하기</a><br>";
+												}
+												else {
+													echo "--";
+												}
+											?>
 
 
 										</td>

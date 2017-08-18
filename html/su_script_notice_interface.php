@@ -5,7 +5,7 @@
 <?php
     session_start();
 	include('./classes/su_class_common_header.php');
-
+	$_SESSION['now_page_coord'] = 0;
 
 // class 객체 생성
 
@@ -44,7 +44,7 @@ function hrefClick(course,type){
 		<title>test</title>
 		<meta charset="utf-8" />
 		
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<!-- <meta name="viewport" content="width=device-width, initial-scale=1" /> -->
 
 		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
@@ -77,7 +77,15 @@ function hrefClick(course,type){
     padding: 1px;
     text-align: center;
   }
-
+	#left {
+		text-align: left;
+	}
+	#center {
+		text-align: center;
+	}
+	#right {
+		text-align: right;
+	}
   th:nth-child(2n), td:nth-child(2n) {
     background-color: #;
   }
@@ -266,10 +274,9 @@ function hrefClick(course,type){
 
 							<?php
 								if($new_icon_flag){
-									echo "<a href='#' onclick='hrefClick(".$row['notice_id'].",1);'/>".$row['notice_name']."</a>";
-									echo "<font color='red'> new ! </font>";
+									echo "<div id='left'><a href='#' onclick='hrefClick(".$row['notice_id'].",1);'/>".$row['notice_name']."</a><font color='red'> new ! </font></div>";
 								}else{
-									echo "<a href='#' onclick='hrefClick(".$row['notice_id'].",1);'/>".$row['notice_name']."</a>";
+									echo "<div id='left'><a href='#' onclick='hrefClick(".$row['notice_id'].",1);'/>".$row['notice_name']."</a></div>";
 								}
 							?>
 
@@ -346,10 +353,9 @@ function hrefClick(course,type){
 
 
 								if($new_icon_flag){
-									echo "<a href='#' onclick='hrefClick(".$row['former_id'].",$type);'/>".$name."</a>";
-									echo "<font color='red'> new ! </font>";
+									echo "<div id='left'><a href='#' onclick='hrefClick(".$row['former_id'].",$type);'/>".$name."</a><font color='red'> new ! </font></div>";
 								}else{
-									echo "<a href='#' onclick='hrefClick(".$row['former_id'].",$type);'/>".$name."</a>";
+									echo "<div id='left'><a href='#' onclick='hrefClick(".$row['former_id'].",$type);'/>".$name."</a></div>";
 								}
 							?>
 

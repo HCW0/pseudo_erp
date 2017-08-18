@@ -66,7 +66,7 @@
 <html>
 	<head>
 			<meta charset="utf-8" />
-			<meta name="viewport" content="width=device-width, initial-scale=1" />
+			<!-- <meta name="viewport" content="width=device-width, initial-scale=1" /> -->
 			<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		
 			<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
@@ -443,7 +443,7 @@
        							 <?php
 
 									if($_SESSION['table_write_type']=='new'){
-										$query = "SELECT * FROM task_document_header_table u WHERE ".$_SESSION['sub_hold_level']."=u.task_level_sub_code AND u.task_state=5 AND u.task_orderer !=".$_SESSION['my_sid_code'];
+										$query = "SELECT * FROM task_document_header_table u WHERE ".$_SESSION['sub_hold_level']."=u.task_level_sub_code AND (u.task_state=5 OR u.task_state=20) AND u.task_orderer !=".$_SESSION['my_sid_code'];
      					        		$result = mysqli_query($conn,$query);  
 										 echo "<option value='' selected>신규</option>"; 
            										 while( $row=mysqli_fetch_array($result) ){   

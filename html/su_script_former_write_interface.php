@@ -55,7 +55,7 @@
 <html>
 	<head>
 			<meta charset="utf-8" />
-			<meta name="viewport" content="width=device-width, initial-scale=1" />
+			<!-- <meta name="viewport" content="width=device-width, initial-scale=1" /> -->
 			<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		
 			<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
@@ -236,7 +236,7 @@
 					
 					<tr>
 						<td>수신목록</td>
-						<td colspan=2 id="dstate_zone"><input type=text style="width:99%; border: 0; resize: none;"></td>
+						<td colspan=2 id="dstate_zone"><input type=text name=rev_self_input style="width:99%; border: 0; resize: none;"></td>
 						<td>
 							<input type=button value='초기화' id="remove"/>
 						</td>

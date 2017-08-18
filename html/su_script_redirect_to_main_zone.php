@@ -35,11 +35,17 @@
 // 뒤로가기 버튼 연타시, 로그아웃 해주는 플래그
 
 			$_SESSION['backword_flag'] = 514;
-		
+            echo "<script> window.opener.close(); </script>";
 
+            // 일단은 무조건 1뎁스 화면으로 이동시킨다.
+            
+            if($_SESSION['my_permission_code']==4){
+                $_SESSION['home_address'] = 'su_script_user_chef_interface.php';
+            }else{
+                $_SESSION['home_address'] = 'su_script_user_personal_interface.php';                
+            }
 
-			// 일단은 무조건 1뎁스 화면으로 이동시킨다.
-			header('Location: ./su_script_user_personal_interface.php');
+			header("Location: ./".$_SESSION['home_address']);
 
 
 

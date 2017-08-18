@@ -93,6 +93,6 @@
                    echo "<br />";
        echo $index;
                    echo "<br />";
-       header("location: ".$_SESSION['root']."/su_script_user_personal_interface.php");
+       header("location: ".$_SESSION['root']."/".$_SESSION['home_address']);
 
     ?>

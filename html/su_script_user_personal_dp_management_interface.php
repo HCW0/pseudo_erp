@@ -3,9 +3,9 @@
 <html>
 
 <?php
-       session_start();
+    session_start();
 	include('./classes/su_class_common_header.php');
-
+	$_SESSION['now_page_coord'] = 5; // 슬라이드 메뉴의 현재 위치 표시에 필요한 전역 변수 값을 변경하는 부분.
 
 // class 객체 생성
 
@@ -96,7 +96,7 @@
 		<title>test</title>
 		<meta charset="utf-8" />
 		
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<!-- <meta name="viewport" content="width=device-width, initial-scale=1" /> -->
 
 		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>

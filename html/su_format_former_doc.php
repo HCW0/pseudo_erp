@@ -145,13 +145,13 @@ if ($update_row['server_name']) {
 		<title>test</title>
 		<meta charset="utf-8" />
 		
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<!-- <meta name="viewport" content="width=device-width, initial-scale=1" /> -->
 
 		
 
 	
 <script language="javascript">
-				window.resizeTo(screen.availWidth*0.42,screen.availHeight*0.96); // 지정한 크기로 변한다.(가로,세로)
+				window.resizeTo(screen.availWidth*0.46,screen.availHeight*0.96); // 지정한 크기로 변한다.(가로,세로)
 				//window.resizeBy(500,500); // 지정한 크기만큼 더하거나 빼져서 변한다.
 
 
@@ -199,7 +199,7 @@ if ($update_row['server_name']) {
   }
 
   #wrapper{
-	width:800px; height:1220px;
+	width:800px; height:100%;
 	border: 2px solid black
 }
 
@@ -241,7 +241,7 @@ if ($update_row['server_name']) {
 	  width:240px;
 	  height:240px;
 	  position:relative;
-      left:280px;;
+      left:50%;;
 	  
   }
 
@@ -258,10 +258,13 @@ if ($update_row['server_name']) {
 		<div id="seocond">
 			<p>수 신 : 
 				<?php
-					foreach($recv_array as &$var){
-						$code = $ob6->su_function_decode($var);
-						echo $ob2->su_function_convert_name($conn, "master_user_info_table", "SID", $code, "master_user_info_name")."  ";
-					}
+					
+					// foreach($recv_array as &$var){
+					// 	$code = $ob6->su_function_decode($var);
+					// 	echo $ob2->su_function_convert_name($conn, "master_user_info_table", "SID", $code, "master_user_info_name")."  ";
+					// }
+
+					echo $row['former_recv_self'];
 				?> 
 			</p>
 			<p>참 조 :
@@ -278,16 +281,16 @@ if ($update_row['server_name']) {
 				?> 
 			</p>
 			<p>(경유) : <?php echo " -- " ?> </p>
-			<p>제 목 : <?php echo $row['former_title']; ?> </p>
+			<H2><p>제 목 : <?php echo $row['former_title']; ?></p></H2> 
 			
 		</div>
 		
-		<div style="height:570px; display:table-row; vertical-align:middle;">  
+		<div style="height:440px; width:100%; display:table-row; vertical-align:middle;">  
 		<!--내용-->
 					<br /><br />
 					 <?php echo nl2br($row['former_content']); ?>
 		</div>
-				<div style="height:240px; display:table-row; vertical-align:bottom; text-align:center;">  
+				<div style="height:240px; width:100%; display:table-row; vertical-align:bottom; text-align:center;">  
 		<!--내용-->
 					 <?php if($row['appro_state']==70) echo "<img id='sig' src='./src/sig.png'/>"; ?>
 		</div>
